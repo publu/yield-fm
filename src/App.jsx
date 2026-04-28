@@ -429,19 +429,29 @@ export default function App() {
 
           {/* Hero Left */}
           <div className="flex-1 relative overflow-hidden" style={{
-            padding: '40px 40px 36px',
+            padding: '48px 44px 48px',
             borderRight: `1px solid ${C.border}`,
-            background: 'linear-gradient(140deg, #0c0c18 0%, #080810 50%, #09091a 100%)',
+            background: 'linear-gradient(140deg, #0d0d1c 0%, #080810 55%, #0a0a1a 100%)',
+            minHeight: 300,
           }}>
-            {/* Vinyl glow bloom */}
+            {/* Glow bloom — large, bleeds into text area */}
             <div className="absolute pointer-events-none" style={{
-              right: 40, top: 0, width: 320, height: 320,
-              background: `radial-gradient(circle at 50% 45%, rgba(155,89,216,0.09) 0%, rgba(0,212,168,0.05) 38%, transparent 68%)`,
-              filter: 'blur(28px)',
+              right: -50, top: -80,
+              width: 560, height: 560,
+              background: `radial-gradient(circle at 55% 48%, rgba(155,89,216,0.14) 0%, rgba(0,212,168,0.07) 38%, transparent 66%)`,
+              filter: 'blur(36px)',
             }} />
 
-            {/* Background bar chart — scaleY only (GPU-safe) */}
-            <div className="absolute flex items-end gap-1 pointer-events-none" style={{ right: 250, bottom: 0, opacity: 0.11 }}>
+            {/* Secondary ambient — lower left warmth */}
+            <div className="absolute pointer-events-none" style={{
+              left: -60, bottom: -60,
+              width: 340, height: 340,
+              background: `radial-gradient(circle, rgba(0,212,168,0.04) 0%, transparent 65%)`,
+              filter: 'blur(24px)',
+            }} />
+
+            {/* Background bar chart */}
+            <div className="absolute flex items-end gap-1 pointer-events-none" style={{ right: 256, bottom: 0, opacity: 0.10 }}>
               {[30, 50, 26, 66, 42, 76, 34, 56, 48, 70, 32, 52, 44, 62, 38, 50, 40, 58].map((h, i) => (
                 <motion.div key={i}
                   style={{ width: 7, height: h, background: `linear-gradient(to top, ${C.teal}, ${C.purple})`, originY: 1 }}
@@ -451,58 +461,88 @@ export default function App() {
               ))}
             </div>
 
-            {/* Logo — staggered entrance */}
+            {/* Content */}
             <motion.div
               variants={staggerContainer} initial="hidden" animate="visible"
-              transition={{ delayChildren: 0.3, staggerChildren: 0.12 }}
+              transition={{ delayChildren: 0.3, staggerChildren: 0.13 }}
             >
-              <motion.div variants={fadeUpItem} className="flex items-center gap-5 mb-6">
-                <div className="flex items-end gap-1">
-                  {[16, 28, 38, 32, 22, 34, 26].map((h, i) => (
+
+              {/* Logo row */}
+              <motion.div variants={fadeUpItem} className="flex items-end gap-4" style={{ marginBottom: 32 }}>
+                <div className="flex items-end gap-1 pb-1.5">
+                  {[14, 24, 34, 28, 20, 30, 22].map((h, i) => (
                     <motion.div key={i}
-                      style={{ width: 6, borderRadius: 2, originY: 1, height: h,
+                      style={{ width: 5, borderRadius: 2, originY: 1, height: h,
                         background: i < 4
-                          ? 'linear-gradient(to top, #009a7a, #00d4a8)'
-                          : 'linear-gradient(to top, #6a28b0, #9b59d8)' }}
+                          ? 'linear-gradient(to top, #008a6a, #00d4a8)'
+                          : 'linear-gradient(to top, #6020a0, #9b59d8)' }}
                       animate={{ scaleY: [0.22, 1, 0.48, 0.85, 0.22] }}
                       transition={{ duration: 1.5, repeat: Infinity, delay: i * 0.14, ease: 'easeInOut' }}
                     />
                   ))}
                 </div>
-                <h1 style={{ fontSize: 76, fontWeight: 700, lineHeight: 1, letterSpacing: '-2px', fontFamily: "'Space Mono', monospace" }}>
+                <h1 style={{ margin: 0, fontSize: 82, fontWeight: 700, lineHeight: 0.95, letterSpacing: '-2.5px', fontFamily: "'Space Mono', monospace" }}>
                   <span style={{
-                    background: `linear-gradient(92deg, ${C.teal} 0%, #7a44d8 65%)`,
+                    background: `linear-gradient(94deg, ${C.teal} 0%, #8844e0 62%)`,
                     WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent',
-                  }}>yield.</span>
-                  <span style={{ color: '#eaeaf8' }}>fm</span>
+                  }}>yield.</span><span style={{ color: '#ececf8' }}>fm</span>
                 </h1>
               </motion.div>
 
-              <motion.p variants={fadeUpItem} style={{ fontSize: 17, color: '#c0c0dc', letterSpacing: '0.05em', marginBottom: 18 }}>
-                Own music. Own publishing. Own master catalogs.
-              </motion.p>
-
+              {/* Tagline — three items with teal dot separators */}
               <motion.div variants={fadeUpItem}
-                style={{ height: 1, background: `linear-gradient(90deg, ${C.border}, transparent)`, marginBottom: 22 }} />
+                className="flex items-baseline flex-wrap"
+                style={{ gap: '6px 14px', marginBottom: 28 }}
+              >
+                {['Own music', 'Own publishing', 'Own master catalogs'].map((phrase, i, arr) => (
+                  <span key={i} className="flex items-baseline gap-3.5">
+                    <span style={{ fontSize: 17, color: '#b8b8d4', letterSpacing: '0.03em', fontWeight: 400 }}>
+                      {phrase}
+                    </span>
+                    {i < arr.length - 1 && (
+                      <span style={{ color: C.teal, fontSize: 22, lineHeight: 1, opacity: 0.55, fontWeight: 700 }}>·</span>
+                    )}
+                  </span>
+                ))}
+              </motion.div>
 
-              <motion.p variants={fadeUpItem} style={{ fontSize: 13, color: '#606080', lineHeight: 1.85, marginBottom: 14, maxWidth: 355 }}>
-                A yield-bearing protocol for future ownership<br />
-                of music royalties, streams, and curated<br />
-                catalogs&mdash;designed for the next era of<br />
+              {/* Separator — teal→purple→transparent */}
+              <motion.div variants={fadeUpItem} style={{
+                height: 1,
+                background: `linear-gradient(90deg, ${C.teal}55 0%, ${C.purple}30 45%, transparent 100%)`,
+                marginBottom: 26,
+                maxWidth: 440,
+              }} />
+
+              {/* Description — natural paragraph, no forced breaks */}
+              <motion.p variants={fadeUpItem} style={{
+                fontSize: 13, color: '#545470', lineHeight: 1.95,
+                marginBottom: 20, maxWidth: 395,
+              }}>
+                A yield-bearing protocol for future ownership of music royalties,
+                streams, and curated catalogs — designed for the next era of
                 music infrastructure.
               </motion.p>
 
-              <motion.p variants={fadeUpItem} style={{ fontSize: 13, color: C.teal, letterSpacing: '0.03em' }}>
+              {/* Teal callout — left border accent */}
+              <motion.p variants={fadeUpItem} style={{
+                fontSize: 12, color: C.teal,
+                borderLeft: `2px solid ${C.teal}`,
+                paddingLeft: 12, lineHeight: 1.6,
+                letterSpacing: '0.025em', opacity: 0.88,
+                margin: 0,
+              }}>
                 Catalogs can earn whether the market is up or down.
               </motion.p>
+
             </motion.div>
 
-            {/* Vinyl — absolute, entrance from right */}
+            {/* Vinyl */}
             <motion.div
               style={{ position: 'absolute', right: 36, top: '50%', transform: 'translateY(-52%)' }}
-              initial={{ opacity: 0, x: 20 }}
+              initial={{ opacity: 0, x: 24 }}
               animate={{ opacity: 1, x: 0 }}
-              transition={{ ...spring, delay: 0.5 }}
+              transition={{ ...spring, delay: 0.55 }}
             >
               <Vinyl />
             </motion.div>
