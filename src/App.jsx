@@ -1,93 +1,78 @@
-import { useState, useEffect } from 'react'
-import { motion } from 'framer-motion'
+import { useState, useEffect, useRef } from 'react'
+import { motion, useInView, AnimatePresence } from 'framer-motion'
 
-// ── Constants ─────────────────────────────────────────────────────────────────
+// ── Spring presets (framer-motion-animator) ───────────────────────────────────
+
+const spring     = { type: 'spring', stiffness: 300, damping: 24 }
+const springBouncy = { type: 'spring', stiffness: 500, damping: 15 }
+const springStiff  = { type: 'spring', stiffness: 700, damping: 30 }
+const snappy     = { type: 'tween', duration: 0.15, ease: [0.25, 0.1, 0.25, 1] }
+
+// ── Stagger variants (framer-motion-animator) ─────────────────────────────────
+
+const staggerContainer = {
+  hidden: { opacity: 0 },
+  visible: { opacity: 1, transition: { staggerChildren: 0.07, delayChildren: 0.1 } },
+}
+
+const fadeSlideItem = {
+  hidden: { opacity: 0, x: -14 },
+  visible: { opacity: 1, x: 0, transition: spring },
+}
+
+const fadeUpItem = {
+  hidden: { opacity: 0, y: 14 },
+  visible: { opacity: 1, y: 0, transition: spring },
+}
+
+// ── Color tokens (framer-ui-skills) ──────────────────────────────────────────
+// surface-base: #000000 | surface-raised: #141415 | border-default: #1e1e2e
+
+const C = {
+  base:      '#000000',
+  raised:    '#0e0e12',
+  panel:     '#111116',
+  border:    '#1e1e2e',
+  borderDim: '#141418',
+  teal:      '#00d4a8',
+  purple:    '#9b59d8',
+  orange:    '#f5a623',
+  text:      '#d0d0e4',
+  dim:       '#4a4a6a',
+  dimmer:    '#2a2a3e',
+}
+
+// ── Data ──────────────────────────────────────────────────────────────────────
 
 const BAR_H = [0.4, 0.9, 0.6, 1.0, 0.5, 0.8, 0.3, 0.7, 0.9, 0.4, 0.6, 0.8, 0.5, 0.95]
 
 const OWNERSHIP = [
-  {
-    num: '01', title: 'PUBLISHING RIGHTS', desc: 'Composition & songwriter share', color: '#00d4a8',
-    icon: (
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-5 h-5">
-        <rect x="4" y="2" width="16" height="20" rx="2"/>
-        <line x1="8" y1="8" x2="16" y2="8"/><line x1="8" y1="12" x2="16" y2="12"/>
-        <line x1="8" y1="16" x2="12" y2="16"/>
-      </svg>
-    ),
-  },
-  {
-    num: '02', title: 'MASTER RIGHTS', desc: 'Sound recordings & masters', color: '#9b59d8',
-    icon: (
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-5 h-5">
-        <rect x="2" y="6" width="20" height="12" rx="2"/>
-        <circle cx="8" cy="12" r="2.5"/><circle cx="16" cy="12" r="2.5"/>
-        <line x1="10.5" y1="12" x2="13.5" y2="12"/>
-      </svg>
-    ),
-  },
-  {
-    num: '03', title: 'ROYALTY STREAMS', desc: 'Future cash flows from rights', color: '#00d4a8',
-    icon: (
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-5 h-5">
-        <path d="M2 14 Q6 10 10 14 Q14 18 18 14 Q20 12 22 14"/>
-        <line x1="5" y1="14" x2="5" y2="20"/><line x1="9" y1="12" x2="9" y2="20"/>
-        <line x1="13" y1="14" x2="13" y2="20"/><line x1="17" y1="12" x2="17" y2="20"/>
-      </svg>
-    ),
-  },
-  {
-    num: '04', title: 'CURATED CATALOGS', desc: 'Quality, history, and culture', color: '#9b59d8',
-    icon: (
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-5 h-5">
-        <circle cx="12" cy="12" r="10"/>
-        <circle cx="12" cy="12" r="4"/>
-        <circle cx="12" cy="12" r="1.5" fill="currentColor"/>
-      </svg>
-    ),
-  },
+  { num: '01', title: 'PUBLISHING RIGHTS',  desc: 'Composition & songwriter share', color: C.teal,
+    icon: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-5 h-5"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="8" x2="16" y2="8"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="8" y1="16" x2="12" y2="16"/></svg> },
+  { num: '02', title: 'MASTER RIGHTS',      desc: 'Sound recordings & masters',     color: C.purple,
+    icon: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-5 h-5"><rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="8" cy="12" r="2.5"/><circle cx="16" cy="12" r="2.5"/><line x1="10.5" y1="12" x2="13.5" y2="12"/></svg> },
+  { num: '03', title: 'ROYALTY STREAMS',    desc: 'Future cash flows from rights',  color: C.teal,
+    icon: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-5 h-5"><path d="M2 14 Q6 10 10 14 Q14 18 18 14 Q20 12 22 14"/><line x1="5" y1="14" x2="5" y2="20"/><line x1="9" y1="12" x2="9" y2="20"/><line x1="13" y1="14" x2="13" y2="20"/><line x1="17" y1="12" x2="17" y2="20"/></svg> },
+  { num: '04', title: 'CURATED CATALOGS',   desc: 'Quality, history, and culture',  color: C.purple,
+    icon: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-5 h-5"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="4"/><circle cx="12" cy="12" r="1.5" fill="currentColor"/></svg> },
 ]
 
 const EARNING = [
-  {
-    title: 'STREAMING', desc: 'DSP plays across the globe', color: '#00d4a8',
-    icon: <svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5"><polygon points="6,3 20,12 6,21" opacity="0.9"/></svg>,
-  },
-  {
-    title: 'LICENSING', desc: 'Brand, media, & platform deals', color: '#9b59d8',
-    icon: (
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-5 h-5">
-        <rect x="3" y="3" width="18" height="18" rx="2"/>
-        <line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="9" x2="9" y2="21"/>
-      </svg>
-    ),
-  },
-  {
-    title: 'PERFORMANCE', desc: 'Live, radio, & public performance', color: '#00d4a8',
-    icon: (
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-5 h-5">
-        <path d="M12 2C8.5 2 6 5 6 8c0 3 2 6 6 7 4-1 6-4 6-7 0-3-2.5-6-6-6z"/>
-        <line x1="12" y1="15" x2="12" y2="19"/><line x1="8" y1="21" x2="16" y2="21"/>
-      </svg>
-    ),
-  },
-  {
-    title: 'SYNC', desc: 'TV, film, games, & digital syncs', color: '#9b59d8',
-    icon: (
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-5 h-5">
-        <rect x="2" y="4" width="20" height="14" rx="2"/>
-        <line x1="8" y1="4" x2="8" y2="18"/>
-        <line x1="2" y1="11" x2="22" y2="11" strokeWidth="0.8" opacity="0.4"/>
-      </svg>
-    ),
-  },
+  { title: 'STREAMING',    desc: 'DSP plays across the globe',         color: C.teal,
+    icon: <svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5"><polygon points="6,3 20,12 6,21" opacity="0.9"/></svg> },
+  { title: 'LICENSING',    desc: 'Brand, media, & platform deals',     color: C.purple,
+    icon: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-5 h-5"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="9" x2="9" y2="21"/></svg> },
+  { title: 'PERFORMANCE',  desc: 'Live, radio, & public performance',  color: C.teal,
+    icon: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-5 h-5"><path d="M12 2C8.5 2 6 5 6 8c0 3 2 6 6 7 4-1 6-4 6-7 0-3-2.5-6-6-6z"/><line x1="12" y1="15" x2="12" y2="19"/><line x1="8" y1="21" x2="16" y2="21"/></svg> },
+  { title: 'SYNC',         desc: 'TV, film, games, & digital syncs',   color: C.purple,
+    icon: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-5 h-5"><rect x="2" y="4" width="20" height="14" rx="2"/><line x1="8" y1="4" x2="8" y2="18"/><line x1="2" y1="11" x2="22" y2="11" strokeWidth="0.8" opacity="0.4"/></svg> },
 ]
 
 const CHART_LINES = [
-  { color: '#00d4a8', amp: 18, freq: 2.2, phase: 0,   label: 'STREAMING' },
-  { color: '#9b59d8', amp: 13, freq: 1.8, phase: 1.2, label: 'LICENSING' },
-  { color: '#f5a623', amp: 15, freq: 2.6, phase: 0.7, label: 'PERFORMANCE' },
-  { color: '#c0c0d8', amp:  9, freq: 1.5, phase: 2.1, label: 'SYNC' },
+  { color: C.teal,    amp: 18, freq: 2.2, phase: 0,   label: 'STREAMING' },
+  { color: C.purple,  amp: 13, freq: 1.8, phase: 1.2, label: 'LICENSING' },
+  { color: C.orange,  amp: 15, freq: 2.6, phase: 0.7, label: 'PERFORMANCE' },
+  { color: '#b0b0c8', amp:  9, freq: 1.5, phase: 2.1, label: 'SYNC' },
 ]
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
@@ -113,9 +98,9 @@ function useTimer() {
   return `${h}:${m}:${s}`
 }
 
-// ── Primitives ────────────────────────────────────────────────────────────────
+// ── WaveBars — only animates transform/opacity (GPU-only per framer-motion-animator) ──
 
-function WaveBars({ count = 8, color = '#00d4a8', height = 28, gap = 2 }) {
+function WaveBars({ count = 8, color = C.teal, height = 28, gap = 2 }) {
   return (
     <div className="flex items-end" style={{ height, gap }}>
       {Array.from({ length: count }, (_, i) => {
@@ -123,10 +108,9 @@ function WaveBars({ count = 8, color = '#00d4a8', height = 28, gap = 2 }) {
         return (
           <motion.div
             key={i}
-            style={{ width: 3, background: color, originY: 1, borderRadius: 1 }}
+            style={{ width: 3, background: color, originY: 1, borderRadius: 1, height }}
             animate={{ scaleY: [base * 0.25, base, base * 0.45, base * 0.82, base * 0.25] }}
             transition={{ duration: 1.6, repeat: Infinity, delay: i * 0.115, ease: 'easeInOut' }}
-            initial={{ height, scaleY: base * 0.5 }}
           />
         )
       })}
@@ -134,131 +118,132 @@ function WaveBars({ count = 8, color = '#00d4a8', height = 28, gap = 2 }) {
   )
 }
 
-function PulseDot({ color = '#f5a623', size = 8 }) {
+function PulseDot({ color = C.orange, size = 8 }) {
   return (
     <motion.div
       className="rounded-full shrink-0"
-      style={{ width: size, height: size, background: color, boxShadow: `0 0 6px ${color}` }}
-      animate={{ opacity: [1, 0.2, 1], scale: [1, 0.85, 1] }}
-      transition={{ duration: 1.8, repeat: Infinity }}
+      style={{ width: size, height: size, background: color, boxShadow: `0 0 8px ${color}88` }}
+      animate={{ opacity: [1, 0.2, 1], scale: [1, 0.8, 1] }}
+      transition={{ duration: 1.8, repeat: Infinity, ease: 'easeInOut' }}
     />
   )
 }
 
-// ── Vinyl Record ──────────────────────────────────────────────────────────────
+// ── Vinyl ─────────────────────────────────────────────────────────────────────
 
 function Vinyl() {
   return (
-    <div className="relative" style={{ width: 240, height: 240 }}>
-      {/* Atmosphere glow behind the disc */}
-      <div
-        className="absolute inset-0 rounded-full pointer-events-none"
+    <div className="relative" style={{ width: 248, height: 248 }}>
+      {/* Atmosphere — radial glow (opacity-only, GPU safe) */}
+      <motion.div
+        className="absolute rounded-full pointer-events-none"
         style={{
-          background: 'radial-gradient(circle at 50% 50%, rgba(0,212,168,0.08) 0%, rgba(155,89,216,0.06) 40%, transparent 70%)',
-          filter: 'blur(12px)',
-          transform: 'scale(1.3)',
+          inset: -40,
+          background: 'radial-gradient(circle, rgba(155,89,216,0.1) 0%, rgba(0,212,168,0.06) 40%, transparent 68%)',
+          filter: 'blur(24px)',
         }}
+        animate={{ opacity: [0.6, 1, 0.6] }}
+        transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
       />
       <motion.div
         animate={{ rotate: 360 }}
         transition={{ duration: 14, repeat: Infinity, ease: 'linear' }}
-        style={{ width: 240, height: 240 }}
+        style={{ width: 248, height: 248 }}
       >
-        <svg viewBox="0 0 240 240" style={{ width: '100%', height: '100%', filter: 'drop-shadow(0 0 18px rgba(0,212,168,0.18)) drop-shadow(0 0 40px rgba(155,89,216,0.10))' }}>
+        <svg viewBox="0 0 248 248" style={{ width: '100%', height: '100%',
+          filter: 'drop-shadow(0 0 20px rgba(0,212,168,0.2)) drop-shadow(0 0 48px rgba(155,89,216,0.12))' }}>
           <defs>
             <radialGradient id="vg" cx="50%" cy="50%" r="50%">
-              <stop offset="0%" stopColor="#18182e" />
-              <stop offset="60%" stopColor="#0e0e20" />
-              <stop offset="100%" stopColor="#08080e" />
+              <stop offset="0%"   stopColor="#16162a" />
+              <stop offset="55%"  stopColor="#0c0c1a" />
+              <stop offset="100%" stopColor="#06060e" />
             </radialGradient>
-            <radialGradient id="labelGrad" cx="40%" cy="35%" r="60%">
-              <stop offset="0%" stopColor="#1a0e2e" />
-              <stop offset="100%" stopColor="#08080e" />
+            <radialGradient id="labelGrad" cx="38%" cy="32%" r="65%">
+              <stop offset="0%"   stopColor="#180e2c" />
+              <stop offset="100%" stopColor="#07070e" />
             </radialGradient>
           </defs>
 
-          {/* Outer body */}
-          <circle cx="120" cy="120" r="117" fill="url(#vg)" stroke="#1a1a30" strokeWidth="1.5" />
+          <circle cx="124" cy="124" r="121" fill="url(#vg)" stroke="#18183a" strokeWidth="1.5" />
 
           {/* Groove rings */}
-          {Array.from({ length: 26 }, (_, i) => (
-            <circle key={i} cx="120" cy="120" r={108 - i * 3} fill="none"
-              stroke={i % 4 === 0 ? '#161630' : '#0e0e22'} strokeWidth={i % 4 === 0 ? 0.8 : 0.4} />
+          {Array.from({ length: 30 }, (_, i) => (
+            <circle key={i} cx="124" cy="124" r={113 - i * 2.8} fill="none"
+              stroke={i % 5 === 0 ? '#141430' : '#0a0a1c'} strokeWidth={i % 5 === 0 ? 0.7 : 0.35} />
           ))}
 
-          {/* Glowing arc highlight (non-rotating feel) */}
-          <path d="M 58 88 A 75 75 0 0 1 182 88" stroke="#00d4a8" strokeWidth="1" fill="none" opacity="0.12" />
+          {/* Soft sweep highlight */}
+          <path d="M 56 90 A 80 80 0 0 1 192 90" stroke={C.teal} strokeWidth="1" fill="none" opacity="0.08" />
 
           {/* Label disc */}
-          <circle cx="120" cy="120" r="42" fill="url(#labelGrad)" />
-          <circle cx="120" cy="120" r="42" fill="none" stroke="#9b59d8" strokeWidth="0.8" opacity="0.5" />
-          <circle cx="120" cy="120" r="34" fill="none" stroke="#00d4a8" strokeWidth="0.5" opacity="0.3" />
+          <circle cx="124" cy="124" r="44" fill="url(#labelGrad)" />
+          <circle cx="124" cy="124" r="44" fill="none" stroke={C.purple} strokeWidth="0.8" opacity="0.5" />
+          <circle cx="124" cy="124" r="36" fill="none" stroke={C.teal} strokeWidth="0.5" opacity="0.25" />
 
-          {/* Label text */}
-          <text x="120" y="116" textAnchor="middle" fill="#00d4a8" fontSize="9" fontFamily="Space Mono, monospace" letterSpacing="1">yield.fm</text>
-          <text x="120" y="128" textAnchor="middle" fill="#9b59d8" fontSize="6" fontFamily="Space Mono, monospace" opacity="0.8">v0.1</text>
+          <text x="124" y="120" textAnchor="middle" fill={C.teal}   fontSize="9.5" fontFamily="Space Mono, monospace" letterSpacing="1.2">yield.fm</text>
+          <text x="124" y="133" textAnchor="middle" fill={C.purple} fontSize="6.5" fontFamily="Space Mono, monospace" opacity="0.85">v0.1</text>
 
-          {/* Spinning highlight arc on label */}
-          <path d="M 120 78 A 42 42 0 0 1 162 120" stroke="#00d4a8" strokeWidth="2" fill="none" opacity="0.8" strokeLinecap="round" />
-          <path d="M 120 78 A 42 42 0 0 1 162 120" stroke="#00d4a8" strokeWidth="6" fill="none" opacity="0.1" strokeLinecap="round" />
+          {/* Spinning highlight arc — the "expensive" detail */}
+          <path d="M 124 80 A 44 44 0 0 1 168 124" stroke={C.teal} strokeWidth="2.5" fill="none" opacity="0.85" strokeLinecap="round" />
+          <path d="M 124 80 A 44 44 0 0 1 168 124" stroke={C.teal} strokeWidth="8"   fill="none" opacity="0.08" strokeLinecap="round" />
 
-          {/* Center hole */}
-          <circle cx="120" cy="120" r="5.5" fill="#06060c" />
-          <circle cx="120" cy="120" r="5.5" fill="none" stroke="#1e1e3f" strokeWidth="0.8" />
+          <circle cx="124" cy="124" r="6" fill="#04040a" />
+          <circle cx="124" cy="124" r="6" fill="none" stroke="#16163a" strokeWidth="0.8" />
         </svg>
       </motion.div>
     </div>
   )
 }
 
-// ── Royalty Flow Chart ────────────────────────────────────────────────────────
+// ── Royalty Chart ─────────────────────────────────────────────────────────────
 
 function RoyaltyChart() {
-  const W = 290, H = 110
+  const ref = useRef(null)
+  const inView = useInView(ref, { once: true, margin: '-40px' })
+  const W = 290, H = 115
+
   return (
-    <div>
-      {/* Subtle grid */}
-      <svg viewBox={`0 0 ${W} ${H}`} style={{ width: '100%', height: H }}>
-        {/* Horizontal grid lines */}
-        {[0.25, 0.5, 0.75].map(f => (
-          <line key={f} x1={0} y1={H * f} x2={W} y2={H * f}
-            stroke="#1a1a30" strokeWidth="0.5" strokeDasharray="4 4" />
-        ))}
-        {/* Chart lines */}
-        {CHART_LINES.map(({ color, amp, freq, phase }, idx) => {
-          const d1 = makePath(W, H, amp, freq, phase)
-          const d2 = makePath(W, H, amp * 0.6, freq, phase + 0.65)
-          const dotX = W * 0.62
-          const dotY = H / 2 + amp * Math.sin((dotX / W) * Math.PI * freq + phase)
-          return (
-            <g key={idx}>
-              {/* Glow layer */}
-              <motion.path d={d1} stroke={color} strokeWidth="4" fill="none" opacity={0.08}
-                animate={{ d: [d1, d2, d1] }}
-                transition={{ duration: 3.8 + idx * 0.55, repeat: Infinity, ease: 'easeInOut' }} />
-              {/* Main line */}
-              <motion.path d={d1} stroke={color} strokeWidth="1.5" fill="none" opacity={0.9}
-                animate={{ d: [d1, d2, d1] }}
-                transition={{ duration: 3.8 + idx * 0.55, repeat: Infinity, ease: 'easeInOut' }} />
-              {/* Dot */}
-              <motion.circle cx={dotX} cy={dotY} r="3.5" fill={color}
-                style={{ filter: `drop-shadow(0 0 4px ${color})` }}
-                animate={{ opacity: [1, 0.3, 1], r: [3.5, 2.5, 3.5] }}
-                transition={{ duration: 2, repeat: Infinity, delay: idx * 0.4 }} />
-            </g>
-          )
-        })}
-      </svg>
-      {/* Legend */}
-      <div className="flex gap-4 flex-wrap mt-2">
+    <motion.div ref={ref}
+      variants={staggerContainer}
+      initial="hidden"
+      animate={inView ? 'visible' : 'hidden'}
+    >
+      <motion.div variants={fadeUpItem}>
+        <svg viewBox={`0 0 ${W} ${H}`} style={{ width: '100%', height: H }}>
+          {/* Grid */}
+          {[0.25, 0.5, 0.75].map(f => (
+            <line key={f} x1={0} y1={H * f} x2={W} y2={H * f}
+              stroke="#0e0e18" strokeWidth="0.8" strokeDasharray="3 5" />
+          ))}
+          {CHART_LINES.map(({ color, amp, freq, phase }, idx) => {
+            const d1 = makePath(W, H, amp, freq, phase)
+            const d2 = makePath(W, H, amp * 0.58, freq, phase + 0.68)
+            const dotX = W * 0.62
+            const dotY = H / 2 + amp * Math.sin((dotX / W) * Math.PI * freq + phase)
+            return (
+              <g key={idx}>
+                <motion.path d={d1} stroke={color} strokeWidth="5"   fill="none" opacity={0.07}
+                  animate={{ d: [d1, d2, d1] }} transition={{ duration: 4 + idx * 0.6, repeat: Infinity, ease: 'easeInOut' }} />
+                <motion.path d={d1} stroke={color} strokeWidth="1.5" fill="none" opacity={0.92}
+                  animate={{ d: [d1, d2, d1] }} transition={{ duration: 4 + idx * 0.6, repeat: Infinity, ease: 'easeInOut' }} />
+                <motion.circle cx={dotX} cy={dotY} r="3.5" fill={color}
+                  style={{ filter: `drop-shadow(0 0 5px ${color})` }}
+                  animate={{ opacity: [1, 0.25, 1], r: [3.5, 2.5, 3.5] }}
+                  transition={{ duration: 2, repeat: Infinity, delay: idx * 0.4 }} />
+              </g>
+            )
+          })}
+        </svg>
+      </motion.div>
+      <motion.div variants={fadeUpItem} className="flex gap-4 flex-wrap mt-2">
         {CHART_LINES.map(({ color, label }) => (
           <div key={label} className="flex items-center gap-1.5">
             <div style={{ width: 14, height: 2, background: color, borderRadius: 1 }} />
-            <span style={{ fontSize: 9, color: '#5a5a7a', letterSpacing: 1.5 }}>{label}</span>
+            <span style={{ fontSize: 9, color: C.dim, letterSpacing: 1.5 }}>{label}</span>
           </div>
         ))}
-      </div>
-    </div>
+      </motion.div>
+    </motion.div>
   )
 }
 
@@ -266,67 +251,111 @@ function RoyaltyChart() {
 
 function Cassette() {
   const spokes = [0, 72, 144, 216, 288]
+
   function Reel({ cx, cy }) {
     return (
       <g>
-        <circle cx={cx} cy={cy} r={30} fill="#0a0616" stroke="#3d206080" strokeWidth="1.5" />
+        {/* Outer ring */}
+        <circle cx={cx} cy={cy} r={30} fill="#070510" stroke="#3a1e6080" strokeWidth="1.5" />
+        {/* Spinning hub */}
         <motion.g
-          style={{ originX: cx + 'px', originY: cy + 'px' }}
+          style={{ originX: `${cx}px`, originY: `${cy}px` }}
           animate={{ rotate: 360 }}
-          transition={{ duration: 5, repeat: Infinity, ease: 'linear' }}
+          transition={{ duration: 4.5, repeat: Infinity, ease: 'linear' }}
         >
           {spokes.map(a => (
             <line key={a}
-              x1={cx + 12 * Math.cos((a * Math.PI) / 180)}
-              y1={cy + 12 * Math.sin((a * Math.PI) / 180)}
+              x1={cx + 13 * Math.cos((a * Math.PI) / 180)}
+              y1={cy + 13 * Math.sin((a * Math.PI) / 180)}
               x2={cx + 26 * Math.cos((a * Math.PI) / 180)}
               y2={cy + 26 * Math.sin((a * Math.PI) / 180)}
-              stroke="#5a2a8880" strokeWidth="2" strokeLinecap="round" />
+              stroke="#5a28a060" strokeWidth="2" strokeLinecap="round" />
           ))}
         </motion.g>
-        <circle cx={cx} cy={cy} r={11} fill="#130a20" stroke="#2d1a4e" strokeWidth="1" />
-        <circle cx={cx} cy={cy} r={4.5} fill="#080810" />
-        <circle cx={cx} cy={cy} r={11} fill="none" stroke="#9b59d840" strokeWidth="0.5" />
+        <circle cx={cx} cy={cy} r={11} fill="#100820" stroke="#2a1848" strokeWidth="1" />
+        {/* Inner glow ring */}
+        <circle cx={cx} cy={cy} r={11} fill="none" stroke={C.purple} strokeWidth="0.5" opacity="0.3" />
+        <circle cx={cx} cy={cy} r={5} fill="#04030a" />
       </g>
     )
   }
+
   return (
     <svg viewBox="0 0 320 148" style={{ width: '100%', height: '100%' }}>
       <defs>
         <linearGradient id="cassBg" x1="0%" y1="0%" x2="0%" y2="100%">
-          <stop offset="0%" stopColor="#16082a" />
-          <stop offset="100%" stopColor="#0a0616" />
+          <stop offset="0%"   stopColor="#140826" />
+          <stop offset="100%" stopColor="#080512" />
+        </linearGradient>
+        <linearGradient id="cassStroke" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%"   stopColor="#5a2a90" />
+          <stop offset="100%" stopColor="#2a1448" />
         </linearGradient>
       </defs>
+
       {/* Body */}
-      <rect x="3" y="3" width="314" height="142" rx="12" fill="url(#cassBg)" stroke="#4a2270" strokeWidth="1.5" />
-      <rect x="8" y="8" width="304" height="132" rx="8" fill="none" stroke="#2d1a4e60" strokeWidth="1" />
+      <rect x="3" y="3" width="314" height="142" rx="12" fill="url(#cassBg)" stroke="url(#cassStroke)" strokeWidth="1.5" />
+      {/* Inner inset */}
+      <rect x="7" y="7" width="306" height="134" rx="9" fill="none" stroke="#2a144860" strokeWidth="1" />
 
-      {/* Window frame */}
-      <rect x="52" y="18" width="216" height="82" rx="6" fill="#06040e" stroke="#2d1a4e" strokeWidth="1.5" />
-      <rect x="55" y="21" width="210" height="76" rx="4" fill="#08060f" stroke="#1a0e2e80" strokeWidth="0.5" />
+      {/* Window */}
+      <rect x="52" y="18" width="216" height="82" rx="6" fill="#04030a" stroke="#2a1848" strokeWidth="1.5" />
+      <rect x="55" y="21" width="210" height="76" rx="4" fill="#050410" stroke="#16102890" strokeWidth="0.5" />
 
-      {/* Tape path curve */}
-      <path d="M 85 94 Q 160 104 235 94" stroke="#3d206060" strokeWidth="1.5" fill="none" strokeLinecap="round" />
+      {/* Tape path */}
+      <path d="M 84 94 Q 160 106 236 94" stroke="#3a186060" strokeWidth="2" fill="none" strokeLinecap="round" />
 
-      {/* Reels */}
       <Reel cx={108} cy={60} />
       <Reel cx={212} cy={60} />
 
       {/* Top notches */}
-      <rect x="20" y="2" width="24" height="10" rx="3" fill="#08060f" stroke="#3d2060" strokeWidth="1" />
-      <rect x="276" y="2" width="24" height="10" rx="3" fill="#08060f" stroke="#3d2060" strokeWidth="1" />
+      <rect x="20" y="2" width="24" height="10" rx="3" fill="#08060f" stroke="#3a1860" strokeWidth="1" />
+      <rect x="276" y="2" width="24" height="10" rx="3" fill="#08060f" stroke="#3a1860" strokeWidth="1" />
 
-      {/* Corner detail circles */}
-      <circle cx="20" cy="130" r="6" fill="#08060f" stroke="#2d1a4e" strokeWidth="1" />
-      <circle cx="300" cy="130" r="6" fill="#08060f" stroke="#2d1a4e" strokeWidth="1" />
+      {/* Corner rivets */}
+      <circle cx="20" cy="130" r="5.5" fill="#08060f" stroke="#2a1448" strokeWidth="1" />
+      <circle cx="300" cy="130" r="5.5" fill="#08060f" stroke="#2a1448" strokeWidth="1" />
 
       {/* Labels */}
-      <text x="160" y="120" textAnchor="middle" fill="#6b3a8a" fontSize="8" letterSpacing="3.5"
+      <text x="160" y="120" textAnchor="middle" fill="#5a2a8a" fontSize="8" letterSpacing="3.5"
         fontFamily="Space Mono, monospace" fontWeight="700">THE WORLD'S SOUNDTRACK</text>
-      <text x="160" y="134" textAnchor="middle" fill="#3d1a5a" fontSize="7" letterSpacing="2.5"
+      <text x="160" y="135" textAnchor="middle" fill="#3a1860" fontSize="7" letterSpacing="2.5"
         fontFamily="Space Mono, monospace">BUILT FOR OWNERS // NOT RENTERS</text>
     </svg>
+  )
+}
+
+// ── Staggered feature row wrapper ─────────────────────────────────────────────
+
+function FeatureList({ items, variant = 'slide' }) {
+  const ref = useRef(null)
+  const inView = useInView(ref, { once: true, margin: '-40px' })
+  const itemVar = variant === 'slide' ? fadeSlideItem : fadeUpItem
+
+  return (
+    <motion.div ref={ref} className="flex flex-col gap-1"
+      variants={staggerContainer} initial="hidden" animate={inView ? 'visible' : 'hidden'}>
+      {items.map((item, i) => (
+        <motion.div key={i} variants={itemVar}>
+          <motion.div
+            className="flex items-center gap-3 cursor-pointer rounded"
+            style={{ padding: '10px 10px', border: '1px solid transparent' }}
+            whileHover={{ backgroundColor: '#111116', borderColor: C.border,
+              boxShadow: `inset 2px 0 0 ${item.color}`, transition: snappy }}
+            whileTap={{ scale: 0.98, transition: springStiff }}
+          >
+            <div style={{ color: item.color }} className="shrink-0">{item.icon}</div>
+            <div className="flex-1">
+              <div style={{ fontSize: 11, color: C.text, fontWeight: 700, letterSpacing: 1 }}>{item.title}</div>
+              <div style={{ fontSize: 10, color: C.dim,  marginTop: 2 }}>{item.desc}</div>
+            </div>
+            {item.num && (
+              <span style={{ fontSize: 11, color: C.dimmer, fontWeight: 700 }}>{item.num}</span>
+            )}
+          </motion.div>
+        </motion.div>
+      ))}
+    </motion.div>
   )
 }
 
@@ -337,431 +366,372 @@ export default function App() {
 
   return (
     <div
-      className="min-h-screen w-full flex items-center justify-center p-4 py-8"
-      style={{
-        fontFamily: "'Space Mono', monospace",
-        background: 'radial-gradient(ellipse at 50% 0%, #0d0d22 0%, #080810 60%)',
-      }}
+      className="min-h-dvh w-full flex items-center justify-center p-4 py-8"
+      style={{ fontFamily: "'Space Mono', monospace", background: C.base }}
     >
+      {/* Window — spring entrance (framer-motion-animator: spring is more natural than tween) */}
       <motion.div
         className="w-full rounded-xl overflow-hidden"
         style={{
           maxWidth: 1200,
-          border: '1px solid #1e1e3f',
-          boxShadow:
-            '0 0 0 1px #0d0d1f, 0 40px 120px rgba(0,0,0,0.8), 0 0 80px rgba(0,212,168,0.05), 0 0 160px rgba(155,89,216,0.04)',
+          border: `1px solid ${C.border}`,
+          boxShadow: `
+            0 0 0 1px #0a0a14,
+            0 48px 140px rgba(0,0,0,0.95),
+            0 0 100px rgba(0,212,168,0.06),
+            0 0 200px rgba(155,89,216,0.04)
+          `,
         }}
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.7 }}
+        variants={{ hidden: { opacity: 0, y: 28 }, visible: { opacity: 1, y: 0 } }}
+        initial="hidden"
+        animate="visible"
+        transition={{ ...springBouncy, delay: 0.05 }}
       >
 
         {/* ── Title Bar ── */}
-        <div
+        <motion.div
           className="flex items-center justify-between px-5 py-2.5"
-          style={{
-            background: 'linear-gradient(180deg, #111124 0%, #0d0d1f 100%)',
-            borderBottom: '1px solid #1e1e3f',
-          }}
+          style={{ background: 'linear-gradient(180deg, #0c0c12 0%, #080810 100%)', borderBottom: `1px solid ${C.border}` }}
+          variants={fadeUpItem} initial="hidden" animate="visible"
+          transition={{ ...spring, delay: 0.2 }}
         >
           <div className="flex items-center gap-3">
-            <WaveBars count={5} height={14} color="#00d4a8" gap={2} />
-            <span style={{ fontSize: 11, color: '#3d3d5e', letterSpacing: 3 }}>
+            <WaveBars count={5} height={14} color={C.teal} gap={2} />
+            <span style={{ fontSize: 11, color: C.dimmer, letterSpacing: 3 }}>
               yield.fm v0.1 // PROTOCOL PREVIEW
             </span>
           </div>
           <div className="flex items-center gap-4">
             <motion.div
               style={{
-                fontSize: 11, letterSpacing: 3, padding: '3px 10px',
-                border: '1px solid #f5a623', color: '#f5a623',
-                boxShadow: '0 0 12px rgba(245,166,35,0.2)',
+                fontSize: 11, letterSpacing: 3, padding: '3px 12px',
+                border: `1px solid ${C.orange}`, color: C.orange,
+                boxShadow: `0 0 14px rgba(245,166,35,0.22)`,
               }}
-              animate={{ opacity: [1, 0.5, 1] }}
-              transition={{ duration: 2.4, repeat: Infinity }}
+              animate={{ opacity: [1, 0.45, 1] }}
+              transition={{ duration: 2.5, repeat: Infinity }}
             >
               PRE-LAUNCH
             </motion.div>
-            <div className="flex items-center gap-2.5" style={{ color: '#2a2a42' }}>
-              <span className="cursor-pointer hover:text-[#6b6b8a] transition-colors" style={{ fontSize: 13 }}>⊙</span>
-              <span className="cursor-pointer hover:text-[#6b6b8a] transition-colors" style={{ fontSize: 13 }}>□</span>
-              <span className="cursor-pointer hover:text-[#6b6b8a] transition-colors" style={{ fontSize: 13 }}>×</span>
+            <div className="flex items-center gap-2.5" style={{ color: '#222232' }}>
+              {['⊙', '□', '×'].map(ch => (
+                <motion.span key={ch} className="cursor-pointer" style={{ fontSize: 13 }}
+                  whileHover={{ color: C.dim, transition: snappy }}>
+                  {ch}
+                </motion.span>
+              ))}
             </div>
           </div>
-        </div>
+        </motion.div>
 
         {/* ── Hero Row ── */}
-        <div className="flex" style={{ borderBottom: '1px solid #1e1e3f' }}>
+        <div className="flex" style={{ borderBottom: `1px solid ${C.border}` }}>
 
           {/* Hero Left */}
-          <div
-            className="flex-1 relative overflow-hidden"
-            style={{
-              padding: '36px 36px 32px',
-              borderRight: '1px solid #1e1e3f',
-              background: 'linear-gradient(135deg, #0d0d22 0%, #080810 50%, #0a0818 100%)',
-            }}
-          >
-            {/* Ambient glow behind vinyl area */}
-            <div
-              className="absolute pointer-events-none"
-              style={{
-                right: 60, top: 20,
-                width: 280, height: 280,
-                background: 'radial-gradient(circle, rgba(155,89,216,0.07) 0%, rgba(0,212,168,0.04) 40%, transparent 70%)',
-                filter: 'blur(20px)',
-              }}
-            />
+          <div className="flex-1 relative overflow-hidden" style={{
+            padding: '40px 40px 36px',
+            borderRight: `1px solid ${C.border}`,
+            background: 'linear-gradient(140deg, #0c0c18 0%, #080810 50%, #09091a 100%)',
+          }}>
+            {/* Vinyl glow bloom */}
+            <div className="absolute pointer-events-none" style={{
+              right: 40, top: 0, width: 320, height: 320,
+              background: `radial-gradient(circle at 50% 45%, rgba(155,89,216,0.09) 0%, rgba(0,212,168,0.05) 38%, transparent 68%)`,
+              filter: 'blur(28px)',
+            }} />
 
-            {/* Background bar chart */}
-            <div className="absolute flex items-end gap-1 pointer-events-none" style={{ right: 230, bottom: 0, opacity: 0.14 }}>
-              {[32, 52, 28, 68, 44, 78, 36, 58, 50, 72, 34, 55, 46, 65, 40, 54, 42, 60].map((h, i) => (
+            {/* Background bar chart — scaleY only (GPU-safe) */}
+            <div className="absolute flex items-end gap-1 pointer-events-none" style={{ right: 250, bottom: 0, opacity: 0.11 }}>
+              {[30, 50, 26, 66, 42, 76, 34, 56, 48, 70, 32, 52, 44, 62, 38, 50, 40, 58].map((h, i) => (
                 <motion.div key={i}
-                  style={{ width: 7, background: 'linear-gradient(to top, #00d4a8, #9b59d8)' }}
-                  animate={{ height: [h * 0.4, h, h * 0.6, h * 0.88, h * 0.4] }}
-                  transition={{ duration: 2.4 + i * 0.12, repeat: Infinity, delay: i * 0.07 }}
+                  style={{ width: 7, height: h, background: `linear-gradient(to top, ${C.teal}, ${C.purple})`, originY: 1 }}
+                  animate={{ scaleY: [0.4, 1, 0.6, 0.88, 0.4] }}
+                  transition={{ duration: 2.6 + i * 0.12, repeat: Infinity, delay: i * 0.07 }}
                 />
               ))}
             </div>
 
-            {/* Logo */}
-            <div className="flex items-center gap-5 mb-6">
-              <div className="flex items-end gap-1">
-                {[16, 26, 36, 30, 22, 32, 24].map((h, i) => (
-                  <motion.div key={i}
-                    style={{
-                      width: 6, borderRadius: 2, originY: 1,
-                      background: i < 4
-                        ? `linear-gradient(to top, #00b890, #00d4a8)`
-                        : `linear-gradient(to top, #7a3ab8, #9b59d8)`,
-                    }}
-                    animate={{ scaleY: [0.25, 1, 0.5, 0.88, 0.25] }}
-                    transition={{ duration: 1.5, repeat: Infinity, delay: i * 0.13, ease: 'easeInOut' }}
-                    initial={{ height: h, scaleY: 0.5 }}
-                  />
-                ))}
-              </div>
-              <h1
-                style={{
-                  fontSize: 72, fontWeight: 700, lineHeight: 1,
-                  fontFamily: "'Space Mono', monospace",
-                  letterSpacing: '-2px',
-                }}
-              >
-                <span style={{
-                  background: 'linear-gradient(90deg, #00d4a8 0%, #7a4ad8 70%)',
-                  WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent',
-                }}>yield.</span>
-                <span style={{ color: '#e8e8f0' }}>fm</span>
-              </h1>
-            </div>
+            {/* Logo — staggered entrance */}
+            <motion.div
+              variants={staggerContainer} initial="hidden" animate="visible"
+              transition={{ delayChildren: 0.3, staggerChildren: 0.12 }}
+            >
+              <motion.div variants={fadeUpItem} className="flex items-center gap-5 mb-6">
+                <div className="flex items-end gap-1">
+                  {[16, 28, 38, 32, 22, 34, 26].map((h, i) => (
+                    <motion.div key={i}
+                      style={{ width: 6, borderRadius: 2, originY: 1, height: h,
+                        background: i < 4
+                          ? 'linear-gradient(to top, #009a7a, #00d4a8)'
+                          : 'linear-gradient(to top, #6a28b0, #9b59d8)' }}
+                      animate={{ scaleY: [0.22, 1, 0.48, 0.85, 0.22] }}
+                      transition={{ duration: 1.5, repeat: Infinity, delay: i * 0.14, ease: 'easeInOut' }}
+                    />
+                  ))}
+                </div>
+                <h1 style={{ fontSize: 76, fontWeight: 700, lineHeight: 1, letterSpacing: '-2px', fontFamily: "'Space Mono', monospace" }}>
+                  <span style={{
+                    background: `linear-gradient(92deg, ${C.teal} 0%, #7a44d8 65%)`,
+                    WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent',
+                  }}>yield.</span>
+                  <span style={{ color: '#eaeaf8' }}>fm</span>
+                </h1>
+              </motion.div>
 
-            <p style={{ fontSize: 17, color: '#c8c8e0', letterSpacing: '0.04em', marginBottom: 16 }}>
-              Own music. Own publishing. Own master catalogs.
-            </p>
+              <motion.p variants={fadeUpItem} style={{ fontSize: 17, color: '#c0c0dc', letterSpacing: '0.05em', marginBottom: 18 }}>
+                Own music. Own publishing. Own master catalogs.
+              </motion.p>
 
-            <div style={{ height: 1, background: 'linear-gradient(90deg, #2a2a4a, transparent)', marginBottom: 20 }} />
+              <motion.div variants={fadeUpItem}
+                style={{ height: 1, background: `linear-gradient(90deg, ${C.border}, transparent)`, marginBottom: 22 }} />
 
-            <p style={{ fontSize: 13, color: '#7070a0', lineHeight: 1.8, marginBottom: 12, maxWidth: 360 }}>
-              A yield-bearing protocol for future ownership<br />
-              of music royalties, streams, and curated<br />
-              catalogs&mdash;designed for the next era of<br />
-              music infrastructure.
-            </p>
-            <p style={{ fontSize: 13, color: '#00d4a8', letterSpacing: '0.02em' }}>
-              Catalogs can earn whether the market is up or down.
-            </p>
+              <motion.p variants={fadeUpItem} style={{ fontSize: 13, color: '#606080', lineHeight: 1.85, marginBottom: 14, maxWidth: 355 }}>
+                A yield-bearing protocol for future ownership<br />
+                of music royalties, streams, and curated<br />
+                catalogs&mdash;designed for the next era of<br />
+                music infrastructure.
+              </motion.p>
 
-            {/* Vinyl — absolute right */}
-            <div className="absolute" style={{ right: 32, top: '50%', transform: 'translateY(-52%)' }}>
+              <motion.p variants={fadeUpItem} style={{ fontSize: 13, color: C.teal, letterSpacing: '0.03em' }}>
+                Catalogs can earn whether the market is up or down.
+              </motion.p>
+            </motion.div>
+
+            {/* Vinyl — absolute, entrance from right */}
+            <motion.div
+              style={{ position: 'absolute', right: 36, top: '50%', transform: 'translateY(-52%)' }}
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ ...spring, delay: 0.5 }}
+            >
               <Vinyl />
-            </div>
+            </motion.div>
           </div>
 
           {/* Status Panel */}
-          <div
+          <motion.div
             className="flex flex-col gap-4"
             style={{
-              width: 288, padding: '24px 22px',
-              background: 'linear-gradient(180deg, #09091a 0%, #080810 100%)',
+              width: 288, padding: '26px 22px',
+              background: 'linear-gradient(180deg, #08080e 0%, #060609 100%)',
             }}
+            variants={fadeSlideItem} initial="hidden" animate="visible"
+            transition={{ ...spring, delay: 0.45 }}
           >
             <div className="flex items-center justify-between">
-              <span style={{ fontSize: 10, color: '#3d3d5e', letterSpacing: 4 }}>STATUS</span>
-              <span style={{ color: '#2a2a3e', fontSize: 12 }}>—</span>
+              <span style={{ fontSize: 10, color: C.dimmer, letterSpacing: 4 }}>STATUS</span>
+              <span style={{ color: '#1a1a28', fontSize: 12 }}>—</span>
             </div>
 
             <div style={{
-              border: '1px solid rgba(245,166,35,0.3)',
+              border: `1px solid rgba(245,166,35,0.28)`,
               padding: '14px 16px',
-              background: 'linear-gradient(135deg, #110a08, #0d0a10)',
-              boxShadow: 'inset 0 0 20px rgba(245,166,35,0.04)',
+              background: 'linear-gradient(135deg, #100a08, #0c0a10)',
+              boxShadow: 'inset 0 0 24px rgba(245,166,35,0.03)',
             }}>
               <div className="flex items-start gap-2.5">
-                <PulseDot color="#f5a623" />
-                <span style={{ color: '#f5a623', fontSize: 14, fontWeight: 700, lineHeight: 1.4, letterSpacing: 1 }}>
+                <PulseDot color={C.orange} />
+                <span style={{ color: C.orange, fontSize: 14, fontWeight: 700, lineHeight: 1.45, letterSpacing: 1 }}>
                   PRE-LAUNCH<br />WAITLIST OPEN
                 </span>
               </div>
             </div>
 
-            <p style={{ fontSize: 12, color: '#484868', lineHeight: 1.8 }}>
+            <p style={{ fontSize: 12, color: '#404060', lineHeight: 1.85 }}>
               We're indexing catalogs and<br />
               building the rails for the<br />
               future of royalty ownership.
             </p>
 
             <div className="flex-1 flex flex-col justify-end gap-3">
-              {/* Waveform grid */}
               <div className="grid grid-cols-4 gap-2">
                 {[0, 1, 2, 3].map(row => (
-                  <WaveBars key={row} count={4} height={20} color={row % 2 === 0 ? '#00d4a8' : '#9b59d8'} gap={2} />
+                  <WaveBars key={row} count={4} height={20} color={row % 2 === 0 ? C.teal : C.purple} gap={2} />
                 ))}
               </div>
-
               <motion.button
-                className="w-full cursor-pointer"
                 style={{
-                  padding: '9px 0', fontSize: 10, letterSpacing: 3,
-                  border: '1px solid #252540', color: '#5a5a7a',
-                  background: 'transparent', marginTop: 4,
+                  padding: '10px 0', fontSize: 10, letterSpacing: 3, marginTop: 4,
+                  border: `1px solid #1e1e2e`, color: '#484868',
+                  background: 'transparent', cursor: 'pointer', width: '100%',
+                  fontFamily: "'Space Mono', monospace",
                 }}
-                whileHover={{
-                  borderColor: '#00d4a8', color: '#00d4a8',
-                  boxShadow: '0 0 16px rgba(0,212,168,0.15)',
-                }}
-                transition={{ duration: 0.15 }}
+                whileHover={{ borderColor: C.teal, color: C.teal,
+                  boxShadow: `0 0 18px rgba(0,212,168,0.14)`, transition: snappy }}
+                whileTap={{ scale: 0.97, transition: springStiff }}
               >
                 ACCESS BY INVITE ONLY
               </motion.button>
             </div>
-          </div>
+          </motion.div>
         </div>
 
         {/* ── Features Row ── */}
-        <div className="flex" style={{ borderBottom: '1px solid #1e1e3f' }}>
-
-          {/* What You Can Own */}
-          <div
-            className="flex-1"
-            style={{
-              padding: '22px 24px',
-              borderRight: '1px solid #1e1e3f',
-              background: 'linear-gradient(180deg, #0c0c1e 0%, #080810 100%)',
-            }}
-          >
-            <h3 style={{
-              fontSize: 10, color: '#3a3a5a', letterSpacing: 4,
-              marginBottom: 18, paddingBottom: 10,
-              borderBottom: '1px dashed #1a1a30',
-            }}>WHAT YOU CAN OWN</h3>
-            <div className="flex flex-col gap-1">
-              {OWNERSHIP.map((item, i) => (
-                <motion.div
-                  key={i}
-                  className="flex items-center gap-3 cursor-pointer rounded"
-                  style={{ padding: '9px 10px', border: '1px solid transparent' }}
-                  whileHover={{
-                    backgroundColor: '#0d0d20',
-                    borderColor: '#1e1e3f',
-                    boxShadow: `inset 2px 0 0 ${item.color}`,
-                  }}
-                  transition={{ duration: 0.12 }}
-                >
-                  <div style={{ color: item.color }} className="shrink-0">{item.icon}</div>
-                  <div className="flex-1">
-                    <div style={{ fontSize: 11, color: '#c0c0d8', fontWeight: 700, letterSpacing: 1 }}>{item.title}</div>
-                    <div style={{ fontSize: 10, color: '#484868', marginTop: 2 }}>{item.desc}</div>
-                  </div>
-                  <span style={{ fontSize: 11, color: '#282840', fontWeight: 700 }}>{item.num}</span>
-                </motion.div>
-              ))}
+        <div className="flex" style={{ borderBottom: `1px solid ${C.border}` }}>
+          {[
+            { title: 'WHAT YOU CAN OWN',    items: OWNERSHIP, variant: 'slide' },
+            { title: 'HOW CATALOGS EARN',    items: EARNING,   variant: 'slide' },
+          ].map(({ title, items, variant }, colIdx) => (
+            <div key={title} className="flex-1" style={{
+              padding: '24px 24px',
+              borderRight: `1px solid ${C.border}`,
+              background: 'linear-gradient(180deg, #0a0a10 0%, #060609 100%)',
+            }}>
+              <h3 style={{
+                fontSize: 10, color: C.dimmer, letterSpacing: 4,
+                marginBottom: 18, paddingBottom: 10,
+                borderBottom: `1px dashed #14141e`,
+              }}>{title}</h3>
+              <FeatureList items={items} variant={variant} />
             </div>
-          </div>
-
-          {/* How Catalogs Earn */}
-          <div
-            className="flex-1"
-            style={{
-              padding: '22px 24px',
-              borderRight: '1px solid #1e1e3f',
-              background: 'linear-gradient(180deg, #0c0c1e 0%, #080810 100%)',
-            }}
-          >
-            <h3 style={{
-              fontSize: 10, color: '#3a3a5a', letterSpacing: 4,
-              marginBottom: 18, paddingBottom: 10,
-              borderBottom: '1px dashed #1a1a30',
-            }}>HOW CATALOGS EARN</h3>
-            <div className="flex flex-col gap-1">
-              {EARNING.map((item, i) => (
-                <motion.div
-                  key={i}
-                  className="flex items-center gap-3 cursor-pointer rounded"
-                  style={{ padding: '9px 10px', border: '1px solid transparent' }}
-                  whileHover={{
-                    backgroundColor: '#0d0d20',
-                    borderColor: '#1e1e3f',
-                    boxShadow: `inset 2px 0 0 ${item.color}`,
-                  }}
-                  transition={{ duration: 0.12 }}
-                >
-                  <div style={{ color: item.color }} className="shrink-0">{item.icon}</div>
-                  <div>
-                    <div style={{ fontSize: 11, color: '#c0c0d8', fontWeight: 700, letterSpacing: 1 }}>{item.title}</div>
-                    <div style={{ fontSize: 10, color: '#484868', marginTop: 2 }}>{item.desc}</div>
-                  </div>
-                </motion.div>
-              ))}
-            </div>
-          </div>
+          ))}
 
           {/* Royalty Flow */}
-          <div
-            className="flex-1"
-            style={{
-              padding: '22px 24px',
-              background: 'linear-gradient(180deg, #0c0c1e 0%, #080810 100%)',
-            }}
-          >
+          <div className="flex-1" style={{
+            padding: '24px 24px',
+            background: 'linear-gradient(180deg, #0a0a10 0%, #060609 100%)',
+          }}>
             <h3 style={{
-              fontSize: 10, color: '#3a3a5a', letterSpacing: 4,
+              fontSize: 10, color: C.dimmer, letterSpacing: 4,
               marginBottom: 18, paddingBottom: 10,
-              borderBottom: '1px dashed #1a1a30',
+              borderBottom: `1px dashed #14141e`,
             }}>ROYALTY FLOW (CONCEPTUAL)</h3>
             <RoyaltyChart />
-            <div
+            <motion.div
               style={{
-                marginTop: 16, padding: '14px 16px',
-                borderLeft: '2px solid #9b59d8',
-                background: 'linear-gradient(135deg, #0e0a1e, #09090f)',
-                boxShadow: 'inset 0 0 20px rgba(155,89,216,0.04)',
+                marginTop: 18, padding: '14px 16px',
+                borderLeft: `2px solid ${C.purple}`,
+                background: 'linear-gradient(135deg, #0c081c, #080610)',
+                boxShadow: `inset 0 0 24px rgba(155,89,216,0.04)`,
               }}
+              initial={{ opacity: 0, x: 12 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true, margin: '-30px' }}
+              transition={{ ...spring, delay: 0.2 }}
             >
               <div className="flex items-start justify-between gap-2">
                 <div>
-                  <span style={{ color: '#9b59d8', fontSize: 22, lineHeight: 1, fontWeight: 700 }}>"</span>
-                  <p style={{ color: '#00d4a8', fontSize: 11, lineHeight: 1.7, fontWeight: 700, marginTop: 4 }}>
-                    Diverse sources.<br />
-                    Durable demand.<br />
-                    Market-neutral exposure.
+                  <span style={{ color: C.purple, fontSize: 22, lineHeight: 1, fontWeight: 700 }}>"</span>
+                  <p style={{ color: C.teal, fontSize: 11, lineHeight: 1.75, fontWeight: 700, marginTop: 4 }}>
+                    Diverse sources.<br />Durable demand.<br />Market-neutral exposure.
                   </p>
                 </div>
-                <span style={{ color: '#9b59d8', fontSize: 28, opacity: 0.2, marginTop: 4 }}>♪</span>
+                <span style={{ color: C.purple, fontSize: 30, opacity: 0.18, marginTop: 4 }}>♪</span>
               </div>
-            </div>
+            </motion.div>
           </div>
         </div>
 
         {/* ── Bottom Row ── */}
-        <div className="flex items-stretch" style={{ borderBottom: '1px solid #1e1e3f' }}>
+        <div className="flex items-stretch" style={{ borderBottom: `1px solid ${C.border}` }}>
           {/* Cassette */}
-          <div
+          <motion.div
             className="flex items-center justify-center"
             style={{
-              width: 310, padding: '20px 24px',
-              borderRight: '1px solid #1e1e3f',
-              background: 'linear-gradient(135deg, #0e0820, #080810)',
+              width: 312, padding: '22px 26px',
+              borderRight: `1px solid ${C.border}`,
+              background: 'linear-gradient(140deg, #0c061a, #080510)',
             }}
+            initial={{ opacity: 0, x: -20 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ ...spring, delay: 0.1 }}
           >
-            <div style={{ width: 280 }}>
-              <Cassette />
-            </div>
-          </div>
+            <div style={{ width: 278 }}><Cassette /></div>
+          </motion.div>
 
-          {/* CTAs */}
-          <div
+          {/* CTAs — staggered entrance */}
+          <motion.div
             className="flex-1 flex flex-col justify-center gap-5"
-            style={{ padding: '28px 32px', background: '#08080f' }}
+            style={{ padding: '30px 34px', background: '#04040a' }}
+            variants={staggerContainer} initial="hidden"
+            whileInView="visible" viewport={{ once: true }}
+            transition={{ delayChildren: 0.15, staggerChildren: 0.1 }}
           >
-            <div className="flex gap-4 items-stretch">
+            <motion.div variants={fadeUpItem} className="flex gap-4 items-stretch">
               <motion.button
                 className="flex-1 cursor-pointer border-0"
                 style={{
-                  padding: '18px 24px', fontSize: 13, fontWeight: 700,
-                  letterSpacing: 3, color: '#080810',
-                  background: 'linear-gradient(135deg, #00d4a8, #00b890)',
+                  padding: '20px 24px', fontSize: 13, fontWeight: 700,
+                  letterSpacing: 3, color: '#04080a',
+                  background: `linear-gradient(135deg, ${C.teal}, #00b890)`,
                   fontFamily: "'Space Mono', monospace",
                 }}
-                whileHover={{
-                  scale: 1.02,
-                  boxShadow: '0 0 40px rgba(0,212,168,0.5), 0 8px 32px rgba(0,212,168,0.2)',
-                }}
+                whileHover={{ scale: 1.025, boxShadow: `0 0 48px rgba(0,212,168,0.55), 0 8px 36px rgba(0,212,168,0.22)` }}
                 whileTap={{ scale: 0.97 }}
+                transition={springBouncy}
               >
                 JOIN WAITLIST →
               </motion.button>
               <motion.button
                 className="flex-1 cursor-pointer border-0"
                 style={{
-                  padding: '18px 24px', fontSize: 13, fontWeight: 700,
-                  letterSpacing: 3, color: '#e8e8f0',
-                  background: 'linear-gradient(135deg, #9b59d8, #7a3ab8)',
+                  padding: '20px 24px', fontSize: 13, fontWeight: 700,
+                  letterSpacing: 3, color: '#f0e8ff',
+                  background: `linear-gradient(135deg, ${C.purple}, #7a38b8)`,
                   fontFamily: "'Space Mono', monospace",
                 }}
-                whileHover={{
-                  scale: 1.02,
-                  boxShadow: '0 0 40px rgba(155,89,216,0.5), 0 8px 32px rgba(155,89,216,0.2)',
-                }}
+                whileHover={{ scale: 1.025, boxShadow: `0 0 48px rgba(155,89,216,0.55), 0 8px 36px rgba(155,89,216,0.22)` }}
                 whileTap={{ scale: 0.97 }}
+                transition={springBouncy}
               >
                 READ THESIS →
               </motion.button>
               <motion.button
-                className="cursor-pointer"
                 style={{
-                  padding: '18px 20px', fontSize: 11, fontWeight: 700,
-                  letterSpacing: 2, color: '#6060a0', lineHeight: 1.5,
-                  border: '1px solid #252540', background: 'transparent',
+                  padding: '20px 22px', fontSize: 11, fontWeight: 700,
+                  letterSpacing: 2, color: '#484870', lineHeight: 1.5,
+                  border: `1px solid #1e1e2e`, background: 'transparent',
+                  cursor: 'pointer',
                   fontFamily: "'Space Mono', monospace",
                 }}
-                whileHover={{
-                  borderColor: '#5050a0', color: '#a0a0d0',
-                  boxShadow: '0 0 20px rgba(100,100,200,0.1)',
-                }}
-                whileTap={{ scale: 0.97 }}
+                whileHover={{ borderColor: '#4a4a80', color: '#9090c0',
+                  boxShadow: '0 0 22px rgba(100,100,200,0.12)', transition: snappy }}
+                whileTap={{ scale: 0.97, transition: springStiff }}
               >
                 EXPLORE<br />MECHANICS →
               </motion.button>
-            </div>
-            <p style={{ fontSize: 11, color: '#30304a', letterSpacing: 1, textAlign: 'center' }}>
+            </motion.div>
+            <motion.p variants={fadeUpItem}
+              style={{ fontSize: 11, color: '#282840', letterSpacing: 1, textAlign: 'center' }}>
               Be first in line for early access, updates, and protocol releases.
-            </p>
-          </div>
+            </motion.p>
+          </motion.div>
         </div>
 
         {/* ── Status Bar ── */}
-        <div
+        <motion.div
           className="flex items-center justify-between"
           style={{
-            padding: '8px 20px',
-            background: 'linear-gradient(180deg, #09091a, #080810)',
-            borderTop: '1px solid #12122a',
+            padding: '9px 20px',
+            background: 'linear-gradient(180deg, #080810, #040408)',
+            borderTop: `1px solid #0e0e18`,
           }}
+          variants={staggerContainer} initial="hidden"
+          whileInView="visible" viewport={{ once: true }}
         >
-          <WaveBars count={5} height={12} color="#00d4a8" gap={2} />
-          <div className="flex items-center gap-6" style={{ fontSize: 10, letterSpacing: 3 }}>
+          <WaveBars count={5} height={12} color={C.teal} gap={2} />
+          <motion.div className="flex items-center gap-6" variants={staggerContainer}>
             {[
-              { label: 'INDEXING CATALOGS',      color: '#00d4a8', delay: 0 },
-              { label: 'BUILDING RAILS',          color: '#00d4a8', delay: 0.5 },
-              { label: 'WAITLIST ACTIVE',         color: '#f5a623', delay: 1.0 },
-              { label: 'MARKET-NEUTRAL EXPOSURE', color: '#00d4a8', delay: 1.5 },
+              { label: 'INDEXING CATALOGS',       color: C.teal,   delay: 0 },
+              { label: 'BUILDING RAILS',           color: C.teal,   delay: 0.5 },
+              { label: 'WAITLIST ACTIVE',          color: C.orange, delay: 1.0 },
+              { label: 'MARKET-NEUTRAL EXPOSURE',  color: C.teal,   delay: 1.5 },
             ].map(({ label, color, delay }) => (
-              <div key={label} className="flex items-center gap-2">
-                <span style={{ color: '#383858' }}>{label}</span>
-                <motion.div
-                  className="rounded-full"
-                  style={{ width: 6, height: 6, background: color, boxShadow: `0 0 4px ${color}` }}
-                  animate={{ opacity: [1, 0.15, 1] }}
-                  transition={{ duration: 2, repeat: Infinity, delay }}
-                />
-              </div>
+              <motion.div key={label} className="flex items-center gap-2" variants={fadeUpItem}
+                style={{ fontSize: 10, letterSpacing: 3 }}>
+                <span style={{ color: C.dimmer }}>{label}</span>
+                <motion.div className="rounded-full"
+                  style={{ width: 6, height: 6, background: color, boxShadow: `0 0 5px ${color}` }}
+                  animate={{ opacity: [1, 0.12, 1] }}
+                  transition={{ duration: 2, repeat: Infinity, delay }} />
+              </motion.div>
             ))}
-          </div>
-          <span style={{ color: '#00d4a8', fontSize: 11, letterSpacing: 3, fontVariantNumeric: 'tabular-nums' }}>
+          </motion.div>
+          <span style={{ color: C.teal, fontSize: 11, letterSpacing: 3, fontVariantNumeric: 'tabular-nums' }}>
             {timer}
           </span>
-        </div>
+        </motion.div>
 
       </motion.div>
     </div>
