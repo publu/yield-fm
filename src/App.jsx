@@ -277,21 +277,29 @@ function FeatureList({ items }) {
   const ref = useRef(null)
   const inView = useInView(ref, { once: true, margin: '-40px' })
   return (
-    <motion.div ref={ref} className="flex flex-col gap-1"
+    <motion.div ref={ref} className="flex flex-col"
       variants={stagger} initial="hidden" animate={inView ? 'visible' : 'hidden'}>
       {items.map((item, i) => (
         <motion.div key={i} variants={slideItem}>
-          <motion.div className="flex items-center gap-3 cursor-pointer rounded"
-            style={{ padding: '10px 10px', border: '1px solid transparent' }}
-            whileHover={{ backgroundColor: '#0d0d20', borderColor: C.border,
-              boxShadow: `inset 2px 0 0 ${item.color}`, transition: snappy }}
+          <motion.div className="flex items-center gap-3 cursor-pointer"
+            style={{
+              padding: '13px 8px',
+              borderBottom: i < items.length - 1 ? `1px solid ${C.ghost}50` : 'none',
+            }}
+            whileHover={{ backgroundColor: '#0d0d22', paddingLeft: 14, transition: snappy }}
             whileTap={{ scale: 0.98, transition: springStiff }}>
-            <div style={{ color: item.color }} className="shrink-0">{item.icon}</div>
-            <div className="flex-1">
-              <div style={{ fontSize: 13, color: C.text, fontWeight: 700, letterSpacing: 1 }}>{item.title}</div>
-              <div style={{ fontSize: 11, color: C.sub, marginTop: 3 }}>{item.desc}</div>
+            {/* Color accent bar */}
+            <div style={{ width: 2, height: 34, borderRadius: 1, background: item.color, opacity: 0.7, flexShrink: 0 }} />
+            <div style={{ color: item.color, opacity: 0.85 }} className="shrink-0">{item.icon}</div>
+            <div className="flex-1 min-w-0">
+              <div style={{ fontSize: 12, color: C.text, fontWeight: 700, letterSpacing: 1.5 }}>{item.title}</div>
+              <div style={{ fontSize: 10, color: C.dim, marginTop: 3, letterSpacing: 0.5 }}>{item.desc}</div>
             </div>
-            {item.num && <span style={{ fontSize: 11, color: C.dim, fontWeight: 700 }}>{item.num}</span>}
+            {item.num && (
+              <span style={{ fontSize: 30, color: C.ghost, fontWeight: 700, letterSpacing: -1.5, lineHeight: 1, flexShrink: 0 }}>
+                {item.num}
+              </span>
+            )}
           </motion.div>
         </motion.div>
       ))}
@@ -528,24 +536,24 @@ export default function App() {
                 marginBottom: 16, paddingBottom: 10,
                 borderBottom: `1px dashed #1c1c32` }}>ROYALTY FLOW (CONCEPTUAL)</h3>
               <RoyaltyChart />
-              <motion.div style={{
-                marginTop: 16, padding: '14px 16px',
-                borderLeft: `2px solid ${C.purple}`,
-                background: 'linear-gradient(135deg, #0c081e, #080612)',
-                boxShadow: `inset 0 0 24px rgba(155,89,216,0.04)`,
-              }}
-                initial={{ opacity: 0, x: 12 }}
-                whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true, margin: '-30px' }}
+              <motion.div className="flex gap-2 mt-4 flex-wrap"
+                initial={{ opacity: 0, y: 8 }}
+                whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: '-30px' }}
                 transition={{ ...spring, delay: 0.2 }}>
-                <div className="flex items-start justify-between gap-2">
-                  <div>
-                    <span style={{ color: C.purple, fontSize: 26, lineHeight: 1, fontWeight: 700 }}>"</span>
-                    <p style={{ color: C.teal, fontSize: 13, lineHeight: 1.75, fontWeight: 700, marginTop: 4 }}>
-                      Diverse sources.<br />Durable demand.<br />Market-neutral exposure.
-                    </p>
+                {[
+                  { label: '4 STREAMS', sub: 'revenue sources', color: C.teal },
+                  { label: '~12 YRS', sub: 'catalog avg life', color: C.purple },
+                  { label: 'NEUTRAL', sub: 'market exposure', color: C.orange },
+                ].map(({ label, sub, color }) => (
+                  <div key={label} style={{
+                    flex: 1, padding: '10px 12px',
+                    border: `1px solid ${C.ghost}60`,
+                    background: '#09091a',
+                  }}>
+                    <div style={{ fontSize: 13, color, fontWeight: 700, letterSpacing: 0.5 }}>{label}</div>
+                    <div style={{ fontSize: 9, color: C.dim, marginTop: 3, letterSpacing: 1 }}>{sub.toUpperCase()}</div>
                   </div>
-                  <span style={{ color: C.purple, fontSize: 32, opacity: 0.22, marginTop: 4 }}>♪</span>
-                </div>
+                ))}
               </motion.div>
             </div>
           </div>
@@ -561,42 +569,50 @@ export default function App() {
             <div style={{ width: 278 }}><Cassette /></div>
           </motion.div>
 
-          <motion.div className="flex-1 flex flex-col justify-center gap-5"
-            style={{ padding: '30px 34px', background: '#06060e' }}
+          <motion.div className="flex-1 flex flex-col justify-center"
+            style={{ padding: '36px 44px', background: '#06060e' }}
             variants={stagger} initial="hidden" whileInView="visible" viewport={{ once: true }}
             transition={{ delayChildren: 0.15, staggerChildren: 0.1 }}>
-            <motion.div variants={upItem} className="flex gap-3 items-stretch">
+
+            <motion.p variants={upItem} style={{
+              fontSize: 10, color: C.ghost, letterSpacing: 4, marginBottom: 20,
+            }}>
+              BUILT FOR OWNERS // NOT RENTERS
+            </motion.p>
+
+            <motion.div variants={upItem} className="flex gap-3 items-stretch" style={{ marginBottom: 18 }}>
               <motion.button className="flex-1 cursor-pointer border-0"
-                style={{ padding: '20px 24px', fontSize: 13, fontWeight: 700, letterSpacing: 3,
+                style={{ padding: '22px 28px', fontSize: 13, fontWeight: 700, letterSpacing: 3,
                   color: '#04080a', background: `linear-gradient(135deg, ${C.teal}, #00b890)`,
                   fontFamily: "'Space Mono', monospace" }}
-                whileHover={{ scale: 1.025, boxShadow: `0 0 48px rgba(0,212,168,0.55), 0 8px 36px rgba(0,212,168,0.22)` }}
+                whileHover={{ scale: 1.02, boxShadow: `0 0 52px rgba(0,212,168,0.5), 0 8px 36px rgba(0,212,168,0.2)` }}
                 whileTap={{ scale: 0.97 }} transition={springBouncy}>
                 JOIN WAITLIST →
               </motion.button>
               <motion.button className="flex-1 cursor-pointer border-0"
-                style={{ padding: '20px 24px', fontSize: 13, fontWeight: 700, letterSpacing: 3,
+                style={{ padding: '22px 28px', fontSize: 13, fontWeight: 700, letterSpacing: 3,
                   color: '#f0e8ff', background: `linear-gradient(135deg, ${C.purple}, #7a38b8)`,
                   fontFamily: "'Space Mono', monospace" }}
-                whileHover={{ scale: 1.025, boxShadow: `0 0 48px rgba(155,89,216,0.55), 0 8px 36px rgba(155,89,216,0.22)` }}
+                whileHover={{ scale: 1.02, boxShadow: `0 0 52px rgba(155,89,216,0.5), 0 8px 36px rgba(155,89,216,0.2)` }}
                 whileTap={{ scale: 0.97 }} transition={springBouncy}>
                 READ THESIS →
               </motion.button>
-              <motion.button
-                style={{ padding: '20px 20px', fontSize: 12, fontWeight: 700, letterSpacing: 2,
-                  color: C.dim, lineHeight: 1.5, border: `1px solid ${C.border}`,
-                  background: 'transparent', cursor: 'pointer',
-                  fontFamily: "'Space Mono', monospace" }}
-                whileHover={{ borderColor: C.sub, color: '#b0b0d8',
-                  boxShadow: '0 0 22px rgba(100,100,200,0.12)', transition: snappy }}
+            </motion.div>
+
+            <motion.div variants={upItem} className="flex items-center justify-between">
+              <span style={{ fontSize: 11, color: C.dim, letterSpacing: 0.5 }}>
+                Be first in line for early access, updates, and protocol releases.
+              </span>
+              <motion.button style={{
+                fontSize: 11, letterSpacing: 2, padding: '4px 0', marginLeft: 24,
+                color: C.sub, background: 'transparent', border: 'none', cursor: 'pointer',
+                fontFamily: "'Space Mono', monospace", whiteSpace: 'nowrap', fontWeight: 700,
+              }}
+                whileHover={{ color: C.text, transition: snappy }}
                 whileTap={{ scale: 0.97, transition: springStiff }}>
-                EXPLORE<br />MECHANICS →
+                EXPLORE MECHANICS →
               </motion.button>
             </motion.div>
-            <motion.p variants={upItem}
-              style={{ fontSize: 12, color: C.dim, letterSpacing: 1, textAlign: 'center' }}>
-              Be first in line for early access, updates, and protocol releases.
-            </motion.p>
           </motion.div>
         </div>
 
