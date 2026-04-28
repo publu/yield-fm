@@ -81,6 +81,22 @@ function useTimer() {
   return `${String(Math.floor(s/3600)).padStart(2,'0')}:${String(Math.floor((s%3600)/60)).padStart(2,'0')}:${String(s%60).padStart(2,'0')}`
 }
 
+function useMedia(query) {
+  const [matches, setMatches] = useState(() => (
+    typeof window !== 'undefined' ? window.matchMedia(query).matches : false
+  ))
+
+  useEffect(() => {
+    const media = window.matchMedia(query)
+    const onChange = () => setMatches(media.matches)
+    onChange()
+    media.addEventListener('change', onChange)
+    return () => media.removeEventListener('change', onChange)
+  }, [query])
+
+  return matches
+}
+
 // ── Primitives ────────────────────────────────────────────────────────────────
 
 function WaveBars({ count = 8, color = C.teal, height = 28, gap = 2 }) {
@@ -112,18 +128,19 @@ function PulseDot({ color = C.orange, size = 10 }) {
 
 // ── Vinyl — large, detailed, matching original ────────────────────────────────
 
-function Vinyl() {
+function Vinyl({ size = 260 }) {
+  const scale = size / 260
   return (
-    <div className="relative" style={{ width: 260, height: 260 }}>
+    <div className="relative" style={{ width: size, height: size }}>
       {/* Atmosphere */}
       <motion.div className="absolute rounded-full pointer-events-none" style={{
-        inset: -48,
+        inset: -48 * scale,
         background: 'radial-gradient(circle, rgba(155,89,216,0.12) 0%, rgba(0,212,168,0.07) 38%, transparent 66%)',
         filter: 'blur(32px)',
       }} animate={{ opacity: [0.6, 1, 0.6] }} transition={{ duration: 4, repeat: Infinity }} />
 
       <motion.div animate={{ rotate: 360 }} transition={{ duration: 14, repeat: Infinity, ease: 'linear' }}
-        style={{ width: 260, height: 260 }}>
+        style={{ width: size, height: size }}>
         <svg viewBox="0 0 260 260" style={{ width: '100%', height: '100%',
           filter: 'drop-shadow(0 0 24px rgba(0,212,168,0.22)) drop-shadow(0 0 56px rgba(155,89,216,0.14))' }}>
           <defs>
@@ -311,14 +328,18 @@ function FeatureList({ items }) {
 
 export default function App() {
   const timer = useTimer()
+  const isMobile = useMedia('(max-width: 760px)')
+  const isTablet = useMedia('(max-width: 980px)')
 
   return (
-    <div className="min-h-dvh w-full flex items-center justify-center p-4 py-8"
-      style={{ fontFamily: "'Space Mono', monospace", background: C.bg }}>
+    <div className="min-h-dvh w-full flex items-center justify-center"
+      style={{ padding: isMobile ? '0' : '32px 16px', fontFamily: "'Space Mono', monospace", background: C.bg }}>
 
-      <motion.div className="w-full rounded-xl overflow-hidden"
+      <motion.div className="w-full overflow-hidden"
         style={{
           maxWidth: 1200,
+          borderRadius: isMobile ? 0 : 12,
+          background: C.bg,
           border: `1px solid ${C.border}`,
           boxShadow: `0 0 0 1px #0a0a1a, 0 48px 140px rgba(0,0,0,0.9),
             0 0 100px rgba(0,212,168,0.06), 0 0 200px rgba(155,89,216,0.04)`,
@@ -327,16 +348,29 @@ export default function App() {
         initial="hidden" animate="visible" transition={{ ...springBouncy, delay: 0.05 }}>
 
         {/* ── Title Bar ── */}
-        <div className="flex items-center justify-between px-5 py-2.5"
-          style={{ background: 'linear-gradient(180deg, #0d0d20 0%, #0a0a18 100%)', borderBottom: `1px solid ${C.border}` }}>
-          <div className="flex items-center gap-3">
+        <div className="flex items-center justify-between"
+          style={{
+            padding: isMobile ? '10px 12px' : '10px 20px',
+            gap: isMobile ? 10 : 16,
+            background: 'linear-gradient(180deg, #0d0d20 0%, #0a0a18 100%)',
+            borderBottom: `1px solid ${C.border}`,
+          }}>
+          <div className="flex items-center min-w-0" style={{ gap: isMobile ? 8 : 12 }}>
             <WaveBars count={6} height={14} color={C.teal} gap={2} />
-            <span style={{ fontSize: 11, color: C.dim, letterSpacing: 3 }}>yield.fm v0.1 // PROTOCOL PREVIEW</span>
+            <span style={{
+              fontSize: isMobile ? 9 : 11,
+              color: C.dim,
+              letterSpacing: isMobile ? 1.4 : 3,
+              whiteSpace: 'nowrap',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+            }}>yield.fm v0.1 // PROTOCOL PREVIEW</span>
           </div>
-          <div className="flex items-center gap-4">
+          <div className="flex items-center shrink-0" style={{ gap: isMobile ? 8 : 16 }}>
             <motion.div style={{ fontSize: 11, letterSpacing: 3, padding: '3px 12px',
                 border: `1px solid ${C.orange}`, color: C.orange,
-                boxShadow: `0 0 14px rgba(245,166,35,0.22)` }}
+                boxShadow: `0 0 14px rgba(245,166,35,0.22)`,
+                display: isMobile ? 'none' : 'block' }}
               animate={{ opacity: [1, 0.45, 1] }} transition={{ duration: 2.5, repeat: Infinity }}>
               PRE-LAUNCH
             </motion.div>
@@ -350,26 +384,36 @@ export default function App() {
         </div>
 
         {/* ── Hero Row ── */}
-        <div className="flex" style={{ borderBottom: `1px solid ${C.border}` }}>
+        <div className="flex" style={{ flexDirection: isTablet ? 'column' : 'row', borderBottom: `1px solid ${C.border}` }}>
 
           {/* Hero Left — wide, matches original proportions */}
           <div className="relative overflow-hidden" style={{
             flex: '1 1 0',
-            padding: '40px 44px 40px',
-            borderRight: `1px solid ${C.border}`,
+            padding: isMobile ? '26px 18px 238px' : '40px 44px 40px',
+            borderRight: isTablet ? 'none' : `1px solid ${C.border}`,
+            borderBottom: isTablet ? `1px solid ${C.border}` : 'none',
             background: 'linear-gradient(140deg, #0e0e22 0%, #090912 55%, #0b0b1c 100%)',
-            minHeight: 290,
+            minHeight: isMobile ? 470 : 290,
           }}>
             {/* Glow bloom behind vinyl */}
             <div className="absolute pointer-events-none" style={{
-              right: -60, top: -80, width: 580, height: 580,
+              right: isMobile ? -180 : -60,
+              top: isMobile ? 96 : -80,
+              width: isMobile ? 470 : 580,
+              height: isMobile ? 470 : 580,
               background: 'radial-gradient(circle at 55% 45%, rgba(155,89,216,0.15) 0%, rgba(0,212,168,0.08) 38%, transparent 65%)',
               filter: 'blur(36px)',
             }} />
 
             {/* Background bar chart — prominent, matching original */}
             <div className="absolute flex items-end gap-1 pointer-events-none"
-              style={{ right: 230, bottom: 0, opacity: 0.22 }}>
+              style={{
+                right: isMobile ? 112 : 230,
+                bottom: 0,
+                opacity: isMobile ? 0.18 : 0.22,
+                transform: isMobile ? 'scaleX(0.72)' : 'none',
+                transformOrigin: 'right bottom',
+              }}>
               {[45, 70, 38, 95, 58, 110, 48, 80, 65, 100, 44, 75, 60, 88, 52, 72, 55, 82].map((h, i) => (
                 <motion.div key={i}
                   style={{ width: 8, height: h, originY: 1,
@@ -387,8 +431,8 @@ export default function App() {
               transition={{ delayChildren: 0.3, staggerChildren: 0.13 }}>
 
               {/* Logo — thick bars matching original */}
-              <motion.div variants={upItem} className="flex items-end gap-4" style={{ marginBottom: 24 }}>
-                <div className="flex items-end gap-0.5">
+              <motion.div variants={upItem} className="flex items-end" style={{ gap: isMobile ? 10 : 16, marginBottom: isMobile ? 18 : 24 }}>
+                <div className="flex items-end gap-0.5" style={{ transform: isMobile ? 'scale(0.72)' : 'none', transformOrigin: 'left bottom' }}>
                   {[12, 20, 30, 38, 30, 22, 36, 28, 18, 32, 24].map((h, i) => (
                     <motion.div key={i}
                       style={{ width: 9, borderRadius: 2, originY: 1, height: h,
@@ -400,8 +444,13 @@ export default function App() {
                     />
                   ))}
                 </div>
-                <h1 style={{ margin: 0, fontSize: 80, fontWeight: 700, lineHeight: 0.95,
-                    letterSpacing: '-2.5px', fontFamily: "'Space Mono', monospace" }}>
+                <h1 style={{
+                    margin: 0,
+                    fontSize: isMobile ? 48 : 80,
+                    fontWeight: 700,
+                    lineHeight: 0.95,
+                    letterSpacing: isMobile ? '-1.4px' : '-2.5px',
+                    fontFamily: "'Space Mono', monospace" }}>
                   <span style={{
                     background: `linear-gradient(94deg, ${C.teal} 0%, #8844e0 62%)`,
                     WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent',
@@ -411,7 +460,15 @@ export default function App() {
 
               {/* Tagline — single clean line, matching original */}
               <motion.p variants={upItem}
-                style={{ fontSize: 17, color: '#c8c8e8', letterSpacing: '0.04em', marginBottom: 16, fontWeight: 400 }}>
+                style={{
+                  fontSize: isMobile ? 14 : 17,
+                  color: '#c8c8e8',
+                  letterSpacing: '0.04em',
+                  marginBottom: 16,
+                  fontWeight: 400,
+                  lineHeight: 1.55,
+                  maxWidth: isMobile ? 320 : 'none',
+                }}>
                 Own music. Own publishing. Own master catalogs.
               </motion.p>
 
@@ -424,10 +481,13 @@ export default function App() {
 
               {/* Description */}
               <motion.p variants={upItem}
-                style={{ fontSize: 13, color: C.sub, lineHeight: 1.9, marginBottom: 16, maxWidth: 380 }}>
-                A yield-bearing protocol for future ownership<br />
-                of music royalties, streams, and curated<br />
-                catalogs—designed for the next era of<br />
+                style={{ fontSize: 13, color: C.sub, lineHeight: 1.9, marginBottom: 16, maxWidth: isMobile ? 315 : 380 }}>
+                A yield-bearing protocol for future ownership
+                {isMobile ? ' ' : <br />}
+                of music royalties, streams, and curated
+                {isMobile ? ' ' : <br />}
+                catalogs, designed for the next era of
+                {isMobile ? ' ' : <br />}
                 music infrastructure.
               </motion.p>
 
@@ -442,16 +502,21 @@ export default function App() {
             </motion.div>
 
             {/* Vinyl — large, positioned right */}
-            <motion.div style={{ position: 'absolute', right: 32, top: '50%', transform: 'translateY(-52%)' }}
+            <motion.div style={{
+                position: 'absolute',
+                right: isMobile ? -24 : 32,
+                top: isMobile ? 242 : '50%',
+                transform: isMobile ? 'none' : 'translateY(-52%)',
+              }}
               initial={{ opacity: 0, x: 28 }} animate={{ opacity: 1, x: 0 }}
               transition={{ ...spring, delay: 0.55 }}>
-              <Vinyl />
+              <Vinyl size={isMobile ? 230 : 260} />
             </motion.div>
           </div>
 
           {/* Status Panel — PRE-LAUNCH large, matching original */}
           <motion.div className="flex flex-col gap-4"
-            style={{ width: 288, padding: '24px 22px',
+            style={{ width: isTablet ? '100%' : 288, padding: isMobile ? '18px' : '24px 22px',
               background: 'linear-gradient(180deg, #0a0a1a 0%, #08080e 100%)' }}
             variants={slideItem} initial="hidden" animate="visible"
             transition={{ ...spring, delay: 0.45 }}>
@@ -506,7 +571,7 @@ export default function App() {
         </div>
 
         {/* ── Features Row ── */}
-        <div className="flex" style={{ borderBottom: `1px solid ${C.border}` }}>
+        <div className="flex" style={{ flexDirection: isTablet ? 'column' : 'row', borderBottom: `1px solid ${C.border}` }}>
 
           {/* What You Can Own — dotted outer border, matching original */}
           {[
@@ -514,11 +579,12 @@ export default function App() {
             { title: 'HOW CATALOGS EARN', items: EARNING },
           ].map(({ title, items }) => (
             <div key={title} className="flex-1" style={{
-              borderRight: `1px solid ${C.border}`,
+              borderRight: isTablet ? 'none' : `1px solid ${C.border}`,
+              borderBottom: isTablet ? `1px solid ${C.border}` : 'none',
               background: 'linear-gradient(180deg, #0b0b1c 0%, #080810 100%)',
             }}>
               {/* Dotted outer border inset — from original */}
-              <div style={{ margin: 16, border: `1px dashed ${C.border}`, padding: '16px 14px' }}>
+              <div style={{ margin: isMobile ? 10 : 16, border: `1px dashed ${C.border}`, padding: isMobile ? '14px 12px' : '16px 14px' }}>
                 <h3 style={{ fontSize: 11, color: C.dim, letterSpacing: 4,
                   marginBottom: 16, paddingBottom: 10,
                   borderBottom: `1px dashed #1c1c32` }}>{title}</h3>
@@ -531,8 +597,8 @@ export default function App() {
           <div className="flex-1" style={{
             background: 'linear-gradient(180deg, #0b0b1c 0%, #080810 100%)',
           }}>
-            <div style={{ margin: 16, border: `1px dashed ${C.border}`, padding: '16px 14px' }}>
-              <h3 style={{ fontSize: 11, color: C.dim, letterSpacing: 4,
+            <div style={{ margin: isMobile ? 10 : 16, border: `1px dashed ${C.border}`, padding: isMobile ? '14px 12px' : '16px 14px' }}>
+              <h3 style={{ fontSize: 11, color: C.dim, letterSpacing: isMobile ? 2.3 : 4,
                 marginBottom: 16, paddingBottom: 10,
                 borderBottom: `1px dashed #1c1c32` }}>ROYALTY FLOW (CONCEPTUAL)</h3>
               <RoyaltyChart />
@@ -546,7 +612,8 @@ export default function App() {
                   { label: 'NEUTRAL', sub: 'market exposure', color: C.orange },
                 ].map(({ label, sub, color }) => (
                   <div key={label} style={{
-                    flex: 1, padding: '10px 12px',
+                    flex: isMobile ? '1 1 100%' : 1,
+                    padding: '10px 12px',
                     border: `1px solid ${C.ghost}60`,
                     background: '#09091a',
                   }}>
@@ -560,11 +627,15 @@ export default function App() {
         </div>
 
         {/* ── Bottom Row ── */}
-        <div className="flex items-stretch" style={{ borderBottom: `1px solid ${C.border}` }}>
+        <div className="flex items-stretch" style={{ flexDirection: isTablet ? 'column' : 'row', borderBottom: `1px solid ${C.border}` }}>
 
           {/* Cassette panel — ambient glow, label below */}
           <motion.div className="relative flex flex-col items-center justify-center gap-3"
-            style={{ width: 292, padding: '24px 20px', borderRight: `1px solid ${C.border}`,
+            style={{
+              width: isTablet ? '100%' : 292,
+              padding: isMobile ? '24px 18px 22px' : '24px 20px',
+              borderRight: isTablet ? 'none' : `1px solid ${C.border}`,
+              borderBottom: isTablet ? `1px solid ${C.border}` : 'none',
               background: 'linear-gradient(155deg, #0f0620 0%, #070410 55%, #0c0518 100%)',
               overflow: 'hidden' }}
             initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }}
@@ -578,14 +649,14 @@ export default function App() {
             {/* Label row */}
             <div className="flex flex-col items-center gap-1.5" style={{ position: 'relative', zIndex: 1 }}>
               <div style={{ width: 48, height: 1, background: `linear-gradient(90deg, transparent, ${C.purple}70, transparent)` }} />
-              <span style={{ fontSize: 9, color: C.sub, letterSpacing: 4 }}>THE WORLD'S SOUNDTRACK</span>
-              <span style={{ fontSize: 8, color: C.dim, letterSpacing: 2.5 }}>BUILT FOR OWNERS // NOT RENTERS</span>
+              <span style={{ fontSize: 9, color: C.sub, letterSpacing: isMobile ? 2.2 : 4, textAlign: 'center' }}>THE WORLD'S SOUNDTRACK</span>
+              <span style={{ fontSize: 8, color: C.dim, letterSpacing: isMobile ? 1.5 : 2.5, textAlign: 'center' }}>BUILT FOR OWNERS // NOT RENTERS</span>
             </div>
           </motion.div>
 
           {/* CTA area */}
           <motion.div className="flex-1 flex flex-col justify-center"
-            style={{ padding: '36px 48px', background: 'linear-gradient(135deg, #080610 0%, #060508 100%)' }}
+            style={{ padding: isMobile ? '26px 18px 28px' : '36px 48px', background: 'linear-gradient(135deg, #080610 0%, #060508 100%)' }}
             variants={stagger} initial="hidden" whileInView="visible" viewport={{ once: true }}
             transition={{ delayChildren: 0.15, staggerChildren: 0.1 }}>
 
@@ -598,9 +669,10 @@ export default function App() {
               Join the waitlist for early access to royalty ownership, yield mechanics, and the protocol launch.
             </motion.p>
 
-            <motion.div variants={upItem} className="flex gap-3" style={{ marginBottom: 16 }}>
+            <motion.div variants={upItem} className="flex gap-3"
+              style={{ marginBottom: 16, flexDirection: isMobile ? 'column' : 'row' }}>
               <motion.button className="flex-1 cursor-pointer border-0"
-                style={{ padding: '20px 0', fontSize: 12, fontWeight: 700, letterSpacing: 3,
+                style={{ padding: isMobile ? '17px 10px' : '20px 0', fontSize: isMobile ? 11 : 12, fontWeight: 700, letterSpacing: isMobile ? 1.6 : 3,
                   color: '#04080a', background: `linear-gradient(135deg, ${C.teal}, #00b890)`,
                   fontFamily: "'Space Mono', monospace" }}
                 whileHover={{ scale: 1.02, boxShadow: `0 0 52px rgba(0,212,168,0.5), 0 8px 32px rgba(0,212,168,0.2)` }}
@@ -608,7 +680,7 @@ export default function App() {
                 JOIN WAITLIST →
               </motion.button>
               <motion.button className="flex-1 cursor-pointer border-0"
-                style={{ padding: '20px 0', fontSize: 12, fontWeight: 700, letterSpacing: 3,
+                style={{ padding: isMobile ? '17px 10px' : '20px 0', fontSize: isMobile ? 11 : 12, fontWeight: 700, letterSpacing: isMobile ? 1.6 : 3,
                   color: '#f0e8ff', background: `linear-gradient(135deg, ${C.purple}, #7a38b8)`,
                   fontFamily: "'Space Mono', monospace" }}
                 whileHover={{ scale: 1.02, boxShadow: `0 0 52px rgba(155,89,216,0.5), 0 8px 32px rgba(155,89,216,0.2)` }}
@@ -633,12 +705,22 @@ export default function App() {
 
         {/* ── Status Bar ── */}
         <motion.div className="flex items-center justify-between"
-          style={{ padding: '9px 20px',
+          style={{
+            padding: isMobile ? '12px' : '9px 20px',
+            gap: isMobile ? 12 : 20,
+            flexWrap: isMobile ? 'wrap' : 'nowrap',
             background: 'linear-gradient(180deg, #0a0a18, #06060c)',
             borderTop: `1px solid #10101e` }}
           variants={stagger} initial="hidden" whileInView="visible" viewport={{ once: true }}>
           <WaveBars count={5} height={12} color={C.teal} gap={2} />
-          <motion.div className="flex items-center gap-6" variants={stagger}>
+          <motion.div className="flex items-center" variants={stagger}
+            style={{
+              gap: isMobile ? 10 : 24,
+              flexWrap: isMobile ? 'wrap' : 'nowrap',
+              justifyContent: isMobile ? 'center' : 'flex-start',
+              order: isMobile ? 3 : 0,
+              width: isMobile ? '100%' : 'auto',
+            }}>
             {[
               { label: 'INDEXING CATALOGS',      color: C.teal,   delay: 0 },
               { label: 'BUILDING RAILS',          color: C.teal,   delay: 0.5 },
@@ -646,7 +728,7 @@ export default function App() {
               { label: 'MARKET-NEUTRAL EXPOSURE', color: C.teal,   delay: 1.5 },
             ].map(({ label, color, delay }) => (
               <motion.div key={label} className="flex items-center gap-2" variants={upItem}
-                style={{ fontSize: 10, letterSpacing: 3 }}>
+                style={{ fontSize: isMobile ? 8 : 10, letterSpacing: isMobile ? 1.4 : 3 }}>
                 <span style={{ color: C.sub }}>{label}</span>
                 <motion.div className="rounded-full"
                   style={{ width: 6, height: 6, background: color, boxShadow: `0 0 5px ${color}` }}
