@@ -33,14 +33,18 @@ const C = {
   raised:    '#0e0e12',
   panel:     '#111116',
   border:    '#1e1e2e',
-  borderDim: '#141418',
+  borderDim: '#1c1c2c',
   teal:      '#00d4a8',
   purple:    '#9b59d8',
   orange:    '#f5a623',
-  text:      '#d0d0e4',
-  dim:       '#4a4a6a',
-  dimmer:    '#2a2a3e',
+  text:      '#dcdcf4',   // primary — readable white
+  sub:       '#9898c0',   // secondary — descriptions, meta
+  dim:       '#6868a0',   // tertiary — labels, section headers
+  ghost:     '#383868',   // barely-there — numbers, controls
 }
+
+// ── Type scale ────────────────────────────────────────────────────────────────
+// xs:10  sm:11  base:13  md:15  lg:17  hero:82
 
 // ── Data ──────────────────────────────────────────────────────────────────────
 
@@ -346,11 +350,11 @@ function FeatureList({ items, variant = 'slide' }) {
           >
             <div style={{ color: item.color }} className="shrink-0">{item.icon}</div>
             <div className="flex-1">
-              <div style={{ fontSize: 11, color: C.text, fontWeight: 700, letterSpacing: 1 }}>{item.title}</div>
-              <div style={{ fontSize: 10, color: C.dim,  marginTop: 2 }}>{item.desc}</div>
+              <div style={{ fontSize: 13, color: C.text, fontWeight: 700, letterSpacing: 1 }}>{item.title}</div>
+              <div style={{ fontSize: 11, color: C.sub, marginTop: 3 }}>{item.desc}</div>
             </div>
             {item.num && (
-              <span style={{ fontSize: 11, color: C.dimmer, fontWeight: 700 }}>{item.num}</span>
+              <span style={{ fontSize: 11, color: C.dim, fontWeight: 700 }}>{item.num}</span>
             )}
           </motion.div>
         </motion.div>
@@ -397,7 +401,7 @@ export default function App() {
         >
           <div className="flex items-center gap-3">
             <WaveBars count={5} height={14} color={C.teal} gap={2} />
-            <span style={{ fontSize: 11, color: C.dimmer, letterSpacing: 3 }}>
+            <span style={{ fontSize: 11, color: C.dim, letterSpacing: 3 }}>
               yield.fm v0.1 // PROTOCOL PREVIEW
             </span>
           </div>
@@ -413,7 +417,7 @@ export default function App() {
             >
               PRE-LAUNCH
             </motion.div>
-            <div className="flex items-center gap-2.5" style={{ color: '#222232' }}>
+            <div className="flex items-center gap-2.5" style={{ color: C.ghost }}>
               {['⊙', '□', '×'].map(ch => (
                 <motion.span key={ch} className="cursor-pointer" style={{ fontSize: 13 }}
                   whileHover={{ color: C.dim, transition: snappy }}>
@@ -496,11 +500,11 @@ export default function App() {
               >
                 {['Own music', 'Own publishing', 'Own master catalogs'].map((phrase, i, arr) => (
                   <span key={i} className="flex items-baseline gap-3.5">
-                    <span style={{ fontSize: 17, color: '#b8b8d4', letterSpacing: '0.03em', fontWeight: 400 }}>
+                    <span style={{ fontSize: 17, color: '#c8c8e8', letterSpacing: '0.03em', fontWeight: 400 }}>
                       {phrase}
                     </span>
                     {i < arr.length - 1 && (
-                      <span style={{ color: C.teal, fontSize: 22, lineHeight: 1, opacity: 0.55, fontWeight: 700 }}>·</span>
+                      <span style={{ color: C.teal, fontSize: 22, lineHeight: 1, opacity: 0.7, fontWeight: 700 }}>·</span>
                     )}
                   </span>
                 ))}
@@ -516,7 +520,7 @@ export default function App() {
 
               {/* Description — natural paragraph, no forced breaks */}
               <motion.p variants={fadeUpItem} style={{
-                fontSize: 13, color: '#545470', lineHeight: 1.95,
+                fontSize: 13, color: C.sub, lineHeight: 1.95,
                 marginBottom: 20, maxWidth: 395,
               }}>
                 A yield-bearing protocol for future ownership of music royalties,
@@ -526,10 +530,10 @@ export default function App() {
 
               {/* Teal callout — left border accent */}
               <motion.p variants={fadeUpItem} style={{
-                fontSize: 12, color: C.teal,
+                fontSize: 13, color: C.teal,
                 borderLeft: `2px solid ${C.teal}`,
                 paddingLeft: 12, lineHeight: 1.6,
-                letterSpacing: '0.025em', opacity: 0.88,
+                letterSpacing: '0.025em',
                 margin: 0,
               }}>
                 Catalogs can earn whether the market is up or down.
@@ -559,8 +563,8 @@ export default function App() {
             transition={{ ...spring, delay: 0.45 }}
           >
             <div className="flex items-center justify-between">
-              <span style={{ fontSize: 10, color: C.dimmer, letterSpacing: 4 }}>STATUS</span>
-              <span style={{ color: '#1a1a28', fontSize: 12 }}>—</span>
+              <span style={{ fontSize: 10, color: C.dim, letterSpacing: 4 }}>STATUS</span>
+              <span style={{ color: C.ghost, fontSize: 12 }}>—</span>
             </div>
 
             <div style={{
@@ -577,7 +581,7 @@ export default function App() {
               </div>
             </div>
 
-            <p style={{ fontSize: 12, color: '#404060', lineHeight: 1.85 }}>
+            <p style={{ fontSize: 13, color: C.sub, lineHeight: 1.85 }}>
               We're indexing catalogs and<br />
               building the rails for the<br />
               future of royalty ownership.
@@ -592,7 +596,7 @@ export default function App() {
               <motion.button
                 style={{
                   padding: '10px 0', fontSize: 10, letterSpacing: 3, marginTop: 4,
-                  border: `1px solid #1e1e2e`, color: '#484868',
+                  border: `1px solid ${C.border}`, color: C.dim,
                   background: 'transparent', cursor: 'pointer', width: '100%',
                   fontFamily: "'Space Mono', monospace",
                 }}
@@ -618,9 +622,9 @@ export default function App() {
               background: 'linear-gradient(180deg, #0a0a10 0%, #060609 100%)',
             }}>
               <h3 style={{
-                fontSize: 10, color: C.dimmer, letterSpacing: 4,
+                fontSize: 11, color: C.dim, letterSpacing: 4,
                 marginBottom: 18, paddingBottom: 10,
-                borderBottom: `1px dashed #14141e`,
+                borderBottom: `1px dashed ${C.borderDim}`,
               }}>{title}</h3>
               <FeatureList items={items} variant={variant} />
             </div>
@@ -652,7 +656,7 @@ export default function App() {
               <div className="flex items-start justify-between gap-2">
                 <div>
                   <span style={{ color: C.purple, fontSize: 22, lineHeight: 1, fontWeight: 700 }}>"</span>
-                  <p style={{ color: C.teal, fontSize: 11, lineHeight: 1.75, fontWeight: 700, marginTop: 4 }}>
+                  <p style={{ color: C.teal, fontSize: 13, lineHeight: 1.75, fontWeight: 700, marginTop: 4 }}>
                     Diverse sources.<br />Durable demand.<br />Market-neutral exposure.
                   </p>
                 </div>
@@ -719,13 +723,13 @@ export default function App() {
               </motion.button>
               <motion.button
                 style={{
-                  padding: '20px 22px', fontSize: 11, fontWeight: 700,
-                  letterSpacing: 2, color: '#484870', lineHeight: 1.5,
-                  border: `1px solid #1e1e2e`, background: 'transparent',
+                  padding: '20px 22px', fontSize: 12, fontWeight: 700,
+                  letterSpacing: 2, color: C.dim, lineHeight: 1.5,
+                  border: `1px solid ${C.border}`, background: 'transparent',
                   cursor: 'pointer',
                   fontFamily: "'Space Mono', monospace",
                 }}
-                whileHover={{ borderColor: '#4a4a80', color: '#9090c0',
+                whileHover={{ borderColor: C.sub, color: '#b0b0d8',
                   boxShadow: '0 0 22px rgba(100,100,200,0.12)', transition: snappy }}
                 whileTap={{ scale: 0.97, transition: springStiff }}
               >
@@ -733,7 +737,7 @@ export default function App() {
               </motion.button>
             </motion.div>
             <motion.p variants={fadeUpItem}
-              style={{ fontSize: 11, color: '#282840', letterSpacing: 1, textAlign: 'center' }}>
+              style={{ fontSize: 12, color: C.dim, letterSpacing: 1, textAlign: 'center' }}>
               Be first in line for early access, updates, and protocol releases.
             </motion.p>
           </motion.div>
@@ -760,7 +764,7 @@ export default function App() {
             ].map(({ label, color, delay }) => (
               <motion.div key={label} className="flex items-center gap-2" variants={fadeUpItem}
                 style={{ fontSize: 10, letterSpacing: 3 }}>
-                <span style={{ color: C.dimmer }}>{label}</span>
+                <span style={{ color: C.sub }}>{label}</span>
                 <motion.div className="rounded-full"
                   style={{ width: 6, height: 6, background: color, boxShadow: `0 0 5px ${color}` }}
                   animate={{ opacity: [1, 0.12, 1] }}
