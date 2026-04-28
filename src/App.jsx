@@ -561,54 +561,69 @@ export default function App() {
 
         {/* ── Bottom Row ── */}
         <div className="flex items-stretch" style={{ borderBottom: `1px solid ${C.border}` }}>
-          <motion.div className="flex items-center justify-center"
-            style={{ width: 312, padding: '20px 24px', borderRight: `1px solid ${C.border}`,
-              background: 'linear-gradient(140deg, #0e0620, #08050e)' }}
+
+          {/* Cassette panel — ambient glow, label below */}
+          <motion.div className="relative flex flex-col items-center justify-center gap-3"
+            style={{ width: 292, padding: '24px 20px', borderRight: `1px solid ${C.border}`,
+              background: 'linear-gradient(155deg, #0f0620 0%, #070410 55%, #0c0518 100%)',
+              overflow: 'hidden' }}
             initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }} transition={{ ...spring, delay: 0.1 }}>
-            <div style={{ width: 278 }}><Cassette /></div>
+            {/* Purple ambient bloom */}
+            <div className="absolute pointer-events-none" style={{
+              inset: 0,
+              background: 'radial-gradient(ellipse at 50% 42%, rgba(155,89,216,0.2) 0%, rgba(0,212,168,0.06) 45%, transparent 72%)',
+            }} />
+            <div style={{ width: '100%', position: 'relative', zIndex: 1 }}><Cassette /></div>
+            {/* Label row */}
+            <div className="flex flex-col items-center gap-1.5" style={{ position: 'relative', zIndex: 1 }}>
+              <div style={{ width: 48, height: 1, background: `linear-gradient(90deg, transparent, ${C.purple}70, transparent)` }} />
+              <span style={{ fontSize: 9, color: C.sub, letterSpacing: 4 }}>THE WORLD'S SOUNDTRACK</span>
+              <span style={{ fontSize: 8, color: C.dim, letterSpacing: 2.5 }}>BUILT FOR OWNERS // NOT RENTERS</span>
+            </div>
           </motion.div>
 
+          {/* CTA area */}
           <motion.div className="flex-1 flex flex-col justify-center"
-            style={{ padding: '36px 44px', background: '#06060e' }}
+            style={{ padding: '36px 48px', background: 'linear-gradient(135deg, #080610 0%, #060508 100%)' }}
             variants={stagger} initial="hidden" whileInView="visible" viewport={{ once: true }}
             transition={{ delayChildren: 0.15, staggerChildren: 0.1 }}>
 
             <motion.p variants={upItem} style={{
-              fontSize: 10, color: C.ghost, letterSpacing: 4, marginBottom: 20,
+              fontSize: 22, fontWeight: 700, color: C.text, letterSpacing: 0.5, marginBottom: 8, lineHeight: 1.25,
             }}>
-              BUILT FOR OWNERS // NOT RENTERS
+              Own the catalog.<br />Own the yield.
+            </motion.p>
+            <motion.p variants={upItem} style={{ fontSize: 12, color: C.dim, letterSpacing: 0.5, marginBottom: 24, lineHeight: 1.75 }}>
+              Join the waitlist for early access to royalty ownership, yield mechanics, and the protocol launch.
             </motion.p>
 
-            <motion.div variants={upItem} className="flex gap-3 items-stretch" style={{ marginBottom: 18 }}>
+            <motion.div variants={upItem} className="flex gap-3" style={{ marginBottom: 16 }}>
               <motion.button className="flex-1 cursor-pointer border-0"
-                style={{ padding: '22px 28px', fontSize: 13, fontWeight: 700, letterSpacing: 3,
+                style={{ padding: '20px 0', fontSize: 12, fontWeight: 700, letterSpacing: 3,
                   color: '#04080a', background: `linear-gradient(135deg, ${C.teal}, #00b890)`,
                   fontFamily: "'Space Mono', monospace" }}
-                whileHover={{ scale: 1.02, boxShadow: `0 0 52px rgba(0,212,168,0.5), 0 8px 36px rgba(0,212,168,0.2)` }}
+                whileHover={{ scale: 1.02, boxShadow: `0 0 52px rgba(0,212,168,0.5), 0 8px 32px rgba(0,212,168,0.2)` }}
                 whileTap={{ scale: 0.97 }} transition={springBouncy}>
                 JOIN WAITLIST →
               </motion.button>
               <motion.button className="flex-1 cursor-pointer border-0"
-                style={{ padding: '22px 28px', fontSize: 13, fontWeight: 700, letterSpacing: 3,
+                style={{ padding: '20px 0', fontSize: 12, fontWeight: 700, letterSpacing: 3,
                   color: '#f0e8ff', background: `linear-gradient(135deg, ${C.purple}, #7a38b8)`,
                   fontFamily: "'Space Mono', monospace" }}
-                whileHover={{ scale: 1.02, boxShadow: `0 0 52px rgba(155,89,216,0.5), 0 8px 36px rgba(155,89,216,0.2)` }}
+                whileHover={{ scale: 1.02, boxShadow: `0 0 52px rgba(155,89,216,0.5), 0 8px 32px rgba(155,89,216,0.2)` }}
                 whileTap={{ scale: 0.97 }} transition={springBouncy}>
                 READ THESIS →
               </motion.button>
             </motion.div>
 
-            <motion.div variants={upItem} className="flex items-center justify-between">
-              <span style={{ fontSize: 11, color: C.dim, letterSpacing: 0.5 }}>
-                Be first in line for early access, updates, and protocol releases.
-              </span>
+            <motion.div variants={upItem} className="flex items-center justify-end">
               <motion.button style={{
-                fontSize: 11, letterSpacing: 2, padding: '4px 0', marginLeft: 24,
-                color: C.sub, background: 'transparent', border: 'none', cursor: 'pointer',
-                fontFamily: "'Space Mono', monospace", whiteSpace: 'nowrap', fontWeight: 700,
+                fontSize: 10, letterSpacing: 2.5, color: C.dim,
+                background: 'transparent', border: 'none', cursor: 'pointer',
+                fontFamily: "'Space Mono', monospace", fontWeight: 700,
               }}
-                whileHover={{ color: C.text, transition: snappy }}
+                whileHover={{ color: C.sub, transition: snappy }}
                 whileTap={{ scale: 0.97, transition: springStiff }}>
                 EXPLORE MECHANICS →
               </motion.button>
