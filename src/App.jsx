@@ -139,8 +139,7 @@ function Vinyl({ size = 260 }) {
         filter: 'blur(32px)',
       }} animate={{ opacity: [0.6, 1, 0.6] }} transition={{ duration: 4, repeat: Infinity }} />
 
-      <motion.div animate={{ rotate: 360 }} transition={{ duration: 14, repeat: Infinity, ease: 'linear' }}
-        style={{ width: size, height: size }}>
+      <div className="vinyl-spin" style={{ width: size, height: size }}>
         <svg viewBox="0 0 260 260" style={{ width: '100%', height: '100%',
           filter: 'drop-shadow(0 0 24px rgba(0,212,168,0.22)) drop-shadow(0 0 56px rgba(155,89,216,0.14))' }}>
           <defs>
@@ -181,7 +180,7 @@ function Vinyl({ size = 260 }) {
           <circle cx="130" cy="130" r="6" fill="#05050c" />
           <circle cx="130" cy="130" r="6" fill="none" stroke="#18183a" strokeWidth="0.8" />
         </svg>
-      </motion.div>
+      </div>
     </div>
   )
 }
@@ -389,11 +388,11 @@ export default function App() {
           {/* Hero Left — wide, matches original proportions */}
           <div className="relative overflow-hidden" style={{
             flex: '1 1 0',
-            padding: isMobile ? '26px 18px 238px' : '40px 44px 40px',
+            padding: isMobile ? '26px 18px 270px' : '40px 44px 40px',
             borderRight: isTablet ? 'none' : `1px solid ${C.border}`,
             borderBottom: isTablet ? `1px solid ${C.border}` : 'none',
             background: 'linear-gradient(140deg, #0e0e22 0%, #090912 55%, #0b0b1c 100%)',
-            minHeight: isMobile ? 470 : 290,
+            minHeight: isMobile ? 540 : 290,
           }}>
             {/* Glow bloom behind vinyl */}
             <div className="absolute pointer-events-none" style={{
@@ -428,6 +427,7 @@ export default function App() {
 
             {/* Staggered content */}
             <motion.div variants={stagger} initial="hidden" animate="visible"
+              style={{ position: 'relative', zIndex: 2 }}
               transition={{ delayChildren: 0.3, staggerChildren: 0.13 }}>
 
               {/* Logo — thick bars matching original */}
@@ -495,7 +495,10 @@ export default function App() {
               <motion.p variants={upItem} style={{
                 fontSize: 13, color: C.teal,
                 borderLeft: `2px solid ${C.teal}`,
-                paddingLeft: 12, lineHeight: 1.6, margin: 0,
+                paddingLeft: 12,
+                lineHeight: 1.6,
+                margin: 0,
+                maxWidth: isMobile ? 315 : 380,
               }}>
                 Catalogs can earn whether the market is up or down.
               </motion.p>
@@ -504,13 +507,14 @@ export default function App() {
             {/* Vinyl — large, positioned right */}
             <motion.div style={{
                 position: 'absolute',
-                right: isMobile ? -24 : 32,
-                top: isMobile ? 242 : '50%',
+                right: isMobile ? -30 : 32,
+                top: isMobile ? 324 : '50%',
                 transform: isMobile ? 'none' : 'translateY(-52%)',
+                zIndex: 1,
               }}
               initial={{ opacity: 0, x: 28 }} animate={{ opacity: 1, x: 0 }}
               transition={{ ...spring, delay: 0.55 }}>
-              <Vinyl size={isMobile ? 230 : 260} />
+              <Vinyl size={isMobile ? 220 : 260} />
             </motion.div>
           </div>
 

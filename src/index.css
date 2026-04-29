@@ -31,6 +31,18 @@ body {
   100% { transform: translateY(100vh); }
 }
 
+@keyframes vinyl-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.vinyl-spin {
+  animation: vinyl-spin 14s linear infinite;
+  transform-origin: 50% 50%;
+  will-change: transform;
+  backface-visibility: hidden;
+}
+
 .scan-overlay::before {
   content: '';
   position: fixed;
