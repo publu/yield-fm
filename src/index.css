@@ -36,22 +36,11 @@ body {
   to { transform: rotate(360deg); }
 }
 
-@keyframes reel-drift {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
-}
-
 .vinyl-spin {
   animation: vinyl-spin 26s linear infinite;
   transform-origin: 50% 50%;
   will-change: transform;
   backface-visibility: hidden;
-}
-
-.reel-drift {
-  animation: reel-drift 28s linear infinite;
-  transform-box: fill-box;
-  will-change: transform;
 }
 
 .status-dot {

@@ -35,8 +35,6 @@ const C = {
 
 // ── Type scale: 10 / 11 / 13 / 17 / 82 ───────────────────────────────────────
 
-const BAR_H = [0.42, 0.78, 0.56, 0.92, 0.5, 0.72, 0.34, 0.66, 0.84, 0.46, 0.62, 0.74, 0.52, 0.86]
-
 const OWNERSHIP = [
   { num: '01', title: 'PUBLISHING RIGHTS',  desc: 'Composition & songwriter share', color: C.teal,
     icon: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-6 h-6"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="8" x2="16" y2="8"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="8" y1="16" x2="12" y2="16"/></svg> },
@@ -99,42 +97,27 @@ function useMedia(query) {
 
 // ── Primitives ────────────────────────────────────────────────────────────────
 
-function WaveBars({ count = 8, color = C.teal, height = 28, gap = 2, width = 3 }) {
+function SignalMark({ size = 18 }) {
   return (
-    <div className="flex items-end" style={{ height, gap }}>
-      {Array.from({ length: count }, (_, i) => {
-        const base = BAR_H[i % BAR_H.length]
-        return (
-          <div key={i}
-            style={{
-              width,
-              height: Math.max(2, height * base),
-              background: color,
-              borderRadius: 1,
-              opacity: i % 4 === 0 ? 0.62 : 0.9,
-            }}
-          />
-        )
-      })}
-    </div>
-  )
-}
-
-function SpectrumStrip({ bars, colorA = C.teal, colorB = C.purple, height = 96, barWidth = 7 }) {
-  return (
-    <div className="flex items-end gap-1 pointer-events-none" style={{ height }}>
-      {bars.map((h, i) => (
-        <div key={i}
-          style={{
-            width: barWidth,
-            height: h,
-            background: i % 3 === 0
-              ? `linear-gradient(to top, #008a6a, ${colorA})`
-              : `linear-gradient(to top, #4a1b78, ${colorB})`,
-            opacity: i % 5 === 0 ? 0.55 : 0.8,
-          }}
-        />
-      ))}
+    <div aria-hidden="true" style={{
+      width: size,
+      height: size,
+      border: `1px solid ${C.teal}`,
+      borderRadius: 999,
+      boxShadow: `0 0 14px rgba(0,212,168,0.22), inset 0 0 10px rgba(0,212,168,0.08)`,
+      position: 'relative',
+      flexShrink: 0,
+    }}>
+      <div style={{
+        position: 'absolute',
+        inset: '50% auto auto 50%',
+        width: Math.max(4, size * 0.28),
+        height: Math.max(4, size * 0.28),
+        borderRadius: 999,
+        background: C.teal,
+        transform: 'translate(-50%, -50%)',
+        opacity: 0.82,
+      }} />
     </div>
   )
 }
@@ -260,22 +243,13 @@ function RoyaltyChart() {
 // ── Cassette ──────────────────────────────────────────────────────────────────
 
 function Cassette() {
-  const spokes = [0, 72, 144, 216, 288]
   function Reel({ cx, cy }) {
     return (
       <g>
-        <circle cx={cx} cy={cy} r={30} fill="#0a0616" stroke="#4a2480" strokeWidth="1.5" />
-        <g className="reel-drift" style={{ transformOrigin: `${cx}px ${cy}px` }}>
-          {spokes.map(a => (
-            <line key={a}
-              x1={cx + 13 * Math.cos((a * Math.PI) / 180)} y1={cy + 13 * Math.sin((a * Math.PI) / 180)}
-              x2={cx + 26 * Math.cos((a * Math.PI) / 180)} y2={cy + 26 * Math.sin((a * Math.PI) / 180)}
-              stroke="#6a30a0" strokeWidth="2" strokeLinecap="round" />
-          ))}
-        </g>
-        <circle cx={cx} cy={cy} r={11} fill="#100820" stroke="#2d1a4e" strokeWidth="1" />
-        <circle cx={cx} cy={cy} r={11} fill="none" stroke={C.purple} strokeWidth="0.5" opacity="0.3" />
-        <circle cx={cx} cy={cy} r={5} fill="#04030a" />
+        <circle cx={cx} cy={cy} r={30} fill="#080613" stroke="#3a2260" strokeWidth="1.2" />
+        <circle cx={cx} cy={cy} r={22} fill="none" stroke="#201838" strokeWidth="1" />
+        <circle cx={cx} cy={cy} r={12} fill="#100820" stroke="#2d1a4e" strokeWidth="1" />
+        <circle cx={cx} cy={cy} r={5} fill="#05040b" />
       </g>
     )
   }
@@ -287,21 +261,21 @@ function Cassette() {
           <stop offset="0%" stopColor="#160a2a" /><stop offset="100%" stopColor="#0a0516" />
         </linearGradient>
       </defs>
-      <rect x="3" y="3" width="314" height="142" rx="12" fill="url(#cBg)" stroke="#4a2480" strokeWidth="1.5" />
-      <rect x="7" y="7" width="306" height="134" rx="9" fill="none" stroke="#2a144860" strokeWidth="1" />
-      <rect x="52" y="18" width="216" height="82" rx="6" fill="#04030a" stroke="#2a1848" strokeWidth="1.5" />
-      <rect x="55" y="21" width="210" height="76" rx="4" fill="#050410" stroke="#16102890" strokeWidth="0.5" />
-      <path d="M 84 94 Q 160 106 236 94" stroke="#4a206060" strokeWidth="2" fill="none" strokeLinecap="round" />
+      <rect x="3" y="3" width="314" height="142" rx="12" fill="url(#cBg)" stroke="#3c2267" strokeWidth="1.2" />
+      <rect x="9" y="9" width="302" height="130" rx="9" fill="none" stroke="#21143a" strokeWidth="1" />
+      <rect x="52" y="18" width="216" height="82" rx="6" fill="#04030a" stroke="#24173f" strokeWidth="1.2" />
+      <rect x="56" y="22" width="208" height="74" rx="4" fill="#050410" stroke="#151022" strokeWidth="0.5" />
+      <path d="M 84 94 Q 160 104 236 94" stroke="#3b2852" strokeWidth="1.4" fill="none" strokeLinecap="round" />
       <Reel cx={108} cy={60} />
       <Reel cx={212} cy={60} />
       <rect x="20" y="2"  width="24" height="10" rx="3" fill="#08060f" stroke="#4a2480" strokeWidth="1" />
       <rect x="276" y="2" width="24" height="10" rx="3" fill="#08060f" stroke="#4a2480" strokeWidth="1" />
       <circle cx="20"  cy="130" r="5.5" fill="#08060f" stroke="#2a1448" strokeWidth="1" />
       <circle cx="300" cy="130" r="5.5" fill="#08060f" stroke="#2a1448" strokeWidth="1" />
-      <text x="160" y="120" textAnchor="middle" fill="#7a3aaa" fontSize="8" letterSpacing="3.5"
-        fontFamily="SpaceMono, monospace" fontWeight="700">THE WORLD'S SOUNDTRACK</text>
-      <text x="160" y="135" textAnchor="middle" fill="#4a1870" fontSize="7" letterSpacing="2.5"
-        fontFamily="SpaceMono, monospace">BUILT FOR OWNERS // NOT RENTERS</text>
+      <text x="160" y="124" textAnchor="middle" fill="#7a3aaa" fontSize="11" letterSpacing="1.5"
+        fontFamily="SpaceMono, monospace" fontWeight="700">yield.fm</text>
+      <text x="160" y="137" textAnchor="middle" fill="#4a1870" fontSize="6.5" letterSpacing="2"
+        fontFamily="SpaceMono, monospace">CATALOG OWNERSHIP</text>
     </svg>
   )
 }
@@ -374,7 +348,7 @@ export default function App() {
             borderBottom: `1px solid ${C.border}`,
           }}>
           <div className="flex items-center min-w-0" style={{ gap: isMobile ? 8 : 12 }}>
-            <WaveBars count={6} height={14} color={C.teal} gap={2} />
+            <SignalMark size={14} />
             <span style={{
               fontSize: isMobile ? 9 : 11,
               color: C.dim,
@@ -423,17 +397,17 @@ export default function App() {
               filter: 'blur(36px)',
             }} />
 
-            {/* Background bar chart — prominent, matching original */}
-            <div className="absolute pointer-events-none"
-              style={{
-                right: isMobile ? 112 : 230,
-                bottom: 0,
-                opacity: isMobile ? 0.13 : 0.18,
-                transform: isMobile ? 'scaleX(0.72)' : 'none',
-                transformOrigin: 'right bottom',
-              }}>
-              <SpectrumStrip bars={[45, 70, 38, 95, 58, 110, 48, 80, 65, 100, 44, 75, 60, 88, 52, 72, 55, 82]} height={112} barWidth={8} />
-            </div>
+            {/* Quiet catalog-grid texture */}
+            <div className="absolute pointer-events-none" style={{
+              right: isMobile ? -24 : 250,
+              bottom: isMobile ? 18 : 0,
+              width: isMobile ? 210 : 260,
+              height: 118,
+              opacity: isMobile ? 0.16 : 0.18,
+              backgroundImage: `linear-gradient(${C.border} 1px, transparent 1px), linear-gradient(90deg, ${C.border} 1px, transparent 1px)`,
+              backgroundSize: '28px 28px',
+              maskImage: 'linear-gradient(90deg, transparent, #000 25%, #000 70%, transparent)',
+            }} />
 
             {/* Staggered content */}
             <motion.div variants={stagger} initial="hidden" animate="visible"
@@ -561,10 +535,18 @@ export default function App() {
             </p>
 
             <div className="flex-1 flex flex-col justify-end gap-3">
-              {/* Quiet signal grid */}
-              <div className="flex items-end flex-wrap" style={{ gap: 3, opacity: 0.84 }}>
+              <div className="grid" style={{
+                gridTemplateColumns: 'repeat(7, 1fr)',
+                gap: 6,
+                opacity: 0.72,
+              }}>
                 {Array.from({ length: 14 }, (_, i) => (
-                  <WaveBars key={i} count={3} height={20} color={i % 2 === 0 ? C.teal : C.purple} gap={2} width={2} />
+                  <div key={i} style={{
+                    height: 6,
+                    borderRadius: 999,
+                    background: i % 4 === 0 ? C.orange : i % 2 === 0 ? C.teal : C.purple,
+                    opacity: i % 5 === 0 ? 0.42 : 0.7,
+                  }} />
                 ))}
               </div>
 
@@ -662,8 +644,8 @@ export default function App() {
             {/* Label row */}
             <div className="flex flex-col items-center gap-1.5" style={{ position: 'relative', zIndex: 1 }}>
               <div style={{ width: 48, height: 1, background: `linear-gradient(90deg, transparent, ${C.purple}70, transparent)` }} />
-              <span style={{ fontSize: 9, color: C.sub, letterSpacing: isMobile ? 2.2 : 4, textAlign: 'center' }}>THE WORLD'S SOUNDTRACK</span>
-              <span style={{ fontSize: 8, color: C.dim, letterSpacing: isMobile ? 1.5 : 2.5, textAlign: 'center' }}>BUILT FOR OWNERS // NOT RENTERS</span>
+              <span style={{ fontSize: 10, color: C.sub, letterSpacing: isMobile ? 1.6 : 2.8, textAlign: 'center' }}>OWNERSHIP SIGNAL</span>
+              <span style={{ fontSize: 9, color: C.dim, letterSpacing: isMobile ? 1.1 : 1.8, textAlign: 'center' }}>CATALOGS, RIGHTS, AND ROYALTIES</span>
             </div>
           </motion.div>
 
@@ -725,7 +707,7 @@ export default function App() {
             background: 'linear-gradient(180deg, #0a0a18, #06060c)',
             borderTop: `1px solid #10101e` }}
           variants={stagger} initial="hidden" whileInView="visible" viewport={{ once: true }}>
-          <WaveBars count={5} height={12} color={C.teal} gap={2} />
+          <SignalMark size={12} />
           <motion.div className="flex items-center" variants={stagger}
             style={{
               gap: isMobile ? 10 : 24,
