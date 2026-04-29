@@ -170,8 +170,8 @@ function Vinyl({ size = 260 }) {
           <circle cx="130" cy="130" r="46" fill="none" stroke={C.purple} strokeWidth="0.8" opacity="0.5" />
           <circle cx="130" cy="130" r="38" fill="none" stroke={C.teal}   strokeWidth="0.5" opacity="0.25" />
 
-          <text x="130" y="126" textAnchor="middle" fill={C.teal}   fontSize="10" fontFamily="Space Mono, monospace" letterSpacing="1">yield.fm</text>
-          <text x="130" y="138" textAnchor="middle" fill={C.purple} fontSize="6.5" fontFamily="Space Mono, monospace" opacity="0.85">v0.1</text>
+          <text x="130" y="126" textAnchor="middle" fill={C.teal}   fontSize="10" fontFamily="SpaceMono, monospace" letterSpacing="1">yield.fm</text>
+          <text x="130" y="138" textAnchor="middle" fill={C.purple} fontSize="6.5" fontFamily="SpaceMono, monospace" opacity="0.85">v0.1</text>
 
           {/* Spinning arc highlight */}
           <path d="M 130 84 A 46 46 0 0 1 176 130" stroke={C.teal} strokeWidth="2.5" fill="none" opacity="0.85" strokeLinecap="round" />
@@ -280,9 +280,9 @@ function Cassette() {
       <circle cx="20"  cy="130" r="5.5" fill="#08060f" stroke="#2a1448" strokeWidth="1" />
       <circle cx="300" cy="130" r="5.5" fill="#08060f" stroke="#2a1448" strokeWidth="1" />
       <text x="160" y="120" textAnchor="middle" fill="#7a3aaa" fontSize="8" letterSpacing="3.5"
-        fontFamily="Space Mono, monospace" fontWeight="700">THE WORLD'S SOUNDTRACK</text>
+        fontFamily="SpaceMono, monospace" fontWeight="700">THE WORLD'S SOUNDTRACK</text>
       <text x="160" y="135" textAnchor="middle" fill="#4a1870" fontSize="7" letterSpacing="2.5"
-        fontFamily="Space Mono, monospace">BUILT FOR OWNERS // NOT RENTERS</text>
+        fontFamily="SpaceMono, monospace">BUILT FOR OWNERS // NOT RENTERS</text>
     </svg>
   )
 }
@@ -332,7 +332,7 @@ export default function App() {
 
   return (
     <div className="min-h-dvh w-full flex items-center justify-center"
-      style={{ padding: isMobile ? '0' : '32px 16px', fontFamily: "'Space Mono', monospace", background: C.bg }}>
+      style={{ padding: isMobile ? '0' : '32px 16px', fontFamily: "'SpaceMono', monospace", background: C.bg }}>
 
       <motion.div className="w-full overflow-hidden"
         style={{
@@ -450,7 +450,7 @@ export default function App() {
                     fontWeight: 700,
                     lineHeight: 0.95,
                     letterSpacing: isMobile ? '-1.4px' : '-2.5px',
-                    fontFamily: "'Space Mono', monospace" }}>
+                    fontFamily: "'SpaceMono', monospace" }}>
                   <span style={{
                     background: `linear-gradient(94deg, ${C.teal} 0%, #8844e0 62%)`,
                     WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent',
@@ -563,7 +563,7 @@ export default function App() {
                 padding: '10px 0', fontSize: 10, letterSpacing: 3, marginTop: 4,
                 border: `1px solid ${C.border}`, color: C.dim,
                 background: 'transparent', cursor: 'pointer', width: '100%',
-                fontFamily: "'Space Mono', monospace",
+                fontFamily: "'SpaceMono', monospace",
               }}
                 whileHover={{ borderColor: C.teal, color: C.teal,
                   boxShadow: `0 0 18px rgba(0,212,168,0.14)`, transition: snappy }}
@@ -678,7 +678,7 @@ export default function App() {
               <motion.button className="flex-1 cursor-pointer border-0"
                 style={{ padding: isMobile ? '17px 10px' : '20px 0', fontSize: isMobile ? 11 : 12, fontWeight: 700, letterSpacing: isMobile ? 1.6 : 3,
                   color: '#04080a', background: `linear-gradient(135deg, ${C.teal}, #00b890)`,
-                  fontFamily: "'Space Mono', monospace" }}
+                  fontFamily: "'SpaceMono', monospace" }}
                 whileHover={{ scale: 1.02, boxShadow: `0 0 52px rgba(0,212,168,0.5), 0 8px 32px rgba(0,212,168,0.2)` }}
                 whileTap={{ scale: 0.97 }} transition={springBouncy}>
                 JOIN WAITLIST →
@@ -686,7 +686,7 @@ export default function App() {
               <motion.button className="flex-1 cursor-pointer border-0"
                 style={{ padding: isMobile ? '17px 10px' : '20px 0', fontSize: isMobile ? 11 : 12, fontWeight: 700, letterSpacing: isMobile ? 1.6 : 3,
                   color: '#f0e8ff', background: `linear-gradient(135deg, ${C.purple}, #7a38b8)`,
-                  fontFamily: "'Space Mono', monospace" }}
+                  fontFamily: "'SpaceMono', monospace" }}
                 whileHover={{ scale: 1.02, boxShadow: `0 0 52px rgba(155,89,216,0.5), 0 8px 32px rgba(155,89,216,0.2)` }}
                 whileTap={{ scale: 0.97 }} transition={springBouncy}>
                 READ THESIS →
@@ -697,7 +697,7 @@ export default function App() {
               <motion.button style={{
                 fontSize: 10, letterSpacing: 2.5, color: C.dim,
                 background: 'transparent', border: 'none', cursor: 'pointer',
-                fontFamily: "'Space Mono', monospace", fontWeight: 700,
+                fontFamily: "'SpaceMono', monospace", fontWeight: 700,
               }}
                 whileHover={{ color: C.sub, transition: snappy }}
                 whileTap={{ scale: 0.97, transition: springStiff }}>

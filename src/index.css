@@ -10,7 +10,7 @@ body {
   margin: 0;
   padding: 0;
   background: #080810;
-  font-family: 'Space Mono', 'Courier New', monospace;
+  font-family: 'SpaceMono', monospace;
   -webkit-font-smoothing: antialiased;
   min-height: 100vh;
 }
