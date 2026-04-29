@@ -240,6 +240,69 @@ function RoyaltyChart() {
   )
 }
 
+// ── Cassette ──────────────────────────────────────────────────────────────────
+
+function Cassette() {
+  const spokes = [0, 72, 144, 216, 288]
+
+  function Reel({ cx, cy, reverse = false }) {
+    return (
+      <g>
+        <circle cx={cx} cy={cy} r={30} fill="#080613" stroke="#3a2260" strokeWidth="1.2" />
+        <circle cx={cx} cy={cy} r={22} fill="none" stroke="#201838" strokeWidth="1" />
+        <g>
+          <animateTransform
+            attributeName="transform"
+            type="rotate"
+            from={`${reverse ? 360 : 0} ${cx} ${cy}`}
+            to={`${reverse ? 0 : 360} ${cx} ${cy}`}
+            dur="24s"
+            repeatCount="indefinite"
+          />
+          {spokes.map(a => (
+            <line key={a}
+              x1={cx + 13 * Math.cos((a * Math.PI) / 180)}
+              y1={cy + 13 * Math.sin((a * Math.PI) / 180)}
+              x2={cx + 26 * Math.cos((a * Math.PI) / 180)}
+              y2={cy + 26 * Math.sin((a * Math.PI) / 180)}
+              stroke="#6a30a0"
+              strokeWidth="1.7"
+              strokeLinecap="round" />
+          ))}
+        </g>
+        <circle cx={cx} cy={cy} r={12} fill="#100820" stroke="#2d1a4e" strokeWidth="1" />
+        <circle cx={cx} cy={cy} r={5} fill="#05040b" />
+      </g>
+    )
+  }
+
+  return (
+    <svg viewBox="0 0 320 148" style={{ width: '100%', height: 'auto', display: 'block' }}>
+      <defs>
+        <linearGradient id="cBg" x1="0%" y1="0%" x2="0%" y2="100%">
+          <stop offset="0%" stopColor="#160a2a" />
+          <stop offset="100%" stopColor="#0a0516" />
+        </linearGradient>
+      </defs>
+      <rect x="3" y="3" width="314" height="142" rx="12" fill="url(#cBg)" stroke="#3c2267" strokeWidth="1.2" />
+      <rect x="9" y="9" width="302" height="130" rx="9" fill="none" stroke="#21143a" strokeWidth="1" />
+      <rect x="52" y="18" width="216" height="82" rx="6" fill="#04030a" stroke="#24173f" strokeWidth="1.2" />
+      <rect x="56" y="22" width="208" height="74" rx="4" fill="#050410" stroke="#151022" strokeWidth="0.5" />
+      <path d="M 84 94 Q 160 104 236 94" stroke="#3b2852" strokeWidth="1.4" fill="none" strokeLinecap="round" />
+      <Reel cx={108} cy={60} />
+      <Reel cx={212} cy={60} reverse />
+      <rect x="20" y="2" width="24" height="10" rx="3" fill="#08060f" stroke="#4a2480" strokeWidth="1" />
+      <rect x="276" y="2" width="24" height="10" rx="3" fill="#08060f" stroke="#4a2480" strokeWidth="1" />
+      <circle cx="20" cy="130" r="5.5" fill="#08060f" stroke="#2a1448" strokeWidth="1" />
+      <circle cx="300" cy="130" r="5.5" fill="#08060f" stroke="#2a1448" strokeWidth="1" />
+      <text x="160" y="124" textAnchor="middle" fill="#7a3aaa" fontSize="11" letterSpacing="1.5"
+        fontFamily="SpaceMono, monospace" fontWeight="700">yield.fm</text>
+      <text x="160" y="137" textAnchor="middle" fill="#4a1870" fontSize="6.5" letterSpacing="2"
+        fontFamily="SpaceMono, monospace">CATALOG OWNERSHIP</text>
+    </svg>
+  )
+}
+
 // ── Feature list with stagger ─────────────────────────────────────────────────
 
 function FeatureList({ items }) {
@@ -584,58 +647,28 @@ export default function App() {
         {/* ── Bottom Row ── */}
         <div className="flex items-stretch" style={{ flexDirection: isTablet ? 'column' : 'row', borderBottom: `1px solid ${C.border}` }}>
 
-          {/* Catalog stack panel */}
-          <motion.div className="relative flex flex-col justify-between"
+          {/* Cassette panel */}
+          <motion.div className="relative flex flex-col items-center justify-center gap-3"
             style={{
               width: isTablet ? '100%' : 292,
-              minHeight: isTablet ? 'auto' : 260,
-              padding: isMobile ? '24px 18px' : '28px 24px',
+              padding: isMobile ? '24px 18px 22px' : '24px 20px',
               borderRight: isTablet ? 'none' : `1px solid ${C.border}`,
               borderBottom: isTablet ? `1px solid ${C.border}` : 'none',
-              background: 'linear-gradient(155deg, #0b0b1c 0%, #070812 62%, #0a0714 100%)',
+              background: 'linear-gradient(155deg, #0f0620 0%, #070410 55%, #0c0518 100%)',
               overflow: 'hidden' }}
             initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }} transition={{ ...spring, delay: 0.1 }}>
             <div className="absolute pointer-events-none" style={{
               inset: 0,
-              opacity: 0.32,
-              backgroundImage: `linear-gradient(${C.border} 1px, transparent 1px), linear-gradient(90deg, ${C.border} 1px, transparent 1px)`,
-              backgroundSize: '32px 32px',
-              maskImage: 'linear-gradient(180deg, #000, transparent 78%)',
+              background: 'radial-gradient(ellipse at 50% 42%, rgba(155,89,216,0.2) 0%, rgba(0,212,168,0.06) 45%, transparent 72%)',
             }} />
-            <div style={{ position: 'relative', zIndex: 1 }}>
-              <div className="flex items-center justify-between" style={{ marginBottom: 28 }}>
-                <span style={{ fontSize: 10, color: C.dim, letterSpacing: 2.4 }}>CATALOG STACK</span>
-                <SignalMark size={13} />
-              </div>
-              <div style={{ fontSize: 28, color: C.text, fontWeight: 700, lineHeight: 1.05, marginBottom: 16 }}>
-                Rights<br />become rails.
-              </div>
-              <p style={{ fontSize: 12, color: C.sub, lineHeight: 1.75, margin: 0 }}>
-                Publishing, masters, and royalty streams organized into investable music infrastructure.
-              </p>
+            <div style={{ width: '100%', maxWidth: 320, position: 'relative', zIndex: 1 }}>
+              <Cassette />
             </div>
-            <div className="grid" style={{
-              position: 'relative',
-              zIndex: 1,
-              gridTemplateColumns: 'repeat(3, 1fr)',
-              gap: 8,
-              marginTop: isTablet ? 24 : 0,
-            }}>
-              {[
-                ['01', 'RIGHTS'],
-                ['02', 'ROYALTIES'],
-                ['03', 'CATALOGS'],
-              ].map(([num, label], i) => (
-                <div key={label} style={{
-                  border: `1px solid ${C.ghost}70`,
-                  background: 'rgba(8,8,18,0.72)',
-                  padding: '10px 8px',
-                }}>
-                  <div style={{ fontSize: 14, color: i === 1 ? C.purple : C.teal, fontWeight: 700 }}>{num}</div>
-                  <div style={{ fontSize: 8, color: C.dim, letterSpacing: 1.1, marginTop: 5 }}>{label}</div>
-                </div>
-              ))}
+            <div className="flex flex-col items-center gap-1.5" style={{ position: 'relative', zIndex: 1 }}>
+              <div style={{ width: 48, height: 1, background: `linear-gradient(90deg, transparent, ${C.purple}70, transparent)` }} />
+              <span style={{ fontSize: 10, color: C.sub, letterSpacing: isMobile ? 1.6 : 2.8, textAlign: 'center' }}>OWNERSHIP SIGNAL</span>
+              <span style={{ fontSize: 9, color: C.dim, letterSpacing: isMobile ? 1.1 : 1.8, textAlign: 'center' }}>CATALOGS, RIGHTS, AND ROYALTIES</span>
             </div>
           </motion.div>
 
