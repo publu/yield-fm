@@ -243,7 +243,7 @@ function RoyaltyChart() {
 // ── Cassette ──────────────────────────────────────────────────────────────────
 
 function Cassette() {
-  const spokes = [0, 72, 144, 216, 288]
+  const spokes = [0, 120, 240]
 
   function Reel({ cx, cy, reverse = false }) {
     return (
@@ -256,17 +256,19 @@ function Cassette() {
             type="rotate"
             from={`${reverse ? 360 : 0} ${cx} ${cy}`}
             to={`${reverse ? 0 : 360} ${cx} ${cy}`}
-            dur="24s"
+            dur="72s"
+            calcMode="linear"
             repeatCount="indefinite"
           />
           {spokes.map(a => (
             <line key={a}
-              x1={cx + 13 * Math.cos((a * Math.PI) / 180)}
-              y1={cy + 13 * Math.sin((a * Math.PI) / 180)}
-              x2={cx + 26 * Math.cos((a * Math.PI) / 180)}
-              y2={cy + 26 * Math.sin((a * Math.PI) / 180)}
+              x1={cx + 15 * Math.cos((a * Math.PI) / 180)}
+              y1={cy + 15 * Math.sin((a * Math.PI) / 180)}
+              x2={cx + 22 * Math.cos((a * Math.PI) / 180)}
+              y2={cy + 22 * Math.sin((a * Math.PI) / 180)}
               stroke="#6a30a0"
-              strokeWidth="1.7"
+              strokeWidth="1.2"
+              opacity="0.58"
               strokeLinecap="round" />
           ))}
         </g>
