@@ -3,10 +3,10 @@ import { motion, useInView } from 'framer-motion'
 
 // ── Spring presets ────────────────────────────────────────────────────────────
 
-const spring      = { type: 'spring', stiffness: 300, damping: 24 }
-const springBouncy = { type: 'spring', stiffness: 500, damping: 15 }
-const springStiff  = { type: 'spring', stiffness: 700, damping: 30 }
-const snappy      = { type: 'tween', duration: 0.15, ease: [0.25, 0.1, 0.25, 1] }
+const spring       = { type: 'spring', stiffness: 260, damping: 26 }
+const springBouncy = { type: 'spring', stiffness: 360, damping: 28 }
+const springStiff  = { type: 'spring', stiffness: 520, damping: 32 }
+const snappy       = { type: 'tween', duration: 0.18, ease: [0.25, 0.1, 0.25, 1] }
 
 // ── Stagger variants ──────────────────────────────────────────────────────────
 
@@ -35,7 +35,7 @@ const C = {
 
 // ── Type scale: 10 / 11 / 13 / 17 / 82 ───────────────────────────────────────
 
-const BAR_H = [0.4, 0.9, 0.6, 1.0, 0.5, 0.8, 0.3, 0.7, 0.9, 0.4, 0.6, 0.8, 0.5, 0.95]
+const BAR_H = [0.42, 0.78, 0.56, 0.92, 0.5, 0.72, 0.34, 0.66, 0.84, 0.46, 0.62, 0.74, 0.52, 0.86]
 
 const OWNERSHIP = [
   { num: '01', title: 'PUBLISHING RIGHTS',  desc: 'Composition & songwriter share', color: C.teal,
@@ -99,16 +99,20 @@ function useMedia(query) {
 
 // ── Primitives ────────────────────────────────────────────────────────────────
 
-function WaveBars({ count = 8, color = C.teal, height = 28, gap = 2 }) {
+function WaveBars({ count = 8, color = C.teal, height = 28, gap = 2, width = 3 }) {
   return (
     <div className="flex items-end" style={{ height, gap }}>
       {Array.from({ length: count }, (_, i) => {
         const base = BAR_H[i % BAR_H.length]
         return (
-          <motion.div key={i}
-            style={{ width: 3, background: color, originY: 1, borderRadius: 1, height }}
-            animate={{ scaleY: [base * 0.25, base, base * 0.45, base * 0.82, base * 0.25] }}
-            transition={{ duration: 1.6, repeat: Infinity, delay: i * 0.115, ease: 'easeInOut' }}
+          <div key={i}
+            style={{
+              width,
+              height: Math.max(2, height * base),
+              background: color,
+              borderRadius: 1,
+              opacity: i % 4 === 0 ? 0.62 : 0.9,
+            }}
           />
         )
       })}
@@ -116,12 +120,29 @@ function WaveBars({ count = 8, color = C.teal, height = 28, gap = 2 }) {
   )
 }
 
+function SpectrumStrip({ bars, colorA = C.teal, colorB = C.purple, height = 96, barWidth = 7 }) {
+  return (
+    <div className="flex items-end gap-1 pointer-events-none" style={{ height }}>
+      {bars.map((h, i) => (
+        <div key={i}
+          style={{
+            width: barWidth,
+            height: h,
+            background: i % 3 === 0
+              ? `linear-gradient(to top, #008a6a, ${colorA})`
+              : `linear-gradient(to top, #4a1b78, ${colorB})`,
+            opacity: i % 5 === 0 ? 0.55 : 0.8,
+          }}
+        />
+      ))}
+    </div>
+  )
+}
+
 function PulseDot({ color = C.orange, size = 10 }) {
   return (
-    <motion.div className="rounded-full shrink-0"
+    <div className="status-dot rounded-full shrink-0"
       style={{ width: size, height: size, background: color, boxShadow: `0 0 10px ${color}88` }}
-      animate={{ opacity: [1, 0.2, 1], scale: [1, 0.8, 1] }}
-      transition={{ duration: 1.8, repeat: Infinity }}
     />
   )
 }
@@ -133,11 +154,11 @@ function Vinyl({ size = 260 }) {
   return (
     <div className="relative" style={{ width: size, height: size }}>
       {/* Atmosphere */}
-      <motion.div className="absolute rounded-full pointer-events-none" style={{
+      <div className="absolute rounded-full pointer-events-none" style={{
         inset: -48 * scale,
         background: 'radial-gradient(circle, rgba(155,89,216,0.12) 0%, rgba(0,212,168,0.07) 38%, transparent 66%)',
         filter: 'blur(32px)',
-      }} animate={{ opacity: [0.6, 1, 0.6] }} transition={{ duration: 4, repeat: Infinity }} />
+      }} />
 
       <div className="vinyl-spin" style={{ width: size, height: size }}>
         <svg viewBox="0 0 260 260" style={{ width: '100%', height: '100%',
@@ -202,22 +223,21 @@ function RoyaltyChart() {
           ))}
           {CHART_LINES.map(({ color, amp, freq, phase }, idx) => {
             const d1 = makePath(W, H, amp, freq, phase)
-            const d2 = makePath(W, H, amp * 0.58, freq, phase + 0.68)
-            // Multiple dots along each line, matching original
-            const dotXs = [W * 0.2, W * 0.45, W * 0.65, W * 0.85]
+            const dotXs = [W * 0.28, W * 0.62, W * 0.84]
             return (
               <g key={idx}>
-                <motion.path d={d1} stroke={color} strokeWidth="5"   fill="none" opacity={0.07}
-                  animate={{ d: [d1, d2, d1] }} transition={{ duration: 4 + idx * 0.6, repeat: Infinity, ease: 'easeInOut' }} />
-                <motion.path d={d1} stroke={color} strokeWidth="1.8" fill="none" opacity={0.92}
-                  animate={{ d: [d1, d2, d1] }} transition={{ duration: 4 + idx * 0.6, repeat: Infinity, ease: 'easeInOut' }} />
+                <motion.path d={d1} stroke={color} strokeWidth="5" fill="none" opacity={0.06}
+                  initial={{ pathLength: 0 }} animate={{ pathLength: inView ? 1 : 0 }}
+                  transition={{ duration: 0.75, ease: 'easeOut', delay: idx * 0.08 }} />
+                <motion.path d={d1} stroke={color} strokeWidth="1.8" fill="none" opacity={0.9}
+                  initial={{ pathLength: 0 }} animate={{ pathLength: inView ? 1 : 0 }}
+                  transition={{ duration: 0.75, ease: 'easeOut', delay: idx * 0.08 }} />
                 {dotXs.map((dotX, di) => {
                   const dotY = H / 2 + amp * Math.sin((dotX / W) * Math.PI * freq + phase)
                   return (
-                    <motion.circle key={di} cx={dotX} cy={dotY} r="3.5" fill={color}
+                    <circle key={di} cx={dotX} cy={dotY} r="3.5" fill={color}
                       style={{ filter: `drop-shadow(0 0 4px ${color})` }}
-                      animate={{ opacity: [1, 0.3, 1] }}
-                      transition={{ duration: 2, repeat: Infinity, delay: idx * 0.3 + di * 0.15 }} />
+                      opacity={di === 1 ? 0.72 : 0.95} />
                   )
                 })}
               </g>
@@ -245,15 +265,14 @@ function Cassette() {
     return (
       <g>
         <circle cx={cx} cy={cy} r={30} fill="#0a0616" stroke="#4a2480" strokeWidth="1.5" />
-        <motion.g style={{ originX: `${cx}px`, originY: `${cy}px` }}
-          animate={{ rotate: 360 }} transition={{ duration: 4.5, repeat: Infinity, ease: 'linear' }}>
+        <g className="reel-drift" style={{ transformOrigin: `${cx}px ${cy}px` }}>
           {spokes.map(a => (
             <line key={a}
               x1={cx + 13 * Math.cos((a * Math.PI) / 180)} y1={cy + 13 * Math.sin((a * Math.PI) / 180)}
               x2={cx + 26 * Math.cos((a * Math.PI) / 180)} y2={cy + 26 * Math.sin((a * Math.PI) / 180)}
               stroke="#6a30a0" strokeWidth="2" strokeLinecap="round" />
           ))}
-        </motion.g>
+        </g>
         <circle cx={cx} cy={cy} r={11} fill="#100820" stroke="#2d1a4e" strokeWidth="1" />
         <circle cx={cx} cy={cy} r={11} fill="none" stroke={C.purple} strokeWidth="0.5" opacity="0.3" />
         <circle cx={cx} cy={cy} r={5} fill="#04030a" />
@@ -312,7 +331,7 @@ function FeatureList({ items }) {
               <div style={{ fontSize: 10, color: C.dim, marginTop: 3, letterSpacing: 0.5 }}>{item.desc}</div>
             </div>
             {item.num && (
-              <span style={{ fontSize: 30, color: C.ghost, fontWeight: 700, letterSpacing: -1.5, lineHeight: 1, flexShrink: 0 }}>
+              <span style={{ fontSize: 30, color: C.ghost, fontWeight: 700, letterSpacing: 0, lineHeight: 1, flexShrink: 0 }}>
                 {item.num}
               </span>
             )}
@@ -366,13 +385,13 @@ export default function App() {
             }}>yield.fm v0.1 // PROTOCOL PREVIEW</span>
           </div>
           <div className="flex items-center shrink-0" style={{ gap: isMobile ? 8 : 16 }}>
-            <motion.div style={{ fontSize: 11, letterSpacing: 3, padding: '3px 12px',
+            <div style={{ fontSize: 11, letterSpacing: 3, padding: '3px 12px',
                 border: `1px solid ${C.orange}`, color: C.orange,
                 boxShadow: `0 0 14px rgba(245,166,35,0.22)`,
                 display: isMobile ? 'none' : 'block' }}
-              animate={{ opacity: [1, 0.45, 1] }} transition={{ duration: 2.5, repeat: Infinity }}>
+              >
               PRE-LAUNCH
-            </motion.div>
+            </div>
             <div className="flex items-center gap-2" style={{ color: C.ghost }}>
               {['⊙', '—', '□', '×'].map(ch => (
                 <motion.span key={ch} className="cursor-pointer text-xs"
@@ -405,24 +424,15 @@ export default function App() {
             }} />
 
             {/* Background bar chart — prominent, matching original */}
-            <div className="absolute flex items-end gap-1 pointer-events-none"
+            <div className="absolute pointer-events-none"
               style={{
                 right: isMobile ? 112 : 230,
                 bottom: 0,
-                opacity: isMobile ? 0.18 : 0.22,
+                opacity: isMobile ? 0.13 : 0.18,
                 transform: isMobile ? 'scaleX(0.72)' : 'none',
                 transformOrigin: 'right bottom',
               }}>
-              {[45, 70, 38, 95, 58, 110, 48, 80, 65, 100, 44, 75, 60, 88, 52, 72, 55, 82].map((h, i) => (
-                <motion.div key={i}
-                  style={{ width: 8, height: h, originY: 1,
-                    background: i % 3 === 0
-                      ? `linear-gradient(to top, #008a6a, ${C.teal})`
-                      : `linear-gradient(to top, #5a20a0, ${C.purple})` }}
-                  animate={{ scaleY: [0.4, 1, 0.65, 0.9, 0.4] }}
-                  transition={{ duration: 2.4 + i * 0.1, repeat: Infinity, delay: i * 0.06 }}
-                />
-              ))}
+              <SpectrumStrip bars={[45, 70, 38, 95, 58, 110, 48, 80, 65, 100, 44, 75, 60, 88, 52, 72, 55, 82]} height={112} barWidth={8} />
             </div>
 
             {/* Staggered content */}
@@ -434,13 +444,12 @@ export default function App() {
               <motion.div variants={upItem} className="flex items-end" style={{ gap: isMobile ? 10 : 16, marginBottom: isMobile ? 18 : 24 }}>
                 <div className="flex items-end gap-0.5" style={{ transform: isMobile ? 'scale(0.72)' : 'none', transformOrigin: 'left bottom' }}>
                   {[12, 20, 30, 38, 30, 22, 36, 28, 18, 32, 24].map((h, i) => (
-                    <motion.div key={i}
-                      style={{ width: 9, borderRadius: 2, originY: 1, height: h,
+                    <div key={i}
+                      style={{ width: 9, borderRadius: 2, height: h,
                         background: i < 5
                           ? `linear-gradient(to top, #008a6a, ${C.teal})`
-                          : `linear-gradient(to top, #6020a0, ${C.purple})` }}
-                      animate={{ scaleY: [0.22, 1, 0.48, 0.85, 0.22] }}
-                      transition={{ duration: 1.5, repeat: Infinity, delay: i * 0.12, ease: 'easeInOut' }}
+                          : `linear-gradient(to top, #6020a0, ${C.purple})`,
+                        opacity: i % 3 === 0 ? 0.72 : 1 }}
                     />
                   ))}
                 </div>
@@ -449,7 +458,7 @@ export default function App() {
                     fontSize: isMobile ? 48 : 80,
                     fontWeight: 700,
                     lineHeight: 0.95,
-                    letterSpacing: isMobile ? '-1.4px' : '-2.5px',
+                    letterSpacing: 0,
                     fontFamily: "'SpaceMono', monospace" }}>
                   <span style={{
                     background: `linear-gradient(94deg, ${C.teal} 0%, #8844e0 62%)`,
@@ -552,10 +561,10 @@ export default function App() {
             </p>
 
             <div className="flex-1 flex flex-col justify-end gap-3">
-              {/* Dense waveform grid — matching original */}
-              <div className="flex items-end gap-px flex-wrap" style={{ gap: 2 }}>
-                {Array.from({ length: 20 }, (_, i) => (
-                  <WaveBars key={i} count={3} height={22} color={i % 2 === 0 ? C.teal : C.purple} gap={2} />
+              {/* Quiet signal grid */}
+              <div className="flex items-end flex-wrap" style={{ gap: 3, opacity: 0.84 }}>
+                {Array.from({ length: 14 }, (_, i) => (
+                  <WaveBars key={i} count={3} height={20} color={i % 2 === 0 ? C.teal : C.purple} gap={2} width={2} />
                 ))}
               </div>
 
@@ -734,10 +743,8 @@ export default function App() {
               <motion.div key={label} className="flex items-center gap-2" variants={upItem}
                 style={{ fontSize: isMobile ? 8 : 10, letterSpacing: isMobile ? 1.4 : 3 }}>
                 <span style={{ color: C.sub }}>{label}</span>
-                <motion.div className="rounded-full"
-                  style={{ width: 6, height: 6, background: color, boxShadow: `0 0 5px ${color}` }}
-                  animate={{ opacity: [1, 0.12, 1] }}
-                  transition={{ duration: 2, repeat: Infinity, delay }} />
+                <div className="rounded-full"
+                  style={{ width: 6, height: 6, background: color, boxShadow: `0 0 5px ${color}`, opacity: delay === 1 ? 0.95 : 0.72 }} />
               </motion.div>
             ))}
           </motion.div>

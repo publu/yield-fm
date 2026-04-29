@@ -36,11 +36,26 @@ body {
   to { transform: rotate(360deg); }
 }
 
+@keyframes reel-drift {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
 .vinyl-spin {
-  animation: vinyl-spin 14s linear infinite;
+  animation: vinyl-spin 26s linear infinite;
   transform-origin: 50% 50%;
   will-change: transform;
   backface-visibility: hidden;
+}
+
+.reel-drift {
+  animation: reel-drift 28s linear infinite;
+  transform-box: fill-box;
+  will-change: transform;
+}
+
+.status-dot {
+  opacity: 0.92;
 }
 
 .scan-overlay::before {
@@ -54,4 +69,14 @@ body {
   animation: scan 10s linear infinite;
   pointer-events: none;
   z-index: 9999;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+  }
 }
