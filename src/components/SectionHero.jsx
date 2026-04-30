@@ -241,8 +241,8 @@ export function Hero({ mode, intensity }) {
               sparkSeed={3}
             />
             <Stat
-              label="AVG CATALOG YIELD — OPEN LISTINGS"
-              value={`${catalogData.stats.avgYieldOpenListings.toFixed(2)}%`}
+              label="AVG CATALOG YIELD — OPEN + CLOSED"
+              value={`${catalogData.stats.avgYieldBlended.toFixed(2)}%`}
               delta={0.84}
               sparkSeed={5}
               color="var(--accent-c)"
