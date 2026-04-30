@@ -33,14 +33,15 @@ float fbm(vec2 p){
 }
 
 float trace(float x, float t, float idx){
-  float drift   = idx*0.05 + t*0.015;
-  float curve   = -0.55*pow(x+0.2, 2.0) + 0.25 + drift;
-  float body    = 0.10 * sin(x*2.4 + t*0.6 + idx*1.7);
-  float kick    = 0.05 * sin(x*9.0 + t*1.4 + idx*2.3);
-  float audio   = 0.06 * sin(x*48.0 - t*2.4 + idx*0.7) *
-                  (0.5 + 0.5*sin(x*3.0 + t*0.8));
-  float grit    = 0.012 * (vnoise(vec2(x*40.0 + t*0.6, idx*7.0)) - 0.5);
-  return curve + body + kick + audio + grit;
+  // Stacked sinusoids — periodic, so the curve loops forever rather than
+  // drifting off the bottom of the screen.
+  float w1 = 0.22 * sin(x*1.3 + t*0.55 + idx*1.7);
+  float w2 = 0.14 * sin(x*2.7 + t*0.85 + idx*2.3);
+  float w3 = 0.08 * sin(x*5.1 + t*1.25 + idx*0.7);
+  float audio = 0.05 * sin(x*40.0 - t*2.4 + idx*0.7) *
+                (0.5 + 0.5*sin(x*3.0 + t*0.8));
+  float grit  = 0.012 * (vnoise(vec2(x*40.0 + t*0.6, idx*7.0)) - 0.5);
+  return w1 + w2 + w3 + audio + grit;
 }
 
 float band(float d, float w){
@@ -61,10 +62,10 @@ void main(){
   float t = uTime;
 
   float baselines[4];
-  baselines[0] =  0.32;
-  baselines[1] =  0.10;
-  baselines[2] = -0.12;
-  baselines[3] = -0.34;
+  baselines[0] =  0.40;
+  baselines[1] =  0.14;
+  baselines[2] = -0.14;
+  baselines[3] = -0.40;
 
   vec3 traceCols[4];
   traceCols[0] = uA;
