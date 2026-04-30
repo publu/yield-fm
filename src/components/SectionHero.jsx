@@ -163,7 +163,7 @@ export function Hero({ mode, intensity }) {
 
   return (
     <section className="hero-section" style={{ position: 'relative', borderBottom: '1px solid var(--line)', overflow: 'hidden', minHeight: 'calc(100svh - 60px)' }}>
-      <div style={{ position: 'absolute', inset: 0, opacity: mode === 'hiphop' ? 0.25 : (mode === 'classical' ? 0.55 : 0.85) }}>
+      <div style={{ position: 'absolute', inset: 0, opacity: mode === 'hiphop' ? 0.25 : (mode === 'classical' ? 0.55 : 0.68) }}>
         <YieldSurface mode={mode} intensity={intensity} height="100%" />
       </div>
       {mode === 'hiphop' && (
