@@ -26,43 +26,34 @@ body {
   border-radius: 2px;
 }
 
-@keyframes scan {
-  0% { transform: translateY(-100vh); }
-  100% { transform: translateY(100vh); }
-}
-
-@keyframes crt-boot {
+@keyframes crt-aperture {
   0% {
-    opacity: 1;
-    transform: scaleY(0.015);
-    filter: brightness(3.2) contrast(1.8);
+    clip-path: inset(49.4% 0 49.4% 0);
+    filter: brightness(2.4) contrast(1.55) saturate(1.2);
   }
-  18% {
-    opacity: 1;
-    transform: scaleY(0.015);
+  16% {
+    clip-path: inset(47.8% 0 47.8% 0);
+    filter: brightness(2.7) contrast(1.7) saturate(1.25);
   }
-  32% {
-    opacity: 1;
-    transform: scaleY(1);
-    filter: brightness(1.8) contrast(1.45);
+  38% {
+    clip-path: inset(18% 0 18% 0);
+    filter: brightness(1.55) contrast(1.22) saturate(1.1);
   }
-  58% {
-    opacity: 0.72;
-    filter: brightness(1.22) contrast(1.16);
+  72% {
+    clip-path: inset(0 0 0 0);
+    filter: brightness(1.12) contrast(1.06) saturate(1.04);
   }
   100% {
-    opacity: 0;
-    transform: scaleY(1);
-    filter: brightness(1) contrast(1);
+    clip-path: inset(0 0 0 0);
+    filter: none;
   }
 }
 
-@keyframes crt-line {
-  0% { opacity: 0; transform: translate(-50%, -50%) scaleX(0.12); }
-  14% { opacity: 1; transform: translate(-50%, -50%) scaleX(0.96); }
-  28% { opacity: 0.85; transform: translate(-50%, -50%) scaleX(0.72); }
-  44% { opacity: 0; transform: translate(-50%, -50%) scaleX(1); }
-  100% { opacity: 0; transform: translate(-50%, -50%) scaleX(1); }
+@keyframes crt-phosphor {
+  0% { opacity: 1; }
+  28% { opacity: 0.82; }
+  72% { opacity: 0.24; }
+  100% { opacity: 0; }
 }
 
 @keyframes crt-flicker {
@@ -82,6 +73,8 @@ body {
 .crt-screen {
   position: relative;
   isolation: isolate;
+  animation: crt-aperture 0.95s cubic-bezier(0.16, 1, 0.3, 1) both;
+  will-change: clip-path, filter;
 }
 
 .crt-screen::before {
@@ -107,32 +100,13 @@ body {
   content: '';
   position: absolute;
   inset: 0;
-  z-index: 31;
-  pointer-events: none;
-  background: linear-gradient(90deg, rgba(255,0,80,0.025), transparent 18%, transparent 82%, rgba(0,212,168,0.025));
-}
-
-.crt-boot {
-  position: absolute;
-  inset: 0;
-  z-index: 60;
+  z-index: 32;
   pointer-events: none;
   background:
-    radial-gradient(ellipse at center, rgba(220,220,244,0.22) 0%, rgba(0,212,168,0.14) 34%, rgba(8,8,18,0.96) 72%),
-    #05050c;
-  transform-origin: center;
-  animation: crt-boot 1.15s cubic-bezier(0.19, 1, 0.22, 1) forwards;
-}
-
-.crt-boot-line {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  width: 88%;
-  height: 2px;
-  background: linear-gradient(90deg, transparent, rgba(0,212,168,0.95), rgba(220,220,244,0.9), rgba(155,89,216,0.95), transparent);
-  box-shadow: 0 0 18px rgba(0,212,168,0.7), 0 0 42px rgba(155,89,216,0.45);
-  animation: crt-line 0.9s ease-out forwards;
+    radial-gradient(ellipse at center, rgba(220,220,244,0.7) 0%, rgba(0,212,168,0.34) 18%, rgba(155,89,216,0.18) 38%, transparent 72%),
+    linear-gradient(90deg, rgba(0,212,168,0.06), transparent 22%, transparent 78%, rgba(155,89,216,0.06));
+  mix-blend-mode: screen;
+  animation: crt-phosphor 0.95s ease-out forwards;
 }
 
 .vinyl-spin {
@@ -146,19 +120,6 @@ body {
   opacity: 0.92;
 }
 
-.scan-overlay::before {
-  content: '';
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 3px;
-  background: linear-gradient(transparent, rgba(0,212,168,0.04), transparent);
-  animation: scan 10s linear infinite;
-  pointer-events: none;
-  z-index: 9999;
-}
-
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -168,7 +129,12 @@ body {
     scroll-behavior: auto !important;
   }
 
-  .crt-boot {
+  .crt-screen {
+    clip-path: none;
+    filter: none;
+  }
+
+  .crt-screen::after {
     display: none;
   }
 }

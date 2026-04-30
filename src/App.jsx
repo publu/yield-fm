@@ -348,14 +348,6 @@ function FeatureList({ items }) {
   )
 }
 
-function CrtBoot() {
-  return (
-    <div className="crt-boot" aria-hidden="true">
-      <div className="crt-boot-line" />
-    </div>
-  )
-}
-
 // ── App ───────────────────────────────────────────────────────────────────────
 
 export default function App() {
@@ -770,7 +762,6 @@ export default function App() {
           </span>
         </motion.div>
 
-        <CrtBoot />
       </motion.div>
     </div>
   )
