@@ -150,6 +150,39 @@ function HeroFeed() {
   )
 }
 
+const BILL_LQIP = 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDABQODxIPDRQSEBIXFRQYHjIhHhwcHj0sLiQySUBMS0dARkVQWnNiUFVtVkVGZIhlbXd7gYKBTmCNl4x9lnN+gXz/2wBDARUXFx4aHjshITt8U0ZTfHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHz/wAARCAARACgDASIAAhEBAxEB/8QAGQABAAMBAQAAAAAAAAAAAAAAAAECAwQG/8QAJBAAAgICAgEDBQAAAAAAAAAAAQIAAwQRBSESEyMxFCJBYXL/xAAXAQEBAQEAAAAAAAAAAAAAAAAAAQID/8QAFxEBAQEBAAAAAAAAAAAAAAAAAAEhEf/aAAwDAQACEQMRAD8A5cTiKbcdGcHsb6kpxVFtzVptQo+T3NcHkKEx61ewDQA7mIzfRzLGrsRq3Ggd/H7nPWsTVxVD61WWIOm++Xbh6tH2Dv8AuaYGXTXT7tyBydnuXOVQLxZ9aviF14b6jtMcORxNaU2N4FSoJGyDE6szkMdqLAtgO1IGolnUrza/ImkRNIj8yGiIFGiIgf/Z'
+
+function BillBackdrop() {
+  const [loaded, setLoaded] = useState(false)
+  return (
+    <div style={{
+      position: 'absolute', inset: 0, pointerEvents: 'none',
+      backgroundColor: 'var(--bg)',
+      backgroundImage: `url(${BILL_LQIP})`,
+      backgroundSize: 'cover',
+      backgroundPosition: 'center',
+      backgroundRepeat: 'no-repeat',
+      filter: loaded ? 'none' : 'blur(20px)',
+      transition: 'filter 0.4s ease-out',
+    }}>
+      <img
+        src="/yield-fm-bill.jpg"
+        alt=""
+        decoding="async"
+        loading="eager"
+        fetchpriority="high"
+        onLoad={() => setLoaded(true)}
+        style={{
+          position: 'absolute', inset: 0,
+          width: '100%', height: '100%', objectFit: 'cover',
+          opacity: loaded ? 0.95 : 0,
+          transition: 'opacity 0.45s ease-out',
+        }}
+      />
+    </div>
+  )
+}
+
 export function Hero({ mode, intensity }) {
   const [time, setTime] = useState('00:00:00')
   useEffect(() => {
@@ -166,16 +199,7 @@ export function Hero({ mode, intensity }) {
       <div style={{ position: 'absolute', inset: 0, opacity: mode === 'hiphop' ? 0.25 : (mode === 'classical' ? 0.55 : 0.68) }}>
         <YieldSurface mode={mode} intensity={intensity} height="100%" />
       </div>
-      {mode === 'hiphop' && (
-        <div style={{
-          position: 'absolute', inset: 0, pointerEvents: 'none',
-          backgroundImage: 'url(/yield-fm-bill.png)',
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          backgroundRepeat: 'no-repeat',
-          opacity: 0.95,
-        }} />
-      )}
+      {mode === 'hiphop' && <BillBackdrop />}
       {mode === 'hiphop' && (
         <div style={{
           position: 'absolute', inset: 0, pointerEvents: 'none',
