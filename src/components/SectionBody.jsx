@@ -96,7 +96,7 @@ export function Primer() {
           <span className="label" style={{ color: 'var(--accent-a)' }}>KEY INSIGHT</span>
           <p style={{ margin: 0, fontSize: 14, color: 'var(--text)', lineHeight: 1.6, flex: 1, minWidth: 280 }}>
             One Spotify stream pays <em>both</em> sides — composition (~$0.0008 to writers/publishers via the MLC) and master (~$0.0040 to label/artist via the distributor).{' '}
-            <span style={{ color: 'var(--sub)' }}>Same play, two checks, different mailboxes. Master share is ~5× larger; composition share is more durable.</span>
+            <span style={{ color: 'var(--sub)' }}>Same play, two checks, different mailboxes. Master share is ~5× larger; composition share is more durable (covers, syncs, samples all still pay).</span>
           </p>
         </div>
       </div>
