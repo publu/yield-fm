@@ -162,7 +162,7 @@ export function Hero({ mode, intensity }) {
   }, [])
 
   return (
-    <section style={{ position: 'relative', borderBottom: '1px solid var(--line)', overflow: 'hidden' }}>
+    <section className="hero-section" style={{ position: 'relative', borderBottom: '1px solid var(--line)', overflow: 'hidden', minHeight: 'calc(100svh - 60px)' }}>
       <div style={{ position: 'absolute', inset: 0, opacity: mode === 'classical' ? 0.55 : 0.85 }}>
         <YieldSurface mode={mode} intensity={intensity} height="100%" />
       </div>
@@ -174,11 +174,11 @@ export function Hero({ mode, intensity }) {
 
       <div className="hero-grid" style={{
         position: 'relative', maxWidth: 1480, margin: '0 auto',
-        padding: 'clamp(56px, 7vw, 96px) 32px clamp(56px, 6vw, 96px)',
+        padding: 'clamp(20px, 3.5vh, 64px) 32px clamp(24px, 3.5vh, 72px)',
         display: 'grid', gridTemplateColumns: 'minmax(0, 1.35fr) minmax(0, 1fr)',
-        gap: 56, alignItems: 'start', minHeight: '78vh',
+        gap: 'clamp(24px, 4vh, 56px)', alignItems: 'start', minHeight: 'calc(100svh - 60px)',
       }}>
-        <div className="col" style={{ gap: 28 }}>
+        <div className="col hero-copy" style={{ gap: 'clamp(14px, 2.4vh, 28px)' }}>
           <div className="row" style={{ alignItems: 'center', gap: 14, flexWrap: 'wrap' }}>
             <PulseDot color="var(--accent-c)" />
             <span className="label" style={{ color: 'var(--accent-c)' }}>EARLY ACCESS · WAITLIST OPEN</span>
@@ -186,12 +186,12 @@ export function Hero({ mode, intensity }) {
             <span className="label tnum">{time}</span>
           </div>
 
-          <h1 style={{
+          <h1 className="hero-h1" style={{
             margin: 0,
             fontFamily: 'var(--face-display)',
             fontWeight: 'var(--weight-display)',
-            fontSize: 'clamp(56px, 9vw, 148px)',
-            lineHeight: 0.92,
+            fontSize: 'clamp(36px, min(6vw, 8.6vh), 104px)',
+            lineHeight: 0.95,
             letterSpacing: 'var(--tracking-display)',
             color: 'var(--text)', textWrap: 'balance',
           }}>
@@ -206,7 +206,7 @@ export function Hero({ mode, intensity }) {
           <p style={{
             margin: 0, maxWidth: 600,
             fontFamily: 'var(--face-body)',
-            fontSize: 'clamp(15px, 1.2vw, 17px)', lineHeight: 1.65,
+            fontSize: 'clamp(14px, 1.2vw, 17px)', lineHeight: 1.55,
             color: 'var(--sub)', textWrap: 'pretty',
           }}>
             yield.fm is a royalty investing terminal for music catalogs. We map

@@ -246,8 +246,18 @@ button { font-family: inherit; cursor: pointer; }
 @media (max-width: 960px) {
   .hero-grid {
     grid-template-columns: minmax(0, 1fr) !important;
-    gap: 40px !important;
-    min-height: auto !important;
+    gap: clamp(20px, 3vh, 32px) !important;
+    min-height: 0 !important;
+  }
+  .hero-section {
+    min-height: 0 !important;
+  }
+  .hero-h1 {
+    font-size: clamp(34px, min(9.4vw, 8.4vh), 72px) !important;
+  }
+  .hero-copy {
+    min-height: calc(100svh - 60px - clamp(48px, 7vh, 144px));
+    justify-content: flex-start;
   }
 }
 
