@@ -35,33 +35,40 @@ const C = {
 
 // ── Type scale: 10 / 11 / 13 / 17 / 82 ───────────────────────────────────────
 
-const OWNERSHIP = [
-  { num: '01', title: 'PUBLISHING RIGHTS',  desc: 'Composition & songwriter share', color: C.teal,
+const RIGHTS = [
+  { num: '01', title: 'COMPOSITION',  desc: 'The song: melody, lyrics, and publisher share', color: C.teal,
     icon: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-6 h-6"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="8" x2="16" y2="8"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="8" y1="16" x2="12" y2="16"/></svg> },
-  { num: '02', title: 'MASTER RIGHTS',      desc: 'Sound recordings & masters',     color: C.purple,
+  { num: '02', title: 'MASTER',      desc: 'The recording: label, artist, or master owner',     color: C.purple,
     icon: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-6 h-6"><rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="8" cy="12" r="2.5"/><circle cx="16" cy="12" r="2.5"/><line x1="10.5" y1="12" x2="13.5" y2="12"/></svg> },
-  { num: '03', title: 'ROYALTY STREAMS',    desc: 'Future cash flows from rights',  color: C.teal,
+  { num: '03', title: 'PERFORMANCE',    desc: 'Public plays: radio, venues, TV, streaming',  color: C.teal,
     icon: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-6 h-6"><path d="M2 14 Q6 10 10 14 Q14 18 18 14 Q20 12 22 14"/><line x1="5" y1="14" x2="5" y2="20"/><line x1="9" y1="12" x2="9" y2="20"/><line x1="13" y1="14" x2="13" y2="20"/><line x1="17" y1="12" x2="17" y2="20"/></svg> },
-  { num: '04', title: 'CURATED CATALOGS',   desc: 'Quality, history, and culture',  color: C.purple,
+  { num: '04', title: 'MECHANICAL',   desc: 'Reproductions: streams, downloads, physical',  color: C.purple,
     icon: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-6 h-6"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="4"/><circle cx="12" cy="12" r="1.5" fill="currentColor"/></svg> },
 ]
 
-const EARNING = [
-  { title: 'STREAMING',   desc: 'DSP plays across the globe',        color: C.teal,
+const COLLECTORS = [
+  { title: 'ASCAP / BMI / SESAC',   desc: 'PROs pay writer and publisher performance shares',        color: C.teal,
     icon: <svg viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6"><polygon points="6,3 20,12 6,21" opacity="0.9"/></svg> },
-  { title: 'LICENSING',   desc: 'Brand, media, & platform deals',    color: C.purple,
+  { title: 'THE MLC',   desc: 'Matches U.S. DSP usage and pays digital mechanicals',    color: C.purple,
     icon: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-6 h-6"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="9" x2="9" y2="21"/></svg> },
-  { title: 'PERFORMANCE', desc: 'Live, radio, & public performance', color: C.teal,
+  { title: 'SOUNDEXCHANGE', desc: 'Digital radio master royalties: 50/45/5 split', color: C.teal,
     icon: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-6 h-6"><path d="M12 2C8.5 2 6 5 6 8c0 3 2 6 6 7 4-1 6-4 6-7 0-3-2.5-6-6-6z"/><line x1="12" y1="15" x2="12" y2="19"/><line x1="8" y1="21" x2="16" y2="21"/></svg> },
-  { title: 'SYNC',        desc: 'TV, film, games, & digital syncs',  color: C.purple,
+  { title: 'DISTRIBUTORS / LABELS',        desc: 'Interactive stream and sale money for the master',  color: C.purple,
     icon: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-6 h-6"><rect x="2" y="4" width="20" height="14" rx="2"/><line x1="8" y1="4" x2="8" y2="18"/><line x1="2" y1="11" x2="22" y2="11" strokeWidth="0.8" opacity="0.4"/></svg> },
 ]
 
 const CHART_LINES = [
-  { color: C.teal,    amp: 18, freq: 2.2, phase: 0,   label: 'STREAMING' },
-  { color: C.purple,  amp: 13, freq: 1.8, phase: 1.2, label: 'LICENSING' },
-  { color: C.orange,  amp: 15, freq: 2.6, phase: 0.7, label: 'PERFORMANCE' },
+  { color: C.teal,    amp: 18, freq: 2.2, phase: 0,   label: 'COMPOSITION' },
+  { color: C.purple,  amp: 13, freq: 1.8, phase: 1.2, label: 'MASTER' },
+  { color: C.orange,  amp: 15, freq: 2.6, phase: 0.7, label: 'MECHANICAL' },
   { color: '#b0b0c8', amp:  9, freq: 1.5, phase: 2.1, label: 'SYNC' },
+]
+
+const FLOW_STEPS = [
+  { label: '01 USE', sub: 'A stream, radio spin, venue play, TV cue, or sale creates usage data.', color: C.teal },
+  { label: '02 MATCH', sub: 'ISRCs identify recordings. ISWCs and publisher splits identify songs.', color: C.purple },
+  { label: '03 COLLECT', sub: 'PROs, The MLC, SoundExchange, labels, and distributors route different rights.', color: C.orange },
+  { label: '04 PAY', sub: 'Splits decide who receives cash: writers, publishers, artists, labels, owners.', color: '#b0b0c8' },
 ]
 
 function makePath(w, h, amp, freq, phase) {
@@ -300,7 +307,7 @@ function Cassette() {
       <text x="160" y="124" textAnchor="middle" fill="#7a3aaa" fontSize="11" letterSpacing="1.5"
         fontFamily="SpaceMono, monospace" fontWeight="700">yield.fm</text>
       <text x="160" y="137" textAnchor="middle" fill="#4a1870" fontSize="6.5" letterSpacing="2"
-        fontFamily="SpaceMono, monospace">CATALOG OWNERSHIP</text>
+        fontFamily="SpaceMono, monospace">ROYALTY MAP</text>
     </svg>
   )
 }
@@ -341,6 +348,14 @@ function FeatureList({ items }) {
   )
 }
 
+function CrtBoot() {
+  return (
+    <div className="crt-boot" aria-hidden="true">
+      <div className="crt-boot-line" />
+    </div>
+  )
+}
+
 // ── App ───────────────────────────────────────────────────────────────────────
 
 export default function App() {
@@ -352,7 +367,7 @@ export default function App() {
     <div className="min-h-dvh w-full flex items-center justify-center"
       style={{ padding: isMobile ? '0' : '32px 16px', fontFamily: "'SpaceMono', monospace", background: C.bg }}>
 
-      <motion.div className="w-full overflow-hidden"
+      <motion.div className="crt-screen w-full overflow-hidden"
         style={{
           maxWidth: 1200,
           borderRadius: isMobile ? 0 : 12,
@@ -381,7 +396,7 @@ export default function App() {
               whiteSpace: 'nowrap',
               overflow: 'hidden',
               textOverflow: 'ellipsis',
-            }}>yield.fm v0.1 // PROTOCOL PREVIEW</span>
+            }}>yield.fm v0.1 // ROYALTY MAP</span>
           </div>
           <div className="flex items-center shrink-0" style={{ gap: isMobile ? 8 : 16 }}>
             <div style={{ fontSize: 11, letterSpacing: 3, padding: '3px 12px',
@@ -466,7 +481,6 @@ export default function App() {
                 </h1>
               </motion.div>
 
-              {/* Tagline — single clean line, matching original */}
               <motion.p variants={upItem}
                 style={{
                   fontSize: isMobile ? 14 : 17,
@@ -477,7 +491,7 @@ export default function App() {
                   lineHeight: 1.55,
                   maxWidth: isMobile ? 320 : 'none',
                 }}>
-                Own music. Own publishing. Own master catalogs.
+                Learn where music royalties come from and who pays them.
               </motion.p>
 
               {/* Separator — teal→purple */}
@@ -490,13 +504,13 @@ export default function App() {
               {/* Description */}
               <motion.p variants={upItem}
                 style={{ fontSize: 13, color: C.sub, lineHeight: 1.9, marginBottom: 16, maxWidth: isMobile ? 315 : 380 }}>
-                A yield-bearing protocol for future ownership
+                Music royalties start with two copyrights:
                 {isMobile ? ' ' : <br />}
-                of music royalties, streams, and curated
+                the composition and the master recording.
                 {isMobile ? ' ' : <br />}
-                catalogs, designed for the next era of
+                Each revenue source travels through a
                 {isMobile ? ' ' : <br />}
-                music infrastructure.
+                different collection path before payout.
               </motion.p>
 
               {/* Teal callout */}
@@ -508,7 +522,7 @@ export default function App() {
                 margin: 0,
                 maxWidth: isMobile ? 315 : 380,
               }}>
-                Catalogs can earn whether the market is up or down.
+                By the end, you should know what ASCAP, The MLC, SoundExchange, and distributors actually do.
               </motion.p>
             </motion.div>
 
@@ -554,9 +568,9 @@ export default function App() {
             </div>
 
             <p style={{ fontSize: 13, color: C.sub, lineHeight: 1.8 }}>
-              We're indexing catalogs and<br />
-              building the rails for the<br />
-              future of royalty ownership.
+              A catalog can earn from public performance,<br />
+              mechanical reproduction, master revenue,<br />
+              and negotiated sync licenses.
             </p>
 
             <div className="flex-1 flex flex-col justify-end gap-3">
@@ -595,8 +609,8 @@ export default function App() {
 
           {/* What You Can Own — dotted outer border, matching original */}
           {[
-            { title: 'WHAT YOU CAN OWN', items: OWNERSHIP },
-            { title: 'HOW CATALOGS EARN', items: EARNING },
+            { title: 'RIGHTS THAT GENERATE ROYALTIES', items: RIGHTS },
+            { title: 'WHO COLLECTS AND PAYS', items: COLLECTORS },
           ].map(({ title, items }) => (
             <div key={title} className="flex-1" style={{
               borderRight: isTablet ? 'none' : `1px solid ${C.border}`,
@@ -620,25 +634,21 @@ export default function App() {
             <div style={{ margin: isMobile ? 10 : 16, border: `1px dashed ${C.border}`, padding: isMobile ? '14px 12px' : '16px 14px' }}>
               <h3 style={{ fontSize: 11, color: C.dim, letterSpacing: isMobile ? 2.3 : 4,
                 marginBottom: 16, paddingBottom: 10,
-                borderBottom: `1px dashed #1c1c32` }}>ROYALTY FLOW (CONCEPTUAL)</h3>
+                borderBottom: `1px dashed #1c1c32` }}>ROYALTY PAYOUT FLOW</h3>
               <RoyaltyChart />
               <motion.div className="flex gap-2 mt-4 flex-wrap"
                 initial={{ opacity: 0, y: 8 }}
                 whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: '-30px' }}
                 transition={{ ...spring, delay: 0.2 }}>
-                {[
-                  { label: '4 STREAMS', sub: 'revenue sources', color: C.teal },
-                  { label: '~12 YRS', sub: 'catalog avg life', color: C.purple },
-                  { label: 'NEUTRAL', sub: 'market exposure', color: C.orange },
-                ].map(({ label, sub, color }) => (
+                {FLOW_STEPS.map(({ label, sub, color }) => (
                   <div key={label} style={{
-                    flex: isMobile ? '1 1 100%' : 1,
+                    flex: isMobile ? '1 1 100%' : '1 1 calc(50% - 8px)',
                     padding: '10px 12px',
                     border: `1px solid ${C.ghost}60`,
                     background: '#09091a',
                   }}>
                     <div style={{ fontSize: 13, color, fontWeight: 700, letterSpacing: 0.5 }}>{label}</div>
-                    <div style={{ fontSize: 9, color: C.dim, marginTop: 3, letterSpacing: 1 }}>{sub.toUpperCase()}</div>
+                    <div style={{ fontSize: 9, color: C.dim, marginTop: 5, letterSpacing: 0.5, lineHeight: 1.55 }}>{sub}</div>
                   </div>
                 ))}
               </motion.div>
@@ -669,8 +679,8 @@ export default function App() {
             </div>
             <div className="flex flex-col items-center gap-1.5" style={{ position: 'relative', zIndex: 1 }}>
               <div style={{ width: 48, height: 1, background: `linear-gradient(90deg, transparent, ${C.purple}70, transparent)` }} />
-              <span style={{ fontSize: 10, color: C.sub, letterSpacing: isMobile ? 1.6 : 2.8, textAlign: 'center' }}>OWNERSHIP SIGNAL</span>
-              <span style={{ fontSize: 9, color: C.dim, letterSpacing: isMobile ? 1.1 : 1.8, textAlign: 'center' }}>CATALOGS, RIGHTS, AND ROYALTIES</span>
+              <span style={{ fontSize: 10, color: C.sub, letterSpacing: isMobile ? 1.6 : 2.8, textAlign: 'center' }}>ROYALTY SIGNAL</span>
+              <span style={{ fontSize: 9, color: C.dim, letterSpacing: isMobile ? 1.1 : 1.8, textAlign: 'center' }}>RIGHTS, USAGE, COLLECTION, PAYOUT</span>
             </div>
           </motion.div>
 
@@ -683,10 +693,10 @@ export default function App() {
             <motion.p variants={upItem} style={{
               fontSize: 22, fontWeight: 700, color: C.text, letterSpacing: 0.5, marginBottom: 8, lineHeight: 1.25,
             }}>
-              Own the catalog.<br />Own the yield.
+              Follow the money.<br />Then price the catalog.
             </motion.p>
             <motion.p variants={upItem} style={{ fontSize: 12, color: C.dim, letterSpacing: 0.5, marginBottom: 24, lineHeight: 1.75 }}>
-              Join the waitlist for early access to royalty ownership, yield mechanics, and the protocol launch.
+              Streaming, radio, live venues, sync licenses, and downloads do not pay through one pipe. The useful map is source, right, collector, split, payout.
             </motion.p>
 
             <motion.div variants={upItem} className="flex gap-3"
@@ -705,7 +715,7 @@ export default function App() {
                   fontFamily: "'SpaceMono', monospace" }}
                 whileHover={{ scale: 1.02, boxShadow: `0 0 52px rgba(155,89,216,0.5), 0 8px 32px rgba(155,89,216,0.2)` }}
                 whileTap={{ scale: 0.97 }} transition={springBouncy}>
-                READ THESIS →
+                READ ROYALTY MAP →
               </motion.button>
             </motion.div>
 
@@ -717,7 +727,7 @@ export default function App() {
               }}
                 whileHover={{ color: C.sub, transition: snappy }}
                 whileTap={{ scale: 0.97, transition: springStiff }}>
-                EXPLORE MECHANICS →
+                EXPLORE PAYOUT MECHANICS →
               </motion.button>
             </motion.div>
           </motion.div>
@@ -742,10 +752,10 @@ export default function App() {
               width: isMobile ? '100%' : 'auto',
             }}>
             {[
-              { label: 'INDEXING CATALOGS',      color: C.teal,   delay: 0 },
-              { label: 'BUILDING RAILS',          color: C.teal,   delay: 0.5 },
-              { label: 'WAITLIST ACTIVE',         color: C.orange, delay: 1.0 },
-              { label: 'MARKET-NEUTRAL EXPOSURE', color: C.teal,   delay: 1.5 },
+              { label: 'COMPOSITION + MASTER', color: C.teal, delay: 0 },
+              { label: 'PRO / MLC / SX',       color: C.teal, delay: 0.5 },
+              { label: 'WAITLIST ACTIVE',      color: C.orange, delay: 1.0 },
+              { label: 'PAYOUT FLOW ONLINE',   color: C.teal, delay: 1.5 },
             ].map(({ label, color, delay }) => (
               <motion.div key={label} className="flex items-center gap-2" variants={upItem}
                 style={{ fontSize: isMobile ? 8 : 10, letterSpacing: isMobile ? 1.4 : 3 }}>
@@ -760,6 +770,7 @@ export default function App() {
           </span>
         </motion.div>
 
+        <CrtBoot />
       </motion.div>
     </div>
   )
