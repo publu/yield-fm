@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { YieldSurface } from './YieldSurface'
 import { Crosshair } from './AppShell'
 import { LiveCounter, Stat, PulseDot } from './DataComponents'
+import catalogData from '../data/catalogs.json'
 
 function tsNow() {
   const d = new Date()
@@ -28,34 +29,72 @@ const RIGHT_COLORS = {
   PERF: 'var(--accent-c)', MECH: 'var(--accent-d)',
   SYNC: 'var(--accent-c)',
 }
-const SAMPLE_PLAYS = [
-  { right: 'COMP', title: "Lover, You Should've Come Over", via: 'ASCAP'   },
-  { right: 'MAST', title: 'Strange Days',                    via: 'SoundEx' },
-  { right: 'MECH', title: 'After Midnight',                  via: 'MLC'     },
-  { right: 'PERF', title: 'Wide Open Spaces',                via: 'BMI'     },
-  { right: 'COMP', title: 'Late Night Talking',              via: 'SESAC'   },
-  { right: 'SYNC', title: 'Coast (TV Spot)',                 via: 'Direct'  },
-  { right: 'MAST', title: 'Heat Waves',                      via: 'Polydor' },
-  { right: 'PERF', title: 'Tiny Dancer',                     via: 'PRS'     },
-  { right: 'COMP', title: 'Out Of Time',                     via: 'ASCAP'   },
-  { right: 'MECH', title: 'Sunset In Bali',                  via: 'MLC'     },
+
+const RIGHT_TYPES = ['COMP', 'MAST', 'MECH', 'PERF', 'SYNC']
+
+function classifyRight(sound, i) {
+  if (sound.label) {
+    if (i % 3 === 0) return 'MAST'
+    if (i % 5 === 0) return 'SYNC'
+  }
+  return RIGHT_TYPES[i % RIGHT_TYPES.length]
+}
+
+function viaFor(right, sound) {
+  if (right === 'MAST') return sound.label?.split(/[,/]/)[0]?.trim().slice(0, 14) || 'Distro'
+  if (right === 'PERF') return ['BMI', 'ASCAP', 'PRS', 'SESAC'][Math.floor(Math.random() * 4)]
+  if (right === 'COMP') return ['ASCAP', 'BMI', 'SESAC', 'GMR'][Math.floor(Math.random() * 4)]
+  if (right === 'MECH') return 'MLC'
+  if (right === 'SYNC') return 'Direct'
+  return 'PRO'
+}
+
+function buildPlay(sound, i) {
+  const right = classifyRight(sound, i)
+  return {
+    right,
+    title: sound.title || 'Unknown',
+    artist: sound.artist || '',
+    via: viaFor(right, sound),
+  }
+}
+
+const FALLBACK_PLAYS = [
+  { right: 'COMP', title: 'I M The Man',      artist: 'Travis Scott',  via: 'BMI' },
+  { right: 'MAST', title: 'Brand New',        artist: 'Ben Rector',    via: 'Downtown' },
+  { right: 'MECH', title: 'Super Model',      artist: 'SZA',           via: 'MLC' },
+  { right: 'PERF', title: 'She Got The Best Of Me', artist: 'Luke Combs', via: 'ASCAP' },
+  { right: 'SYNC', title: 'Under The Influence',    artist: 'Chris Brown', via: 'Direct' },
 ]
 
 function HeroFeed() {
-  const [feed, setFeed] = useState(() => SAMPLE_PLAYS.slice(0, 8).map((p, i) => ({
-    ...p,
-    ts: tsAgo(i * 1.4),
-    cents: pickCents(p.right),
+  const [pool, setPool] = useState(FALLBACK_PLAYS)
+  const [feed, setFeed] = useState(() => FALLBACK_PLAYS.slice(0, 8).map((p, i) => ({
+    ...p, ts: tsAgo(i * 1.4), cents: pickCents(p.right),
   })))
+
+  useEffect(() => {
+    let cancelled = false
+    fetch('https://tiktok.highscore.page/api/indexer/pages/foryou?limit=80')
+      .then(r => r.ok ? r.json() : null)
+      .then(data => {
+        if (cancelled || !data?.sounds?.length) return
+        const built = data.sounds.map((s, i) => buildPlay(s, i))
+        setPool(built)
+      })
+      .catch(() => {})
+    return () => { cancelled = true }
+  }, [])
+
   useEffect(() => {
     const id = setInterval(() => {
       setFeed((f) => {
-        const sample = SAMPLE_PLAYS[Math.floor(Math.random() * SAMPLE_PLAYS.length)]
+        const sample = pool[Math.floor(Math.random() * pool.length)]
         return [{ ...sample, ts: tsNow(), cents: pickCents(sample.right) }, ...f].slice(0, 8)
       })
     }, 1200)
     return () => clearInterval(id)
-  }, [])
+  }, [pool])
 
   return (
     <div style={{
@@ -87,7 +126,10 @@ function HeroFeed() {
             }}>{row.right}</span>
             <span style={{ color: 'var(--text)', flex: 1, minWidth: 0,
               overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
-            }}>{row.title}</span>
+            }}>
+              {row.title}
+              {row.artist && <span style={{ color: 'var(--dim)', marginLeft: 6 }}>· {row.artist}</span>}
+            </span>
             <span className="hero-feed-via" style={{ color: 'var(--dim)', fontSize: 10 }}>{row.via}</span>
             <span className="tnum hero-feed-amt" style={{
               color: 'var(--accent-a)', fontWeight: 700, width: 64, textAlign: 'right',
@@ -192,8 +234,19 @@ export function Hero({ mode, intensity }) {
               label="GLOBAL ROYALTIES PAID — 2024"
               base={45200000000} rate={1430} prefix="$"
             />
-            <Stat label="MEDIAN CATALOG MULTIPLE — LTM" value="6.54×" delta={2.31} sparkSeed={3} />
-            <Stat label="CATALOGS TRACKED" value="1,847" delta={4.62} sparkSeed={7} color="var(--accent-b)" />
+            <Stat
+              label="MEDIAN CATALOG MULTIPLE — RE LTM"
+              value={`${catalogData.stats.medianMultipleAll.toFixed(2)}×`}
+              delta={2.31}
+              sparkSeed={3}
+            />
+            <Stat
+              label="CATALOGS TRACKED"
+              value={catalogData.stats.totalListings.toLocaleString()}
+              delta={4.62}
+              sparkSeed={7}
+              color="var(--accent-b)"
+            />
           </div>
         </div>
 

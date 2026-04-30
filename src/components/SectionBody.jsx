@@ -1,5 +1,6 @@
 import React, { useMemo, useState } from 'react'
 import { Sparkline, SectionHead, makeSeries } from './DataComponents'
+import catalogData from '../data/catalogs.json'
 
 const COPYRIGHTS = [
   {
@@ -269,14 +270,38 @@ export function Flow() {
   )
 }
 
-const CATALOGS = [
-  { code: 'CAT-001', name: 'Velvet Hours',     era: '1968–74', tracks: 142, mult: 7.4, yld: 9.2, hot: true,  spark: 11 },
-  { code: 'CAT-014', name: 'Cosmic Standard',  era: '1996–03', tracks: 89,  mult: 9.1, yld: 6.8, hot: true,  spark: 22 },
-  { code: 'CAT-029', name: 'Late Bloom',       era: '2010–17', tracks: 64,  mult: 12.2, yld: 5.1, hot: false, spark: 33 },
-  { code: 'CAT-041', name: 'Heartland Pop',    era: '1982–89', tracks: 211, mult: 6.0, yld: 11.4, hot: false, spark: 44 },
-  { code: 'CAT-058', name: 'Bedroom Indie',    era: '2018–22', tracks: 312, mult: 14.8, yld: 4.2, hot: true,  spark: 55 },
-  { code: 'CAT-077', name: 'Smooth Standards', era: '1955–63', tracks: 57,  mult: 5.4, yld: 13.6, hot: false, spark: 66 },
-]
+function shortenTitle(t) {
+  return t
+    .replace(/Songwriter Royalties|Publishing Royalties|Royalties|- /gi, '')
+    .replace(/[“”"]/g, '')
+    .replace(/\s+/g, ' ')
+    .trim()
+}
+function termLabel(t) {
+  if (t === 'life_of_rights') return 'LIFE OF RIGHTS'
+  if (t === 'fixed_return') return 'FIXED TERM'
+  return (t || '').toUpperCase()
+}
+const CATALOGS = catalogData.catalogs
+  .filter(c => c.multiple != null && c.yieldPct != null)
+  .slice(0, 8)
+  .map((c) => {
+    const ebyArr = c.earningsByYear ? Object.values(c.earningsByYear) : null
+    return {
+      code: `CAT-${String(c.id).padStart(4, '0')}`,
+      name: shortenTitle(c.title),
+      era: termLabel(c.term),
+      tracks: c.trackCount || 0,
+      mult: c.multiple,
+      yld: c.yieldPct,
+      hot: c.isPick,
+      tags: c.tags,
+      ltm: c.ltm,
+      url: c.url,
+      sparkData: ebyArr && ebyArr.length >= 3 ? ebyArr : null,
+      spark: c.id % 100,
+    }
+  })
 
 export function CatalogIndex() {
   return (
@@ -284,41 +309,68 @@ export function CatalogIndex() {
       <div className="sec-pad" style={{ maxWidth: 1480, margin: '0 auto', padding: '0 32px' }}>
         <SectionHead num="04" kicker="THE INDEX"
           title="Catalogs trade like bonds. Read the curve before it prices in."
-          sub="A catalog is a portfolio of compositions and / or masters. Multiples = price ÷ NPS (net publisher's share). Implied yield = annual cash flow ÷ price. The trade-off curve looks suspiciously like fixed income — that's the lens we give you."
+          sub={`A catalog is a portfolio of compositions and / or masters. Multiples = price ÷ NPS (net publisher's share). Implied yield = annual cash flow ÷ price. We monitor ${catalogData.stats.totalListings.toLocaleString()} listings (${catalogData.stats.openListings} open · ${catalogData.stats.closedComps.toLocaleString()} closed comps), of which ${catalogData.stats.socialCoverage} have deep social coverage from our TikTok / Shorts pipeline.`}
         />
+        <div className="row" style={{
+          display: 'grid', gap: 1, marginBottom: 18, border: '1px solid var(--line)', background: 'var(--line)',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))',
+        }}>
+          {[
+            { lab: 'OPEN LISTINGS', val: catalogData.stats.openListings.toLocaleString() },
+            { lab: 'CLOSED COMPS', val: catalogData.stats.closedComps.toLocaleString() },
+            { lab: 'MEDIAN MULTIPLE', val: catalogData.stats.medianMultipleAll.toFixed(2) + '×' },
+            { lab: 'BLENDED YIELD', val: catalogData.stats.blendedYield.toFixed(1) + '%' },
+            { lab: 'TIKTOK UGC', val: (catalogData.stats.totalTiktokUGC / 1e9).toFixed(2) + 'B' },
+            { lab: 'SOUNDS INDEXED', val: catalogData.stats.totalSounds.toLocaleString() },
+          ].map(s => (
+            <div key={s.lab} style={{ background: 'var(--bg)', padding: '14px 16px' }}>
+              <div className="label" style={{ fontSize: 9 }}>{s.lab}</div>
+              <div className="tnum" style={{
+                fontFamily: 'var(--face-data)', fontSize: 22, fontWeight: 700,
+                color: 'var(--text)', marginTop: 4, lineHeight: 1,
+              }}>{s.val}</div>
+            </div>
+          ))}
+        </div>
         <div style={{ border: '1px solid var(--line)', background: 'var(--bg)' }}>
           <div className="cat-header" style={{
             display: 'grid',
-            gridTemplateColumns: '120px 1.6fr 100px 100px 100px 100px 160px',
+            gridTemplateColumns: '120px 1.6fr 130px 100px 100px 100px 160px',
             gap: 16, padding: '12px 22px', borderBottom: '1px solid var(--line)',
             background: 'var(--bg-2)',
           }}>
-            {['CODE', 'CATALOG', 'ERA', 'TRACKS', 'MULTIPLE', 'YIELD %', '24M PERFORMANCE'].map(h => (
-              <span key={h} className="label" style={{ textAlign: h === '24M PERFORMANCE' ? 'right' : 'left' }}>{h}</span>
+            {['CODE', 'CATALOG', 'TERM', 'TRACKS', 'MULTIPLE', 'YIELD %', 'EARNINGS HISTORY'].map(h => (
+              <span key={h} className="label" style={{ textAlign: h === 'EARNINGS HISTORY' ? 'right' : 'left' }}>{h}</span>
             ))}
           </div>
           {CATALOGS.map((c, i) => (
-            <div key={c.code} className="cat-row" style={{
+            <a key={c.code} href={c.url} target="_blank" rel="noopener noreferrer" className="cat-row" style={{
               display: 'grid',
-              gridTemplateColumns: '120px 1.6fr 100px 100px 100px 100px 160px',
+              gridTemplateColumns: '120px 1.6fr 130px 100px 100px 100px 160px',
               gap: 16, padding: '18px 22px', alignItems: 'center',
               borderBottom: i < CATALOGS.length - 1 ? '1px solid var(--line-soft)' : 'none',
+              color: 'inherit',
             }}>
               <span className="cat-code" style={{ fontFamily: 'var(--mono)', fontSize: 11, color: c.hot ? 'var(--accent-c)' : 'var(--dim)', letterSpacing: '0.1em' }}>
                 {c.hot && <span style={{ color: 'var(--accent-c)', marginRight: 6 }}>●</span>}{c.code}
               </span>
               <span className="cat-name" style={{
                 fontFamily: 'var(--face-display)', fontWeight: 'var(--weight-display)',
-                fontSize: 18, color: 'var(--text)', letterSpacing: 'var(--tracking-display)',
+                fontSize: 16, color: 'var(--text)', letterSpacing: 'var(--tracking-display)',
+                overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
               }}>{c.name}</span>
-              <span className="cat-era" style={{ fontFamily: 'var(--mono)', fontSize: 12, color: 'var(--sub)' }}>{c.era}</span>
+              <span className="cat-era" style={{ fontFamily: 'var(--mono)', fontSize: 10, letterSpacing: '0.12em', color: 'var(--sub)' }}>{c.era}</span>
               <span className="cat-tracks tnum" style={{ fontFamily: 'var(--mono)', fontSize: 13, color: 'var(--text)' }}>{c.tracks}</span>
-              <span className="cat-mult tnum" style={{ fontFamily: 'var(--mono)', fontSize: 14, color: 'var(--text)', fontWeight: 700 }}>{c.mult.toFixed(1)}×</span>
+              <span className="cat-mult tnum" style={{ fontFamily: 'var(--mono)', fontSize: 14, color: 'var(--text)', fontWeight: 700 }}>{c.mult.toFixed(2)}×</span>
               <span className="cat-yld tnum" style={{ fontFamily: 'var(--mono)', fontSize: 14, color: c.yld > 8 ? 'var(--positive)' : 'var(--accent-c)', fontWeight: 700 }}>{c.yld.toFixed(1)}%</span>
               <span className="cat-spark">
-                <Sparkline data={makeSeries(c.spark, 36, 50, 6)} color={c.hot ? 'var(--accent-a)' : 'var(--accent-b)'} width={150} height={26} fill />
+                <Sparkline
+                  data={c.sparkData || makeSeries(c.spark, 36, 50, 6)}
+                  color={c.hot ? 'var(--accent-a)' : 'var(--accent-b)'}
+                  width={150} height={26} fill
+                />
               </span>
-            </div>
+            </a>
           ))}
         </div>
 

@@ -1,0 +1,483 @@
+{
+  "stats": {
+    "totalListings": 3177,
+    "openListings": 751,
+    "closedComps": 1592,
+    "medianMultipleAll": 6.54,
+    "medianMultipleLoR": 7.65,
+    "medianMultiple50k": 4.71,
+    "picks": 5,
+    "blendedYield": 10,
+    "socialCoverage": 553,
+    "totalTiktokUGC": 3188317649,
+    "totalSounds": 10538,
+    "deepEnriched": 751
+  },
+  "syncedAt": "2026-04-18T07:08:22.434896Z",
+  "catalogs": [
+    {
+      "id": 6375,
+      "title": "\"Brand New\" by Ben Rector + More - Publishing Royalties",
+      "url": "https://auctions.royaltyexchange.com/orderbook/asset-detail/6375/",
+      "tags": [
+        "Downtown Music Publishing",
+        "Synchronization Heavy",
+        "Publishing"
+      ],
+      "term": "life_of_rights",
+      "ltm": 116551.06,
+      "multiple": null,
+      "yieldPct": 29.1,
+      "trackCount": 44,
+      "age": 10.48,
+      "isPick": true,
+      "topSong": "BRAND NEW",
+      "topUgc": 0,
+      "earningsByYear": {
+        "0": 32840,
+        "1": 13761,
+        "2": 15085,
+        "3": 55077,
+        "4": 116551
+      }
+    },
+    {
+      "id": 5948,
+      "title": "Travis Scott, 50 Cent, ILOVEMAKONNEN ft. Drake - Songwriter Royalties",
+      "url": "https://auctions.royaltyexchange.com/orderbook/asset-detail/5948/",
+      "tags": [
+        "BMI",
+        "Travis Scott",
+        "21 Savage"
+      ],
+      "term": "life_of_rights",
+      "ltm": 89978.74,
+      "multiple": 9.45,
+      "yieldPct": 9,
+      "trackCount": 71,
+      "age": 9.73,
+      "isPick": true,
+      "topSong": "I M THE MAN",
+      "topUgc": 10017023,
+      "earningsByYear": {
+        "0": 91001,
+        "1": 101453,
+        "2": 96319,
+        "3": 115222,
+        "4": 89979
+      }
+    },
+    {
+      "id": 4520,
+      "title": "\"She Got The Best Of Me\" by Luke Combs - Songwriter Royalties",
+      "url": "https://auctions.royaltyexchange.com/orderbook/asset-detail/4520/",
+      "tags": [
+        "ASCAP",
+        "Country",
+        "Radio Heavy"
+      ],
+      "term": "life_of_rights",
+      "ltm": 77058.05,
+      "multiple": 8.89,
+      "yieldPct": 9.1,
+      "trackCount": 3,
+      "age": 8,
+      "isPick": true,
+      "topSong": "SHE GOT THE BEST OF ME",
+      "topUgc": 866718,
+      "earningsByYear": {
+        "0": 68858,
+        "1": 55884,
+        "2": 73970,
+        "3": 77759,
+        "4": 77058
+      }
+    },
+    {
+      "id": 4324,
+      "title": "SZA + Rihanna: Songwriter Royalties",
+      "url": "https://auctions.royaltyexchange.com/orderbook/asset-detail/4324/",
+      "tags": [
+        "ASCAP",
+        "Pop",
+        "R&B/Soul"
+      ],
+      "term": "life_of_rights",
+      "ltm": 55838.6,
+      "multiple": 9.45,
+      "yieldPct": 8.6,
+      "trackCount": 28,
+      "age": 9.12,
+      "isPick": true,
+      "topSong": "SUPER MODEL",
+      "topUgc": 15895678,
+      "earningsByYear": {
+        "0": 29875,
+        "1": 34483,
+        "2": 53171,
+        "3": 68978,
+        "4": 55917
+      }
+    },
+    {
+      "id": 6583,
+      "title": "Hits From Khalid: 7X Platinum \"Location\" & More",
+      "url": "https://auctions.royaltyexchange.com/orderbook/asset-detail/6583/",
+      "tags": [
+        "BMI",
+        "Khalid",
+        "A$AP Rocky"
+      ],
+      "term": "life_of_rights",
+      "ltm": 50904.68,
+      "multiple": 9.16,
+      "yieldPct": 18.3,
+      "trackCount": 81,
+      "age": 9.23,
+      "isPick": true,
+      "topSong": "SUNDRESS",
+      "topUgc": 12519454,
+      "earningsByYear": {
+        "0": 57265,
+        "1": 41943,
+        "2": 45725,
+        "3": 51425,
+        "4": 50905
+      }
+    },
+    {
+      "id": 6178,
+      "title": "Drake, Megan Thee Stallion, Beyonce + More - Publishing Rights",
+      "url": "https://auctions.royaltyexchange.com/orderbook/asset-detail/6178/",
+      "tags": [
+        "Kobalt"
+      ],
+      "term": "life_of_rights",
+      "ltm": 91961.34,
+      "multiple": 7.56,
+      "yieldPct": 11.5,
+      "trackCount": 37,
+      "age": 6.13,
+      "isPick": false,
+      "topSong": "In My Feelings",
+      "topUgc": 0,
+      "earningsByYear": {
+        "0": 68357,
+        "1": 60789,
+        "2": 70199,
+        "3": 165624,
+        "4": 91961
+      }
+    },
+    {
+      "id": 6333,
+      "title": "Todd Dulaney - Publishing Royalties",
+      "url": "https://auctions.royaltyexchange.com/orderbook/asset-detail/6333/",
+      "tags": [
+        "Contemporary Christian",
+        "MNRK Music Group",
+        "Gospel"
+      ],
+      "term": "life_of_rights",
+      "ltm": 85755.24,
+      "multiple": 6.57,
+      "yieldPct": 39.7,
+      "trackCount": 90,
+      "age": 6.61,
+      "isPick": false,
+      "topSong": "King of Glory",
+      "topUgc": 5344844,
+      "earningsByYear": {
+        "0": 31795,
+        "1": 35166,
+        "2": 69348,
+        "3": 68630,
+        "4": 85755
+      }
+    },
+    {
+      "id": 3998,
+      "title": "Grammy-Winning Band: Cage The Elephant",
+      "url": "https://auctions.royaltyexchange.com/orderbook/asset-detail/3998/",
+      "tags": [
+        "BMI",
+        "Cage The Elephant",
+        "Rock"
+      ],
+      "term": "life_of_rights",
+      "ltm": 85611.92,
+      "multiple": 7.68,
+      "yieldPct": 5.6,
+      "trackCount": 52,
+      "age": 14.2,
+      "isPick": false,
+      "topSong": "CIGARETTE DAYDREAMS",
+      "topUgc": 91261,
+      "earningsByYear": {
+        "0": 48034,
+        "1": 53793,
+        "2": 59930,
+        "3": 72818,
+        "4": 85612
+      }
+    },
+    {
+      "id": 2834,
+      "title": "Jay-Z’s Multi-Platinum “Empire State of Mind”",
+      "url": "https://auctions.royaltyexchange.com/orderbook/asset-detail/2834/",
+      "tags": [
+        "ASCAP",
+        "Established Earner",
+        "Hip-Hop"
+      ],
+      "term": "partial_10_year",
+      "ltm": 75428.92,
+      "multiple": 1.26,
+      "yieldPct": 96.5,
+      "trackCount": 58,
+      "age": 16.04,
+      "isPick": false,
+      "topSong": "EMPIRE STATE OF MIND",
+      "topUgc": 8679799,
+      "earningsByYear": {
+        "0": 46654,
+        "1": 51474,
+        "2": 64655,
+        "3": 73179,
+        "4": 75429
+      }
+    },
+    {
+      "id": 6619,
+      "title": "Rihanna’s “Don’t Stop The Music” — Publishing Royalties",
+      "url": "https://auctions.royaltyexchange.com/orderbook/asset-detail/6619/",
+      "tags": [
+        "Sony Music Publishing"
+      ],
+      "term": "life_of_rights",
+      "ltm": 68650.34,
+      "multiple": 5.27,
+      "yieldPct": 22.9,
+      "trackCount": 3,
+      "age": 18.57,
+      "isPick": false,
+      "topSong": "DON'T STOP THE MUSIC ",
+      "topUgc": 0,
+      "earningsByYear": {
+        "0": 16965,
+        "1": 14715,
+        "2": 20322,
+        "3": 24360,
+        "4": 68650
+      }
+    },
+    {
+      "id": 2821,
+      "title": "Consistent R&B Royalties - Lyfe Jennings",
+      "url": "https://auctions.royaltyexchange.com/orderbook/asset-detail/2821/",
+      "tags": [
+        "ASCAP",
+        "ASCAP",
+        "Established Earner"
+      ],
+      "term": "partial_10_year",
+      "ltm": 63788.94,
+      "multiple": 1.34,
+      "yieldPct": 42.6,
+      "trackCount": 117,
+      "age": 16.07,
+      "isPick": false,
+      "topSong": "MUST BE NICE",
+      "topUgc": 2938866,
+      "earningsByYear": {
+        "0": 48959,
+        "1": 49593,
+        "2": 76313,
+        "3": 73370,
+        "4": 63789
+      }
+    },
+    {
+      "id": 3982,
+      "title": "Dirty Dancing’s \"(I've Had) The Time of My Life\"",
+      "url": "https://auctions.royaltyexchange.com/orderbook/asset-detail/3982/",
+      "tags": [
+        "ASCAP",
+        "\"Dirty Dancing\"",
+        "\"I've Had the Time of My Life\""
+      ],
+      "term": "life_of_rights",
+      "ltm": 62127.97,
+      "multiple": 9.99,
+      "yieldPct": 6.2,
+      "trackCount": 3,
+      "age": 36.19,
+      "isPick": false,
+      "topSong": "TIME OF MY LIFE I VE HAD THE",
+      "topUgc": 3344805,
+      "earningsByYear": {
+        "0": 43370,
+        "1": 47977,
+        "2": 50779,
+        "3": 53642,
+        "4": 62128
+      }
+    },
+    {
+      "id": 3756,
+      "title": "Dance/Club Tracks from Terrence Parker - Songwriter Royalties",
+      "url": "https://auctions.royaltyexchange.com/orderbook/asset-detail/3756/",
+      "tags": [
+        "BMI",
+        "Large Track List",
+        "Established Earner"
+      ],
+      "term": "life_of_rights",
+      "ltm": 60433.96,
+      "multiple": 4.18,
+      "yieldPct": 2942.3,
+      "trackCount": 196,
+      "age": 15.25,
+      "isPick": false,
+      "topSong": "SOMETHIN HERE",
+      "topUgc": 75480,
+      "earningsByYear": {
+        "0": 1681,
+        "1": 2646,
+        "2": 2910,
+        "3": 15828,
+        "4": 60434
+      }
+    },
+    {
+      "id": 2819,
+      "title": "Diverse Catalog Featuring Multi-Platinum Artists",
+      "url": "https://auctions.royaltyexchange.com/orderbook/asset-detail/2819/",
+      "tags": [
+        "ASCAP",
+        "ASCAP",
+        "Hip-Hop"
+      ],
+      "term": "partial_10_year",
+      "ltm": 59701.51,
+      "multiple": 0.91,
+      "yieldPct": 99.5,
+      "trackCount": 256,
+      "age": 11.48,
+      "isPick": false,
+      "topSong": "HOT BOY",
+      "topUgc": 13070474,
+      "earningsByYear": {
+        "0": 40388,
+        "1": 43880,
+        "2": 51599,
+        "3": 50955,
+        "4": 59702
+      }
+    },
+    {
+      "id": 2837,
+      "title": "Streaming-Driven, 10-Year Old Hip-Hop",
+      "url": "https://auctions.royaltyexchange.com/orderbook/asset-detail/2837/",
+      "tags": [
+        "ASCAP",
+        "Large Track List",
+        "Established Earner"
+      ],
+      "term": "partial_10_year",
+      "ltm": 56246.02,
+      "multiple": 1.5,
+      "yieldPct": 111.4,
+      "trackCount": 331,
+      "age": 13.98,
+      "isPick": false,
+      "topSong": "RUNAWAY",
+      "topUgc": 2667260,
+      "earningsByYear": {
+        "0": 36608,
+        "1": 45668,
+        "2": 48767,
+        "3": 64708,
+        "4": 56246
+      }
+    },
+    {
+      "id": 6431,
+      "title": "Cherish, ACRAZE, DaniLeigh, and more - Publishing Royalties",
+      "url": "https://auctions.royaltyexchange.com/orderbook/asset-detail/6431/",
+      "tags": [
+        "CHERISH",
+        "Kaytranada",
+        "DaniLeigh"
+      ],
+      "term": "life_of_rights",
+      "ltm": 54927.83,
+      "multiple": 7.56,
+      "yieldPct": 26.9,
+      "trackCount": 110,
+      "age": 6.59,
+      "isPick": false,
+      "topSong": "EASY",
+      "topUgc": 0,
+      "earningsByYear": {
+        "0": 58388,
+        "1": 73810,
+        "2": 103981,
+        "3": 98533,
+        "4": 54928
+      }
+    },
+    {
+      "id": 3306,
+      "title": "Lil Uzi Vert + Playboi Carti Royalties",
+      "url": "https://auctions.royaltyexchange.com/orderbook/asset-detail/3306/",
+      "tags": [
+        "ASCAP",
+        "Hip-Hop",
+        "Playboi Carti"
+      ],
+      "term": "partial_10_year",
+      "ltm": 49866.15,
+      "multiple": 1.78,
+      "yieldPct": 23.7,
+      "trackCount": 57,
+      "age": 8.08,
+      "isPick": false,
+      "topSong": "SHOOTA",
+      "topUgc": 1443987,
+      "earningsByYear": {
+        "0": 70547,
+        "1": 64213,
+        "2": 60309,
+        "3": 58404,
+        "4": 49866
+      }
+    },
+    {
+      "id": 6312,
+      "title": "Tech N9ne, Jelly Roll, The Rock, + more - Songwriting Royalties",
+      "url": "https://auctions.royaltyexchange.com/orderbook/asset-detail/6312/",
+      "tags": [
+        "Streaming Heavy",
+        "Hip-Hop",
+        "Jelly Roll"
+      ],
+      "term": "life_of_rights",
+      "ltm": 48460.37,
+      "multiple": 8.98,
+      "yieldPct": 32,
+      "trackCount": 2345,
+      "age": 8.29,
+      "isPick": false,
+      "topSong": "FACE OFF",
+      "topUgc": 663951,
+      "earningsByYear": {
+        "0": 39081,
+        "1": 76265,
+        "2": 83267,
+        "3": 57351,
+        "4": 48463
+      }
+    }
+  ]
+}
