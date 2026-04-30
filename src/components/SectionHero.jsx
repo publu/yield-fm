@@ -247,8 +247,14 @@ export function Hero({ mode, intensity }) {
 
           <div className="row" style={{ gap: 36, flexWrap: 'wrap' }}>
             <LiveCounter
-              label="GLOBAL ROYALTIES PAID — 2024"
-              base={45200000000} rate={1430} prefix="$"
+              label="GLOBAL ROYALTIES PAID — 2026 YTD"
+              base={(() => {
+                const RATE = 1521
+                const yearStart = Date.UTC(2026, 0, 1) / 1000
+                const nowSec = Date.now() / 1000
+                return Math.max(0, (nowSec - yearStart)) * RATE
+              })()}
+              rate={1521} prefix="$"
             />
             <Stat
               label="MEDIAN CATALOG MULTIPLE — RE LTM"
