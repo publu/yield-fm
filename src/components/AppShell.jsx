@@ -18,10 +18,10 @@ export function Crosshair({ pos = 'tl', color = 'var(--accent-a)' }) {
 
 export function Logo() {
   return (
-    <span style={{
+    <span className="yield-fm-logo" style={{
       fontFamily: 'var(--face-display)',
       fontWeight: 'var(--weight-display)',
-      fontSize: 20, letterSpacing: 'var(--tracking-display)', color: 'var(--text)',
+      fontSize: 22, letterSpacing: 'var(--tracking-display)', color: 'var(--text)',
     }}>
       <span style={{
         background: 'linear-gradient(96deg, var(--accent-a), var(--accent-b))',
@@ -57,8 +57,8 @@ export function TopNav({ mode, onMode, audioOn, onAudio }) {
           gap: 0, border: '1px solid var(--line)',
           fontFamily: 'var(--mono)', fontSize: 10, letterSpacing: '0.18em', fontWeight: 700,
         }}>
-          {['EDM', 'CLASSICAL', 'VINYL'].map((m, i) => {
-            const v = m.toLowerCase()
+          {['EDM', 'CLASSICAL', 'HIP-HOP'].map((m, i) => {
+            const v = m === 'HIP-HOP' ? 'hiphop' : m.toLowerCase()
             const on = mode === v
             return (
               <button key={v} onClick={() => onMode(v)} style={{
@@ -133,22 +133,57 @@ export function useAmbient(mode, on) {
         o.start(); lfo.start()
         nodes.push(o, g, lfo, lg)
       })
-    } else if (mode === 'vinyl') {
+    } else if (mode === 'hiphop') {
       const buf = ctx.createBuffer(1, ctx.sampleRate * 2, ctx.sampleRate)
       const ch = buf.getChannelData(0)
-      for (let i = 0; i < ch.length; i++) ch[i] = (Math.random() * 2 - 1) * (Math.random() < 0.04 ? 0.6 : 0.05)
+      for (let i = 0; i < ch.length; i++) ch[i] = (Math.random() * 2 - 1) * (Math.random() < 0.02 ? 0.4 : 0.04)
       const noise = ctx.createBufferSource(); noise.buffer = buf; noise.loop = true
-      const filt = ctx.createBiquadFilter(); filt.type = 'highpass'; filt.frequency.value = 1100
-      const ng = ctx.createGain(); ng.gain.value = 0.07
+      const filt = ctx.createBiquadFilter(); filt.type = 'highpass'; filt.frequency.value = 1800
+      const ng = ctx.createGain(); ng.gain.value = 0.05
       noise.connect(filt).connect(ng).connect(master); noise.start()
-      ;[110, 165, 220].forEach((f) => {
-        const o = ctx.createOscillator(); o.type = 'sawtooth'; o.frequency.value = f
-        const lpf = ctx.createBiquadFilter(); lpf.type = 'lowpass'; lpf.frequency.value = 600
-        const g = ctx.createGain(); g.gain.value = 0.025
-        o.connect(lpf).connect(g).connect(master); o.start()
-        nodes.push(o, lpf, g)
-      })
       nodes.push(noise, filt, ng)
+
+      const sub = ctx.createOscillator(); sub.type = 'sine'; sub.frequency.value = 41.2
+      const sg = ctx.createGain(); sg.gain.value = 0.14
+      sub.connect(sg).connect(master); sub.start()
+      nodes.push(sub, sg)
+
+      const tempo = 88
+      const beat = 60 / tempo
+      let step = 0
+      const loop = setInterval(() => {
+        if (!ref.current.ctx) return
+        const t = ctx.currentTime
+        if (step % 4 === 0 || step % 8 === 6) {
+          const k = ctx.createOscillator(); k.type = 'sine'
+          const kg = ctx.createGain(); kg.gain.value = 0
+          k.frequency.setValueAtTime(110, t)
+          k.frequency.exponentialRampToValueAtTime(38, t + 0.18)
+          kg.gain.linearRampToValueAtTime(0.32, t + 0.005)
+          kg.gain.exponentialRampToValueAtTime(0.001, t + 0.32)
+          k.connect(kg).connect(master); k.start(t); k.stop(t + 0.4)
+        }
+        if (step % 8 === 4 || step % 16 === 12) {
+          const sb = ctx.createBuffer(1, ctx.sampleRate * 0.2, ctx.sampleRate)
+          const sc = sb.getChannelData(0)
+          for (let i = 0; i < sc.length; i++) sc[i] = (Math.random() * 2 - 1) * Math.exp(-i / (ctx.sampleRate * 0.04))
+          const sn = ctx.createBufferSource(); sn.buffer = sb
+          const sf = ctx.createBiquadFilter(); sf.type = 'bandpass'; sf.frequency.value = 1800; sf.Q.value = 0.7
+          const sg2 = ctx.createGain(); sg2.gain.value = 0.18
+          sn.connect(sf).connect(sg2).connect(master); sn.start(t); sn.stop(t + 0.2)
+        }
+        if (step % 2 === 1) {
+          const hb = ctx.createBuffer(1, ctx.sampleRate * 0.05, ctx.sampleRate)
+          const hc = hb.getChannelData(0)
+          for (let i = 0; i < hc.length; i++) hc[i] = (Math.random() * 2 - 1) * Math.exp(-i / (ctx.sampleRate * 0.012))
+          const h = ctx.createBufferSource(); h.buffer = hb
+          const hf = ctx.createBiquadFilter(); hf.type = 'highpass'; hf.frequency.value = 7000
+          const hg = ctx.createGain(); hg.gain.value = 0.06
+          h.connect(hf).connect(hg).connect(master); h.start(t); h.stop(t + 0.06)
+        }
+        step++
+      }, beat * 250)
+      nodes.push({ stop() { clearInterval(loop) }, disconnect() {} })
     } else {
       const sub = ctx.createOscillator(); sub.type = 'sine'; sub.frequency.value = 55
       const sg = ctx.createGain(); sg.gain.value = 0.10

@@ -163,9 +163,25 @@ export function Hero({ mode, intensity }) {
 
   return (
     <section className="hero-section" style={{ position: 'relative', borderBottom: '1px solid var(--line)', overflow: 'hidden', minHeight: 'calc(100svh - 60px)' }}>
-      <div style={{ position: 'absolute', inset: 0, opacity: mode === 'classical' ? 0.55 : 0.85 }}>
+      <div style={{ position: 'absolute', inset: 0, opacity: mode === 'hiphop' ? 0.25 : (mode === 'classical' ? 0.55 : 0.85) }}>
         <YieldSurface mode={mode} intensity={intensity} height="100%" />
       </div>
+      {mode === 'hiphop' && (
+        <div style={{
+          position: 'absolute', inset: 0, pointerEvents: 'none',
+          backgroundImage: 'url(/yield-fm-bill.png)',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat',
+          opacity: 0.95,
+        }} />
+      )}
+      {mode === 'hiphop' && (
+        <div style={{
+          position: 'absolute', inset: 0, pointerEvents: 'none',
+          background: 'linear-gradient(90deg, rgba(8,12,8,0.92) 0%, rgba(8,12,8,0.78) 35%, rgba(8,12,8,0.45) 65%, rgba(8,12,8,0.30) 100%)',
+        }} />
+      )}
       <div style={{
         position: 'absolute', inset: 0, pointerEvents: 'none',
         background: 'linear-gradient(180deg, transparent 0%, transparent 55%, var(--bg) 100%)',

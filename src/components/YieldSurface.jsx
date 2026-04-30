@@ -146,48 +146,118 @@ void main(){
     col -= vec3(0.08,0.06,0.03) * smoothstep(0.4, 1.4, r);
 
   } else {
-    vec2 q = vec2(uv.x * aspect, uv.y);
-    q.x -= 0.0;
-    q.y -= 0.05;
-    float r = length(q);
-    float a = atan(q.y, q.x);
+    // ── HIP-HOP: aged greenback paper with engraved hairlines ──
+    // The Benjamin Franklin portrait is layered as a real PNG image
+    // on top of the canvas (see SectionHero.jsx). The shader provides
+    // the moving paper / guilloche / yield-curve engraving underneath.
 
-    col = mix(uBg, vec3(0.04,0.02,0.015), smoothstep(0.95, 0.05, r));
+    float r = length(uv);
 
-    float spin = t * 0.25;
-    float xPolar = a / PI + spin;
+    vec3 paper = vec3(0.82, 0.78, 0.62);
+    float fiber = vnoise(p * 600.0) * 0.06 - 0.03;
+    paper += fiber;
+    float age = vnoise(p * 3.0 + 5.0);
+    paper *= mix(0.78, 1.0, age);
+    paper = mix(paper, paper * vec3(0.78, 0.95, 0.78), 0.18);
 
-    float ringR[4];
-    ringR[0] = 0.62; ringR[1] = 0.50; ringR[2] = 0.38; ringR[3] = 0.26;
+    col = paper;
 
-    for (int i = 0; i < 4; i++) {
-      float fi = float(i);
-      float amp = trace(xPolar, t, fi);
-      float ringy = ringR[i] + amp * 0.020;
-      vec3  c = traceCols[i];
-
-      float g = smoothstep(0.0035, 0.0, abs(r - ringy));
-      col -= vec3(0.05,0.04,0.03) * g * 0.7;
-
-      col += c * smoothstep(0.0015, 0.0, abs(r - ringy)) * 0.55;
+    // outer rectangular border frame
+    float frameDx = aspect - 0.04;
+    float frameDy = 0.46;
+    float ox = abs(p.x) - frameDx;
+    float oy = abs(p.y) - frameDy;
+    float outerEdge = max(ox, oy);
+    col = mix(col, vec3(0.10, 0.18, 0.10), smoothstep(0.003, 0.0, abs(outerEdge + 0.005)) * 0.9);
+    col = mix(col, vec3(0.10, 0.18, 0.10), smoothstep(0.002, 0.0, abs(outerEdge + 0.020)) * 0.8);
+    if (outerEdge > -0.018 && outerEdge < -0.008) {
+      float dots = step(0.5, fract((p.x + p.y) * 60.0));
+      col = mix(col, vec3(0.10, 0.18, 0.10), dots * 0.4);
     }
 
-    float fine = abs(fract(r*100.0) - 0.5)*2.0;
-    col -= vec3(0.04,0.03,0.02) * smoothstep(0.85, 1.0, fine) * smoothstep(0.72, 0.10, r);
+    // dense guilloche border pattern
+    float borderMask = 1.0 - smoothstep(-0.10, -0.04, outerEdge);
+    if (borderMask > 0.01) {
+      float edgeDist = -outerEdge;
+      float perim;
+      if (abs(p.x)/frameDx > abs(p.y)/frameDy) {
+        perim = (p.y / frameDy) * 1.5 + sign(p.x) * 0.5;
+      } else {
+        perim = (p.x / frameDx) * 1.5 + sign(p.y) * 1.5;
+      }
+      float gpat = 0.0;
+      for (int i = 0; i < 3; i++) {
+        float fi = float(i);
+        float wave = sin(perim * 80.0 + fi * 2.094 + t * 0.05) * 0.012;
+        float gband = abs(fract((edgeDist - wave) * 220.0) - 0.5) * 2.0;
+        gpat = max(gpat, smoothstep(0.85, 1.0, gband));
+      }
+      col = mix(col, vec3(0.08, 0.20, 0.10), gpat * borderMask * 0.85);
+    }
 
-    float labelDisc = smoothstep(0.155, 0.150, r);
-    col = mix(col, mix(uB, uC, 0.5), labelDisc * 0.95);
-    float hole = smoothstep(0.022, 0.020, r);
-    col = mix(col, vec3(0.0), hole);
+    // corner "100" numerals (4 corners)
+    for (int cx = 0; cx < 2; cx++) {
+      for (int cy = 0; cy < 2; cy++) {
+        vec2 cc = vec2(
+          (float(cx)*2.0 - 1.0) * (aspect - 0.16),
+          (float(cy)*2.0 - 1.0) * 0.34
+        );
+        vec2 cp = p - cc;
+        if (abs(cp.x) < 0.08 && abs(cp.y) < 0.035) {
+          float gx = (cp.x + 0.08) / 0.053;
+          float gi = floor(gx);
+          float gf = (fract(gx) - 0.5) * 0.053;
+          float gy = cp.y;
 
-    float labelRing = smoothstep(0.001, 0.0, abs(r - 0.13)) +
-                      smoothstep(0.001, 0.0, abs(r - 0.075));
-    col += uC * labelRing * 0.4 * smoothstep(0.16, 0.14, r);
+          float glyph = 0.0;
+          if (gi < 0.5) {
+            float bar = smoothstep(0.008, 0.005, abs(gf + 0.005));
+            float top = smoothstep(0.012, 0.010, abs(gf + 0.012)) *
+                        smoothstep(0.020, 0.025, gy);
+            float baseSerif = smoothstep(0.020, 0.018, abs(gf)) *
+                              smoothstep(-0.024, -0.026, -abs(gy));
+            glyph = max(bar, max(top, baseSerif)) *
+                    smoothstep(0.030, 0.025, abs(gy));
+          } else {
+            vec2 og = vec2(gf, gy);
+            og.x *= 1.6;
+            float od = length(og);
+            glyph = smoothstep(0.030, 0.024, od) - smoothstep(0.024, 0.018, od);
+          }
+          col = mix(col, vec3(0.06, 0.16, 0.08), glyph * 0.95);
+        }
+      }
+    }
 
-    float sheen = smoothstep(-1.0, 1.0, q.y) * smoothstep(0.85, 0.0, r);
-    col += vec3(1.0, 0.8, 0.5) * sheen * 0.06;
+    // faint yield-curve traces baked into the paper
+    float curveInk = 0.0;
+    for (int i = 0; i < 4; i++) {
+      float fi = float(i);
+      float amp = trace(p.x*1.5 + scroll, t, fi);
+      float ty = baselines[i] * 0.4 + amp * 0.06;
+      float ln = smoothstep(0.002, 0.0, abs(p.y - ty));
+      curveInk += ln * (0.20 + fi*0.05);
+    }
+    col = mix(col, vec3(0.08, 0.20, 0.10), curveInk * 0.55);
 
-    col = mix(col, uBg, smoothstep(0.85, 1.05, r));
+    // micro-text band along bottom
+    if (p.y < -0.36 && p.y > -0.39) {
+      float micro = abs(fract((p.x + scroll*0.3) * 200.0) - 0.5);
+      col = mix(col, vec3(0.06, 0.14, 0.08), smoothstep(0.3, 0.0, micro) * 0.5);
+    }
+
+    // distress / aging
+    float wear = vnoise(p * 8.0) * vnoise(p * 30.0);
+    col = mix(col, paper * 0.85, smoothstep(0.4, 0.7, wear) * 0.3);
+
+    float crease = smoothstep(0.001, 0.0, abs(p.x + 0.15)) +
+                   smoothstep(0.001, 0.0, abs(p.x - 0.55));
+    col -= vec3(0.05, 0.04, 0.03) * crease * 0.4;
+
+    float grain = (vnoise(p*180.0) - 0.5) * 0.04;
+    col += grain;
+
+    col *= mix(1.0, smoothstep(1.6, 0.4, r), 0.25);
   }
 
   float vr = length(uv);
@@ -295,7 +365,7 @@ export function YieldSurface({ mode = 'edm', intensity = 1.0, height = 520 }) {
   }, [])
 
   useEffect(() => {
-    const modeNum = mode === 'classical' ? 1 : mode === 'vinyl' ? 2 : 0
+    const modeNum = mode === 'classical' ? 1 : mode === 'hiphop' ? 2 : 0
     const t = setTimeout(() => {
       stateRef.current.modeNum = modeNum
       stateRef.current.A  = getCSSColor('--accent-a')

@@ -74,34 +74,42 @@
   --weight-display:   500;
 }
 
-[data-mode="vinyl"] {
-  --bg:        #1a0e0a;
-  --bg-2:      #221310;
-  --panel:     #2a1a14;
-  --line:      #3d2820;
-  --line-soft: #2a1a14;
-  --text:      #f0d9b8;
-  --sub:       #c9a574;
-  --dim:       #8a6b4a;
-  --ghost:     #4a3220;
+/* ── HIP-HOP ── Death Row / dollar-bill engraving */
+[data-mode="hiphop"] {
+  --bg:        #0a0806;
+  --bg-2:      #14100b;
+  --panel:     #1c1812;
+  --line:      #3a2f20;
+  --line-soft: #1f1a13;
+  --text:      #e8dcb8;
+  --sub:       #b8a878;
+  --dim:       #6a5d3e;
+  --ghost:     #3a3020;
 
-  --accent-a:  #ffb84d;
-  --accent-b:  #c44536;
-  --accent-c:  #f0d9b8;
-  --accent-d:  #2d8a6b;
+  --accent-a:  #d4a93a;  /* gold leaf */
+  --accent-b:  #2d6b3f;  /* dirty dollar green */
+  --accent-c:  #b81e1e;  /* blood red */
+  --accent-d:  #e8dcb8;  /* bone */
 
-  --positive:  #2d8a6b;
-  --negative:  #c44536;
+  --positive:  #d4a93a;
+  --negative:  #b81e1e;
 
   --face-display: var(--serif);
   --face-body:    var(--mono);
   --face-data:    var(--mono);
 
-  --grain-opacity: 0.18;
+  --grain-opacity: 0.22;
   --paper-tint: 0;
 
-  --tracking-display: 0.01em;
+  --tracking-display: -0.01em;
   --weight-display:   700;
+}
+
+/* Old English logo wordmark in hiphop only */
+[data-mode="hiphop"] .yield-fm-logo {
+  font-family: 'UnifrakturCook', var(--serif) !important;
+  font-weight: 700 !important;
+  letter-spacing: 0 !important;
 }
 
 html, body {
