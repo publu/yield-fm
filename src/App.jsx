@@ -256,19 +256,19 @@ function Cassette() {
             type="rotate"
             from={`${reverse ? 360 : 0} ${cx} ${cy}`}
             to={`${reverse ? 0 : 360} ${cx} ${cy}`}
-            dur="72s"
+            dur="24s"
             calcMode="linear"
             repeatCount="indefinite"
           />
           {spokes.map(a => (
             <line key={a}
-              x1={cx + 15 * Math.cos((a * Math.PI) / 180)}
-              y1={cy + 15 * Math.sin((a * Math.PI) / 180)}
-              x2={cx + 22 * Math.cos((a * Math.PI) / 180)}
-              y2={cy + 22 * Math.sin((a * Math.PI) / 180)}
+              x1={cx + 17 * Math.cos((a * Math.PI) / 180)}
+              y1={cy + 17 * Math.sin((a * Math.PI) / 180)}
+              x2={cx + 20.5 * Math.cos((a * Math.PI) / 180)}
+              y2={cy + 20.5 * Math.sin((a * Math.PI) / 180)}
               stroke="#6a30a0"
-              strokeWidth="1.2"
-              opacity="0.58"
+              strokeWidth="1"
+              opacity="0.29"
               strokeLinecap="round" />
           ))}
         </g>
