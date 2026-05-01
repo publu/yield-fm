@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react'
+import React, { useState } from 'react'
 import { Sparkline, SectionHead, makeSeries } from './DataComponents'
 import catalogData from '../data/catalogs.json'
 
@@ -183,87 +183,139 @@ export function FiveStreams() {
 
 export function Flow() {
   const stages = [
-    { n: '01', name: 'USE',     desc: 'A play, sale, sync, or spin emits usage data.' },
-    { n: '02', name: 'MATCH',   desc: 'ISRC + ISWC identify the recording and the song.' },
-    { n: '03', name: 'COLLECT', desc: 'PROs · MLC · SoundEx · Distros route the cash.' },
-    { n: '04', name: 'SPLIT',   desc: 'Writer / publisher / artist / label percentages applied.' },
-    { n: '05', name: 'PAY',     desc: 'Cash arrives — quarterly, monthly, or near-real-time.' },
+    { n: '01', name: 'USE',     remain: 100, lost: 0,  loss: '',                desc: 'A play, sale, sync, or spin emits usage data.' },
+    { n: '02', name: 'MATCH',   remain: 92,  lost: 8,  loss: 'Unmatched pool',  desc: 'ISRC + ISWC identify the recording and the song.' },
+    { n: '03', name: 'COLLECT', remain: 81,  lost: 11, loss: 'Society / admin', desc: 'PROs · MLC · SoundEx · Distros route the cash.' },
+    { n: '04', name: 'SPLIT',   remain: 81,  lost: 0,  loss: '',                desc: 'Writer · publisher · artist · label percentages applied.' },
+    { n: '05', name: 'PAY',     remain: 81,  lost: 0,  loss: '',                desc: 'Cash arrives — quarterly, monthly, or near-real-time.' },
   ]
-  const series = useMemo(() => [
-    { color: 'var(--accent-a)', amp: 28, freq: 2.4, phase: 0.4, label: 'COMPOSITION', drift: -30 },
-    { color: 'var(--accent-b)', amp: 22, freq: 1.7, phase: 1.1, label: 'MASTER',      drift: -10 },
-    { color: 'var(--accent-c)', amp: 18, freq: 2.9, phase: 2.2, label: 'PERFORMANCE', drift:  10 },
-    { color: 'var(--accent-d)', amp: 12, freq: 1.4, phase: 0.7, label: 'MECHANICAL',  drift:  30 },
-  ], [])
-  const W = 1200, H = 240
-  const pathFor = (s) => {
-    let d = ''
-    for (let x = 0; x <= W; x += 4) {
-      const y = H/2 + s.amp * Math.sin((x/W) * Math.PI * s.freq + s.phase) + s.drift * (x/W)
-      d += x === 0 ? `M ${x} ${y}` : ` L ${x} ${y}`
-    }
-    return d
-  }
+  const totalLost = 100 - stages[stages.length - 1].remain
 
   return (
     <section style={{ borderBottom: '1px solid var(--line)', padding: 'clamp(72px, 8vw, 110px) 0' }}>
       <div className="sec-pad" style={{ maxWidth: 1480, margin: '0 auto', padding: '0 32px' }}>
-        <SectionHead num="03" kicker="FOLLOW THE MONEY"
-          title="USE → MATCH → COLLECT → SPLIT → PAY"
-          sub="Royalties don't pay through one pipe. Every play splits into multiple paths — different rates, different cadences, different collectors. Most leakage happens at MATCH: when a song's ID isn't recognized, the cash sits in the unmatched pool until claimed."
-        />
-
-        <div style={{ border: '1px solid var(--line)', background: 'var(--bg-2)', padding: '32px 40px', overflow: 'hidden' }}>
-          <svg viewBox={`0 0 ${W} ${H}`} preserveAspectRatio="none" style={{ width: '100%', height: 'auto', display: 'block' }}>
-            {[0.25, 0.5, 0.75].map(f => (
-              <line key={f} x1="0" y1={H*f} x2={W} y2={H*f} stroke="var(--line-soft)" strokeWidth="0.6" strokeDasharray="2 6" />
-            ))}
-            {stages.map((_, i) => {
-              const x = (i + 0.5) * (W / stages.length)
-              return <line key={i} x1={x} y1="0" x2={x} y2={H} stroke="var(--line)" strokeWidth="0.5" strokeDasharray="2 4" />
-            })}
-            {series.map((s, i) => (
-              <g key={i}>
-                <path d={pathFor(s)} fill="none" stroke={s.color} strokeWidth="8" opacity="0.08" strokeLinecap="round" />
-                <path d={pathFor(s)} fill="none" stroke={s.color} strokeWidth="1.6" opacity="0.95" strokeLinecap="round" />
-                {stages.map((_, j) => {
-                  const x = (j + 0.5) * (W / stages.length)
-                  const y = H/2 + s.amp * Math.sin((x/W) * Math.PI * s.freq + s.phase) + s.drift * (x/W)
-                  return <circle key={j} cx={x} cy={y} r="3.5" fill={s.color} />
-                })}
-              </g>
-            ))}
-          </svg>
-          <div className="row" style={{ marginTop: 18, gap: 24, flexWrap: 'wrap' }}>
-            {series.map(s => (
-              <div key={s.label} className="row" style={{ alignItems: 'center', gap: 8 }}>
-                <span style={{ width: 18, height: 2, background: s.color }} />
-                <span style={{ fontFamily: 'var(--mono)', fontSize: 10, letterSpacing: '0.18em', color: 'var(--sub)' }}>{s.label}</span>
-              </div>
-            ))}
+        <div className="col" style={{ gap: 14, marginBottom: 32 }}>
+          <div className="row" style={{ gap: 14, alignItems: 'center' }}>
+            <span className="tnum" style={{
+              fontFamily: 'var(--mono)', fontSize: 11,
+              color: 'var(--accent-a)', letterSpacing: '0.2em',
+            }}>§ 03</span>
+            <span className="label">FOLLOW THE MONEY</span>
+            <div style={{ flex: 1, height: 1, background: 'var(--line)' }} />
           </div>
+          <h2 style={{
+            margin: 0,
+            fontFamily: 'var(--face-display)',
+            fontWeight: 'var(--weight-display)',
+            fontSize: 'clamp(28px, 3.4vw, 52px)',
+            letterSpacing: 'var(--tracking-display)',
+            lineHeight: 1.04,
+            color: 'var(--text)',
+          }}>Every dollar of usage leaks {totalLost}¢ before payout.</h2>
+          <p style={{
+            margin: 0, maxWidth: 820, color: 'var(--sub)',
+            fontSize: 'clamp(14px, 1vw, 16px)', lineHeight: 1.55,
+          }}>
+            Royalties don't pay through one pipe. Every play splits into multiple paths — different rates, different cadences, different collectors. Most leakage happens at MATCH and COLLECT: when a song's ID isn't recognized, the cash sits in the unmatched pool until claimed.
+          </p>
         </div>
 
-        <div className="flow-stages" style={{
-          marginTop: 24, display: 'grid',
-          gridTemplateColumns: `repeat(${stages.length}, 1fr)`, gap: 1,
-          background: 'var(--line)', border: '1px solid var(--line)',
+        <div className="flow-grid" style={{
+          display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)',
+          border: '1px solid var(--line)', background: 'var(--bg-2)',
         }}>
-          {stages.map((s) => (
-            <div key={s.n} style={{ background: 'var(--bg-2)', padding: '24px 22px' }}>
-              <div className="row" style={{ alignItems: 'baseline', gap: 10, marginBottom: 8 }}>
+          {stages.map((s, i) => (
+            <div key={s.n} style={{
+              padding: '28px 24px 26px',
+              borderRight: i < stages.length - 1 ? '1px solid var(--line)' : 'none',
+              display: 'flex', flexDirection: 'column', gap: 18, position: 'relative',
+            }}>
+              <div className="row" style={{ alignItems: 'baseline', gap: 10 }}>
                 <span className="tnum" style={{
                   fontFamily: 'var(--mono)', fontSize: 11, color: 'var(--accent-a)',
                   letterSpacing: '0.22em', fontWeight: 700,
                 }}>{s.n}</span>
                 <span style={{
-                  fontFamily: 'var(--face-display)', fontSize: 22, fontWeight: 'var(--weight-display)',
+                  fontFamily: 'var(--face-display)', fontSize: 22,
+                  fontWeight: 'var(--weight-display)',
                   letterSpacing: 'var(--tracking-display)', color: 'var(--text)',
                 }}>{s.name}</span>
               </div>
-              <p style={{ margin: 0, fontSize: 12, color: 'var(--sub)', lineHeight: 1.55 }}>{s.desc}</p>
+
+              <div style={{ position: 'relative', height: 132 }}>
+                <div style={{
+                  position: 'absolute', left: 0, right: 0, top: 0,
+                  height: 1, background: 'var(--line-soft)',
+                }} />
+                <div style={{
+                  position: 'absolute', left: 0, right: 0, bottom: 0,
+                  height: 1, background: 'var(--line-soft)',
+                }} />
+                {s.lost > 0 && (
+                  <div style={{
+                    position: 'absolute', left: 0, right: 0,
+                    top: 0, height: `${s.lost}%`,
+                    background: 'repeating-linear-gradient(135deg, var(--accent-c) 0 1px, transparent 1px 6px)',
+                    opacity: 0.7,
+                    borderBottom: '1px dashed var(--accent-c)',
+                  }} />
+                )}
+                <div style={{
+                  position: 'absolute', left: 0, right: 0, bottom: 0,
+                  height: `${s.remain}%`,
+                  background: 'var(--accent-a)', opacity: 0.92,
+                }} />
+                <div style={{
+                  position: 'absolute', right: 6, bottom: `${s.remain}%`,
+                  transform: 'translateY(50%)',
+                  fontFamily: 'var(--mono)', fontSize: 9,
+                  letterSpacing: '0.14em', color: 'var(--bg)',
+                  background: 'var(--accent-a)', padding: '2px 5px',
+                }}>{s.remain}¢</div>
+              </div>
+
+              <div className="col" style={{ gap: 4, minHeight: 32 }}>
+                <div style={{
+                  fontFamily: 'var(--mono)', fontSize: 10, letterSpacing: '0.14em',
+                  color: s.lost > 0 ? 'var(--accent-c)' : 'var(--dim)',
+                  fontWeight: 700,
+                }}>
+                  {s.lost > 0 ? `−${s.lost}¢ LEAK` : '— NO LOSS'}
+                </div>
+                <div style={{
+                  fontFamily: 'var(--mono)', fontSize: 10, letterSpacing: '0.08em',
+                  color: 'var(--sub)', textTransform: 'uppercase',
+                  minHeight: 12,
+                }}>
+                  {s.loss || ' '}
+                </div>
+              </div>
+
+              <p style={{
+                margin: 0, fontSize: 12, color: 'var(--sub)',
+                lineHeight: 1.55, borderTop: '1px solid var(--line)', paddingTop: 14,
+              }}>{s.desc}</p>
             </div>
           ))}
+        </div>
+
+        <div className="row" style={{
+          marginTop: 16, gap: 24, flexWrap: 'wrap',
+          fontFamily: 'var(--mono)', fontSize: 10,
+          letterSpacing: '0.14em', color: 'var(--dim)',
+        }}>
+          <span>BAR HEIGHT = ¢ REMAINING PER $1.00 OF USAGE</span>
+          <span style={{ color: 'var(--sub)' }}>
+            <span style={{
+              display: 'inline-block', width: 10, height: 10, marginRight: 8,
+              background: 'repeating-linear-gradient(135deg, var(--accent-c) 0 1px, transparent 1px 4px)',
+              verticalAlign: '-1px',
+            }} />
+            HATCHED = LEAKAGE
+          </span>
+          <span style={{ marginLeft: 'auto', color: 'var(--dim)' }}>
+            ILLUSTRATIVE INDUSTRY AVERAGE · VARIES BY GENRE / TERRITORY / COLLECTOR
+          </span>
         </div>
       </div>
     </section>
