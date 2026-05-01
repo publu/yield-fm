@@ -5,19 +5,13 @@ import { Primer, FiveStreams, Flow, CatalogIndex, Footer } from './components/Se
 
 export default function App() {
   const [mode, setMode] = useState('edm')
-  const [booted, setBooted] = useState(false)
 
   useEffect(() => {
     document.documentElement.setAttribute('data-mode', mode)
   }, [mode])
 
-  useEffect(() => {
-    const t = setTimeout(() => setBooted(true), 1000)
-    return () => clearTimeout(t)
-  }, [])
-
   return (
-    <div className={booted ? '' : 'crt-screen'}>
+    <div>
       <div className="grain" />
       <TopNav mode={mode} onMode={setMode} />
       <Hero mode={mode} intensity={1.0} />

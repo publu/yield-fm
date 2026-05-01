@@ -202,51 +202,6 @@ button { font-family: inherit; cursor: pointer; }
   to   { stroke-dashoffset: 0; }
 }
 
-/* ── CRT power-on (the screen itself opens from black) ── */
-@keyframes crt-aperture {
-  0% {
-    clip-path: inset(49.4% 0 49.4% 0);
-    filter: brightness(2.4) contrast(1.55) saturate(1.2);
-  }
-  16% {
-    clip-path: inset(47.8% 0 47.8% 0);
-    filter: brightness(2.7) contrast(1.7) saturate(1.25);
-  }
-  38% {
-    clip-path: inset(18% 0 18% 0);
-    filter: brightness(1.55) contrast(1.22) saturate(1.1);
-  }
-  72% {
-    clip-path: inset(0 0 0 0);
-    filter: brightness(1.12) contrast(1.06) saturate(1.04);
-  }
-  100% {
-    clip-path: inset(0 0 0 0);
-    filter: none;
-  }
-}
-@keyframes crt-phosphor {
-  0% { opacity: 1; }
-  28% { opacity: 0.82; }
-  72% { opacity: 0.24; }
-  100% { opacity: 0; }
-}
-.crt-screen {
-  animation: crt-aperture 0.95s cubic-bezier(0.16, 1, 0.3, 1) both;
-  will-change: clip-path, filter;
-}
-.crt-screen::after {
-  content: '';
-  position: fixed;
-  inset: 0;
-  z-index: 200;
-  pointer-events: none;
-  background:
-    radial-gradient(ellipse at center, rgba(220,220,244,0.7) 0%, rgba(0,212,168,0.34) 18%, rgba(155,89,216,0.18) 38%, transparent 72%);
-  mix-blend-mode: screen;
-  animation: crt-phosphor 0.95s ease-out forwards;
-}
-
 /* ────────────────────────────────────────────────
    Responsive
    ──────────────────────────────────────────────── */
@@ -364,6 +319,4 @@ button { font-family: inherit; cursor: pointer; }
     animation-duration: 0.001ms !important;
     animation-iteration-count: 1 !important;
   }
-  .crt-screen { clip-path: none; filter: none; }
-  .crt-screen::after { display: none; }
 }
