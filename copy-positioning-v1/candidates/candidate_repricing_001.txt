@@ -1,0 +1,3 @@
+Find the catalogs the market is about to reprice.
+
+yield.fm combines Royalty Exchange comps with TikTok and Shorts traction to show which music royalties are gaining demand before that demand shows up in the multiple.

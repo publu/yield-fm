@@ -1,0 +1,1 @@
+Morpho is an open lending protocol that lets users earn yield or borrow against collateral through efficient, transparent markets. Curators build vaults, allocators route liquidity, and borrowers access crypto-backed credit through immutable infrastructure designed for decentralized finance.

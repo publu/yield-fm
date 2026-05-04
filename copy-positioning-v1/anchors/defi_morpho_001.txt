@@ -1,0 +1,1 @@
+Morpho is open infrastructure for onchain loans. Users can earn, borrow, or build on a lending network trusted by crypto applications and institutions. Markets are transparent, programmable, and designed for efficient collateralized credit across DeFi.

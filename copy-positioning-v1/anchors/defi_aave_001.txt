@@ -1,0 +1,1 @@
+Aave is a decentralized non-custodial liquidity protocol. Users supply crypto assets to earn interest or borrow against collateral through open-source smart contracts deployed across public blockchains. The protocol gives markets transparent access to liquidity, rates, collateral, and risk parameters.

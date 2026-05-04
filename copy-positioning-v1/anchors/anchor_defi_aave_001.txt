@@ -1,0 +1,1 @@
+Aave is a decentralized liquidity protocol where users supply assets to earn yield and borrow against collateral. Markets are transparent, non-custodial, and governed on-chain, giving institutions and DeFi users programmable access to lending, borrowing, and risk-managed liquidity.

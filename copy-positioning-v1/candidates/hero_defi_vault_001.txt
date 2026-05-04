@@ -1,0 +1,3 @@
+Underwrite music royalties before they become vault assets.
+
+yield.fm maps Royalty Exchange comps, catalog cash flows, and TikTok demand into the diligence layer for buyers building onchain or offchain music yield portfolios.

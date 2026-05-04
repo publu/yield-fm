@@ -1,0 +1,3 @@
+Music catalogs need better underwriting.
+
+yield.fm gives allocators a royalty investing terminal with comps, cash-flow history, rights mapping, implied yields, and live demand signals across Royalty Exchange listings.

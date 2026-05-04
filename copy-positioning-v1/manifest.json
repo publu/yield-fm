@@ -1,0 +1,206 @@
+{
+  "batch": "yield-fm-copy-positioning-v1",
+  "created_at": "2026-05-04T00:00:00Z",
+  "purpose": "Level 0/1 text positioning test for yield.fm copy against DeFi, institutional finance, music business, and negative reference anchors.",
+  "project_name": "yield.fm copy positioning v1",
+  "scoring": {
+    "defi": 0.35,
+    "finance": 0.3,
+    "music": 0.25,
+    "negative": -0.2,
+    "balance_penalty": true
+  },
+  "items": [
+    {
+      "id": "anchor_defi_pendle_001",
+      "file": "anchors/anchor_defi_pendle_001.txt",
+      "level": 0,
+      "role": "reference",
+      "group": "defi",
+      "category": "anchor",
+      "tags": ["yield-fm-copy-v1", "level-0", "anchor", "defi", "pendle"]
+    },
+    {
+      "id": "anchor_defi_morpho_001",
+      "file": "anchors/anchor_defi_morpho_001.txt",
+      "level": 0,
+      "role": "reference",
+      "group": "defi",
+      "category": "anchor",
+      "tags": ["yield-fm-copy-v1", "level-0", "anchor", "defi", "morpho"]
+    },
+    {
+      "id": "anchor_defi_aave_001",
+      "file": "anchors/anchor_defi_aave_001.txt",
+      "level": 0,
+      "role": "reference",
+      "group": "defi",
+      "category": "anchor",
+      "tags": ["yield-fm-copy-v1", "level-0", "anchor", "defi", "aave"]
+    },
+    {
+      "id": "anchor_finance_bloomberg_001",
+      "file": "anchors/anchor_finance_bloomberg_001.txt",
+      "level": 0,
+      "role": "reference",
+      "group": "finance",
+      "category": "anchor",
+      "tags": ["yield-fm-copy-v1", "level-0", "anchor", "finance", "bloomberg"]
+    },
+    {
+      "id": "anchor_finance_pitchbook_001",
+      "file": "anchors/anchor_finance_pitchbook_001.txt",
+      "level": 0,
+      "role": "reference",
+      "group": "finance",
+      "category": "anchor",
+      "tags": ["yield-fm-copy-v1", "level-0", "anchor", "finance", "pitchbook"]
+    },
+    {
+      "id": "anchor_music_mbw_001",
+      "file": "anchors/anchor_music_mbw_001.txt",
+      "level": 0,
+      "role": "reference",
+      "group": "music",
+      "category": "anchor",
+      "tags": ["yield-fm-copy-v1", "level-0", "anchor", "music", "mbw"]
+    },
+    {
+      "id": "anchor_music_royaltyexchange_001",
+      "file": "anchors/anchor_music_royaltyexchange_001.txt",
+      "level": 0,
+      "role": "reference",
+      "group": "music",
+      "category": "anchor",
+      "tags": ["yield-fm-copy-v1", "level-0", "anchor", "music", "royalty-exchange"]
+    },
+    {
+      "id": "anchor_negative_crypto_scam_001",
+      "file": "anchors/anchor_negative_crypto_scam_001.txt",
+      "level": 0,
+      "role": "reference",
+      "group": "negative",
+      "category": "anchor",
+      "tags": ["yield-fm-copy-v1", "level-0", "anchor", "negative", "crypto-scam"]
+    },
+    {
+      "id": "anchor_negative_creator_generic_001",
+      "file": "anchors/anchor_negative_creator_generic_001.txt",
+      "level": 0,
+      "role": "reference",
+      "group": "negative",
+      "category": "anchor",
+      "tags": ["yield-fm-copy-v1", "level-0", "anchor", "negative", "creator-generic"]
+    },
+    {
+      "id": "candidate_yield_current_001",
+      "file": "candidates/candidate_yield_current_001.txt",
+      "level": 1,
+      "role": "submission",
+      "group": "candidate",
+      "direction": "current",
+      "category": "yield-current",
+      "tags": ["yield-fm-copy-v1", "level-1", "candidate", "current"]
+    },
+    {
+      "id": "candidate_defi_cashflow_001",
+      "file": "candidates/candidate_defi_cashflow_001.txt",
+      "level": 1,
+      "role": "submission",
+      "group": "candidate",
+      "direction": "defi_cashflow",
+      "category": "yield-candidate",
+      "tags": ["yield-fm-copy-v1", "level-1", "candidate", "defi", "cashflow"]
+    },
+    {
+      "id": "candidate_defi_terminal_001",
+      "file": "candidates/candidate_defi_terminal_001.txt",
+      "level": 1,
+      "role": "submission",
+      "group": "candidate",
+      "direction": "defi_terminal",
+      "category": "yield-candidate",
+      "tags": ["yield-fm-copy-v1", "level-1", "candidate", "defi", "terminal"]
+    },
+    {
+      "id": "candidate_defi_vault_001",
+      "file": "candidates/candidate_defi_vault_001.txt",
+      "level": 1,
+      "role": "submission",
+      "group": "candidate",
+      "direction": "defi_vault",
+      "category": "yield-candidate",
+      "tags": ["yield-fm-copy-v1", "level-1", "candidate", "defi", "vault"]
+    },
+    {
+      "id": "candidate_catalog_buyer_001",
+      "file": "candidates/candidate_catalog_buyer_001.txt",
+      "level": 1,
+      "role": "submission",
+      "group": "candidate",
+      "direction": "catalog_buyer",
+      "category": "yield-candidate",
+      "tags": ["yield-fm-copy-v1", "level-1", "candidate", "catalog-buyer"]
+    },
+    {
+      "id": "candidate_market_signal_001",
+      "file": "candidates/candidate_market_signal_001.txt",
+      "level": 1,
+      "role": "submission",
+      "group": "candidate",
+      "direction": "market_signal",
+      "category": "yield-candidate",
+      "tags": ["yield-fm-copy-v1", "level-1", "candidate", "market-signal"]
+    },
+    {
+      "id": "candidate_music_credit_001",
+      "file": "candidates/candidate_music_credit_001.txt",
+      "level": 1,
+      "role": "submission",
+      "group": "candidate",
+      "direction": "music_credit",
+      "category": "yield-candidate",
+      "tags": ["yield-fm-copy-v1", "level-1", "candidate", "music-credit"]
+    },
+    {
+      "id": "candidate_repricing_001",
+      "file": "candidates/candidate_repricing_001.txt",
+      "level": 1,
+      "role": "submission",
+      "group": "candidate",
+      "direction": "repricing",
+      "category": "yield-candidate",
+      "tags": ["yield-fm-copy-v1", "level-1", "candidate", "repricing"]
+    },
+    {
+      "id": "candidate_song_cashflow_001",
+      "file": "candidates/candidate_song_cashflow_001.txt",
+      "level": 1,
+      "role": "submission",
+      "group": "candidate",
+      "direction": "song_cashflow",
+      "category": "yield-candidate",
+      "tags": ["yield-fm-copy-v1", "level-1", "candidate", "song-cashflow"]
+    },
+    {
+      "id": "candidate_onchain_rights_001",
+      "file": "candidates/candidate_onchain_rights_001.txt",
+      "level": 1,
+      "role": "submission",
+      "group": "candidate",
+      "direction": "onchain_rights",
+      "category": "yield-candidate",
+      "tags": ["yield-fm-copy-v1", "level-1", "candidate", "onchain-rights"]
+    },
+    {
+      "id": "candidate_seller_price_001",
+      "file": "candidates/candidate_seller_price_001.txt",
+      "level": 1,
+      "role": "submission",
+      "group": "candidate",
+      "direction": "seller_price",
+      "category": "yield-candidate",
+      "tags": ["yield-fm-copy-v1", "level-1", "candidate", "seller-price"]
+    }
+  ]
+}

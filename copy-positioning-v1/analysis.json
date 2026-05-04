@@ -1,0 +1,162 @@
+{
+  "anchors": {
+    "defi": [
+      "anchor_defi_pendle_001",
+      "anchor_defi_morpho_001",
+      "anchor_defi_aave_001"
+    ],
+    "finance": [
+      "anchor_finance_bloomberg_001",
+      "anchor_finance_pitchbook_001"
+    ],
+    "music": [
+      "anchor_music_mbw_001",
+      "anchor_music_royaltyexchange_001"
+    ],
+    "negative": [
+      "anchor_negative_crypto_scam_001",
+      "anchor_negative_creator_generic_001"
+    ]
+  },
+  "n_items": 20,
+  "n_parcels": 181,
+  "project": {
+    "created_at": "2026-05-04T08:03:20.763Z",
+    "name": "yield.fm copy positioning v1",
+    "project_id": "fd59a77a-9c8b-4c21-855c-b9055ed90c8a"
+  },
+  "scores": [
+    {
+      "balance_penalty": 0.02065394839952691,
+      "defi": 0.9065715435448554,
+      "direction": "music_credit",
+      "final": 0.6203172154801389,
+      "finance": 0.9245910899040448,
+      "id": "candidate_music_credit_001",
+      "job_id": "20f1c7916cb2",
+      "music": 0.9565216036306652,
+      "negative": 0.964183021199566,
+      "weighted": 0.6409711638796658
+    },
+    {
+      "balance_penalty": 0.02031343378574388,
+      "defi": 0.8910605865554789,
+      "direction": "defi_terminal",
+      "final": 0.6104444959811522,
+      "finance": 0.9250096390751444,
+      "id": "candidate_defi_terminal_001",
+      "job_id": "98e054f0f996",
+      "music": 0.9395383910497724,
+      "negative": 0.9675038250625395,
+      "weighted": 0.6307579297668962
+    },
+    {
+      "balance_penalty": 0.04044709715872707,
+      "defi": 0.9351394017810831,
+      "direction": "current",
+      "final": 0.6005011558962146,
+      "finance": 0.8709371055095103,
+      "id": "candidate_yield_current_001",
+      "job_id": "b6c9d659a7a1",
+      "music": 0.9683865770640859,
+      "negative": 0.9486415674365607,
+      "weighted": 0.6409482530549416
+    },
+    {
+      "balance_penalty": 0.01382319826095417,
+      "defi": 0.873190601784089,
+      "direction": "song_cashflow",
+      "final": 0.598408482773192,
+      "finance": 0.8832484106207193,
+      "id": "candidate_song_cashflow_001",
+      "job_id": "f35a58932b85",
+      "music": 0.9062193991804454,
+      "negative": 0.9245720128580606,
+      "weighted": 0.6122316810341462
+    },
+    {
+      "balance_penalty": 0.026186457939246267,
+      "defi": 0.8605875780389146,
+      "direction": "defi_vault",
+      "final": 0.5878680153026161,
+      "finance": 0.924349721542529,
+      "id": "candidate_defi_vault_001",
+      "job_id": "73817f1a0994",
+      "music": 0.8985167403312125,
+      "negative": 0.9454264030865976,
+      "weighted": 0.6140544732418624
+    },
+    {
+      "balance_penalty": 0.004188964341845251,
+      "defi": 0.8228243807025922,
+      "direction": "onchain_rights",
+      "final": 0.5639806460579134,
+      "finance": 0.8129405254887663,
+      "id": "candidate_onchain_rights_001",
+      "job_id": "bcbe3cf48e9a",
+      "music": 0.8202689682835052,
+      "negative": 0.8438416128182732,
+      "weighted": 0.5681696103997587
+    },
+    {
+      "balance_penalty": 0.005759980704210006,
+      "defi": 0.7681888409198637,
+      "direction": "market_signal",
+      "final": 0.5266701337873189,
+      "finance": 0.7684821065898598,
+      "id": "candidate_market_signal_001",
+      "job_id": "0d71f85d39e7",
+      "music": 0.7561193493226606,
+      "negative": 0.7800522456902323,
+      "weighted": 0.5324301144915289
+    },
+    {
+      "balance_penalty": 0.026480949284404812,
+      "defi": 0.7310249023788554,
+      "direction": "seller_price",
+      "final": 0.4870895438256483,
+      "finance": 0.7766740037201505,
+      "id": "candidate_seller_price_001",
+      "job_id": "32b74edbfa6f",
+      "music": 0.7139407735729327,
+      "negative": 0.7688780861591232,
+      "weighted": 0.5135704931100531
+    },
+    {
+      "balance_penalty": 0.09338911731918038,
+      "defi": 0.8141213595793299,
+      "direction": "repricing",
+      "final": 0.42032667539574836,
+      "finance": 0.5878203864720591,
+      "id": "candidate_repricing_001",
+      "job_id": "5de792989c7f",
+      "music": 0.729915211495888,
+      "negative": 0.6502580097671324,
+      "weighted": 0.5137157927149287
+    },
+    {
+      "balance_penalty": 0.025299529431822475,
+      "defi": 0.6076964735332125,
+      "direction": "defi_cashflow",
+      "final": 0.38495725801673797,
+      "finance": 0.5771765331785607,
+      "id": "candidate_defi_cashflow_001",
+      "job_id": "82cdb411ebb3",
+      "music": 0.5457278555143594,
+      "negative": 0.56010951060111,
+      "weighted": 0.4102567874485604
+    },
+    {
+      "balance_penalty": 0.09766205402403733,
+      "defi": 0.6463078191286928,
+      "direction": "catalog_buyer",
+      "final": 0.29305331212995767,
+      "finance": 0.40732360541305723,
+      "id": "candidate_catalog_buyer_001",
+      "job_id": "f024bdd44990",
+      "music": 0.5360544772810097,
+      "negative": 0.4585153574260856,
+      "weighted": 0.390715366153995
+    }
+  ]
+}

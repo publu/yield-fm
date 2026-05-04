@@ -1,0 +1,3 @@
+Music royalties on-chain. Backed by Royalty Exchange catalogs, scored by TikTok signal.
+
+musicUSD wraps verified royalty cash flow into a yield-bearing dollar. Live attestations, transparent NAV, on-demand redemption.

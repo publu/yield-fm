@@ -1,0 +1,78 @@
+{
+  "project_name": "yield.fm copy positioning v1",
+  "project_id": "fd59a77a-9c8b-4c21-855c-b9055ed90c8a",
+  "jobs": [
+    {
+      "id": "anchor_defi_pendle_001",
+      "file": "anchors/anchor_defi_pendle_001.txt",
+      "role": "reference",
+      "stdout": "call_id: fc-01KQS0B9PNNM1J6Q1JK3RFDK80\n[   0s] pending\n[  11s] pending\n[  21s] pending\n[  32s] pending\n[  42s] pending\n[  53s] pending\n[  63s] pending\n[  74s] pending\n[  84s] pending\n[  95s] pending\n[ 105s] pending\n[ 116s] pending\n[ 126s] pending\n[ 137s] pending\n[ 147s] pending\n[ 158s] pending\n[ 168s] pending\n[ 179s] pending\n[ 189s] pending\n[ 200s] pending\n[ 210s] pending\n[ 221s] pending\n[ 231s] pending\n[ 242s] pending\n[ 252s] pending\n[ 263s] pending\n[ 273s] pending\n[ 284s] pending\n[ 294s] pending\n[ 305s] pending\n[ 315s] pending\n[ 326s] pending\ndone in 336s\n{\n  \"job_id\": \"e4d0275b3d6f\",\n  \"sha256\": \"e5a2235cc17dac41039fa8baf680bb291e7a265c37fb9309d054454b6ae41b8f\",\n  \"n_segments\": 21,\n  \"r2_prefix\": \"tribev2/jobs/e4d0275b3d6f\"\n}\n",
+      "call_id": "fc-01KQS0B9PNNM1J6Q1JK3RFDK80",
+      "job_id": "e4d0275b3d6f",
+      "sha256": "e5a2235cc17dac41039fa8baf680bb291e7a265c37fb9309d054454b6ae41b8f",
+      "n_segments": 21,
+      "r2_prefix": "tribev2/jobs/e4d0275b3d6f",
+      "assigned": false
+    },
+    {
+      "id": "anchor_defi_morpho_001",
+      "file": "anchors/anchor_defi_morpho_001.txt",
+      "role": "reference",
+      "submitted_file": "audio/anchor_defi_morpho_001.mp3",
+      "stdout": "call_id: fc-01KQS1T1KNVD8NW5HSM37G7YQ2\n",
+      "call_id": "fc-01KQS1T1KNVD8NW5HSM37G7YQ2",
+      "job_id": "3d8fa5f1c8ea",
+      "sha256": "2719f1e8e538da25fee7055427d77087b3600c194188870ccdaef3ae239b940e",
+      "n_segments": 22,
+      "r2_prefix": "tribev2/jobs/3d8fa5f1c8ea",
+      "assigned": false
+    },
+    {
+      "id": "anchor_defi_aave_001",
+      "file": "anchors/anchor_defi_aave_001.txt",
+      "role": "reference",
+      "submitted_file": "audio/anchor_defi_aave_001.mp3",
+      "stdout": "call_id: fc-01KQS26YV585819BNTWT92T6BE\n",
+      "call_id": "fc-01KQS26YV585819BNTWT92T6BE",
+      "job_id": "d63d37796e24",
+      "sha256": "fc3f3bb784b87116da0d1cd8cf122d84ad4ccdbfca68cb7383e0a8e613ff9547",
+      "n_segments": 22,
+      "r2_prefix": "tribev2/jobs/d63d37796e24",
+      "assigned": false
+    },
+    {
+      "id": "anchor_finance_bloomberg_001",
+      "file": "anchors/anchor_finance_bloomberg_001.txt",
+      "role": "reference",
+      "submitted_file": "audio/anchor_finance_bloomberg_001.mp3",
+      "stdout": "call_id: fc-01KQS29DMGJNC1JV8SWNG49K5K\n",
+      "call_id": "fc-01KQS29DMGJNC1JV8SWNG49K5K",
+      "job_id": "bf9c0cebace1",
+      "sha256": "bd38f42d634147b7f44a8560ba459af7ef63b3276e5b3aae9de772b510099fc3",
+      "n_segments": 24,
+      "r2_prefix": "tribev2/jobs/bf9c0cebace1",
+      "assigned": false
+    },
+    {
+      "id": "anchor_finance_pitchbook_001",
+      "file": "anchors/anchor_finance_pitchbook_001.txt",
+      "role": "reference",
+      "submitted_file": "audio/anchor_finance_pitchbook_001.mp3",
+      "stdout": "call_id: fc-01KQS2BER4VM89CP958N94W32R\n",
+      "call_id": "fc-01KQS2BER4VM89CP958N94W32R",
+      "job_id": "e32026ad6de8",
+      "sha256": "0ba401bb53ea48d80a33855f041d7a450f0fdbe41bbedc4f57b0312a311c485d",
+      "n_segments": 25,
+      "r2_prefix": "tribev2/jobs/e32026ad6de8",
+      "assigned": false
+    },
+    {
+      "id": "anchor_music_mbw_001",
+      "file": "anchors/anchor_music_mbw_001.txt",
+      "role": "reference",
+      "submitted_file": "audio/anchor_music_mbw_001.mp3",
+      "stdout": "call_id: fc-01KQS2DY369YNVC7S341Z44T3C\n",
+      "call_id": "fc-01KQS2DY369YNVC7S341Z44T3C"
+    }
+  ]
+}

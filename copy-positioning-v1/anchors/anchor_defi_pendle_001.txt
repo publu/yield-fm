@@ -1,0 +1,1 @@
+Pendle is a permissionless yield-trading protocol. Strip the yield off any yield-bearing asset and trade the principal separately. Lock in fixed yields, take directional exposure to future rates, or hedge yield across major chains with transparent, composable on-chain markets.

@@ -1,0 +1,3 @@
+The music-rights layer for on-chain yield.
+
+yield.fm tracks verified royalty cash flows, Royalty Exchange comps, catalog multiples, and social demand for investors building transparent markets around music income.

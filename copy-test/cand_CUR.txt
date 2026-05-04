@@ -1,0 +1,3 @@
+Music is a yield curve. Most people don't read it.
+
+yield.fm is a royalty investing terminal for music catalogs. We map rights, collectors, cash flows, and market multiples so investors can understand how songs become financial assets.

@@ -1,0 +1,3 @@
+The diligence layer for onchain music rights.
+
+yield.fm tracks catalog cash flows, Royalty Exchange comps, social demand, and market multiples so builders and allocators can evaluate music royalties before they become tokenized yield.

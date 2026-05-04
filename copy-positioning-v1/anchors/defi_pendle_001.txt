@@ -1,0 +1,1 @@
+Pendle is a yield trading platform for DeFi. Users can earn fixed yield, speculate on future yield, or trade the yield component of popular onchain assets across major networks. The protocol separates yield-bearing tokens into principal and yield exposure so markets can price future income directly.

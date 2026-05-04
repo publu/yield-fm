@@ -1,0 +1,674 @@
+{
+  "batch": "yield-fm-copy-positioning-v1",
+  "created_at": "2026-05-04T08:04:19.196679+00:00",
+  "items": {
+    "anchor_defi_aave_001": {
+      "assigned_to_project": false,
+      "call_id": "fc-01KQS0BAZK7642Z38QTSDKF2PX",
+      "checked_at": "2026-05-04T08:15:27.351033+00:00",
+      "completed_at": "2026-05-04T08:15:27.351056+00:00",
+      "item": {
+        "category": "anchor",
+        "file": "anchors/anchor_defi_aave_001.txt",
+        "group": "defi",
+        "id": "anchor_defi_aave_001",
+        "level": 0,
+        "role": "reference",
+        "tags": [
+          "yield-fm-copy-v1",
+          "level-0",
+          "anchor",
+          "defi",
+          "aave"
+        ]
+      },
+      "job_id": "58ff87883961",
+      "last_status": "done",
+      "project_assignment_error": "POST /api/tribe/projects/fd59a77a-9c8b-4c21-855c-b9055ed90c8a/jobs failed 400: {'error': 'name required'}",
+      "record_upserted": true,
+      "result": {
+        "job_id": "58ff87883961",
+        "n_segments": 24,
+        "r2_prefix": "tribev2/jobs/58ff87883961",
+        "sha256": "4b122e390cdf0ca7034bbc44a5451ff13c443239a5d72af6e3d4006fd0733f7f"
+      },
+      "saved_to_job_history": true,
+      "submitted_at": "2026-05-04T08:05:51.371615+00:00"
+    },
+    "anchor_defi_morpho_001": {
+      "assigned_to_project": false,
+      "call_id": "fc-01KQS0BAGNY9DPW8AHC39HZRC7",
+      "checked_at": "2026-05-04T08:14:26.792489+00:00",
+      "completed_at": "2026-05-04T08:14:26.792509+00:00",
+      "item": {
+        "category": "anchor",
+        "file": "anchors/anchor_defi_morpho_001.txt",
+        "group": "defi",
+        "id": "anchor_defi_morpho_001",
+        "level": 0,
+        "role": "reference",
+        "tags": [
+          "yield-fm-copy-v1",
+          "level-0",
+          "anchor",
+          "defi",
+          "morpho"
+        ]
+      },
+      "job_id": "5f3112e8dbe7",
+      "last_status": "done",
+      "project_assignment_error": "POST /api/tribe/projects/fd59a77a-9c8b-4c21-855c-b9055ed90c8a/jobs failed 400: {'error': 'name required'}",
+      "record_upserted": true,
+      "result": {
+        "job_id": "5f3112e8dbe7",
+        "n_segments": 24,
+        "r2_prefix": "tribev2/jobs/5f3112e8dbe7",
+        "sha256": "da54b69ccc933ccc56030a8cc15f420f2973cbbcc0b4b5a1e5f6ab9cb094e5e9"
+      },
+      "saved_to_job_history": true,
+      "submitted_at": "2026-05-04T08:05:50.899107+00:00"
+    },
+    "anchor_defi_pendle_001": {
+      "assigned_to_project": false,
+      "call_id": "fc-01KQS0B9Z42HX0V5DEMWB4775Z",
+      "checked_at": "2026-05-04T08:13:57.477591+00:00",
+      "completed_at": "2026-05-04T08:13:57.477616+00:00",
+      "item": {
+        "category": "anchor",
+        "file": "anchors/anchor_defi_pendle_001.txt",
+        "group": "defi",
+        "id": "anchor_defi_pendle_001",
+        "level": 0,
+        "role": "reference",
+        "tags": [
+          "yield-fm-copy-v1",
+          "level-0",
+          "anchor",
+          "defi",
+          "pendle"
+        ]
+      },
+      "job_id": "95606ed6a7b0",
+      "last_status": "done",
+      "project_assignment_error": "POST /api/tribe/projects/fd59a77a-9c8b-4c21-855c-b9055ed90c8a/jobs failed 400: {'error': 'name required'}",
+      "record_upserted": true,
+      "result": {
+        "job_id": "95606ed6a7b0",
+        "n_segments": 23,
+        "r2_prefix": "tribev2/jobs/95606ed6a7b0",
+        "sha256": "3e12c5a8f7a12a22edf3331df81730506790970ca306863a371182e4ad5f8931"
+      },
+      "saved_to_job_history": true,
+      "submitted_at": "2026-05-04T08:05:50.341164+00:00"
+    },
+    "anchor_finance_bloomberg_001": {
+      "assigned_to_project": false,
+      "call_id": "fc-01KQS0BBES8525DS8C0EQ8HMG7",
+      "checked_at": "2026-05-04T08:16:54.545108+00:00",
+      "completed_at": "2026-05-04T08:16:54.545126+00:00",
+      "item": {
+        "category": "anchor",
+        "file": "anchors/anchor_finance_bloomberg_001.txt",
+        "group": "finance",
+        "id": "anchor_finance_bloomberg_001",
+        "level": 0,
+        "role": "reference",
+        "tags": [
+          "yield-fm-copy-v1",
+          "level-0",
+          "anchor",
+          "finance",
+          "bloomberg"
+        ]
+      },
+      "job_id": "23efae0678db",
+      "last_status": "done",
+      "project_assignment_error": "POST /api/tribe/projects/fd59a77a-9c8b-4c21-855c-b9055ed90c8a/jobs failed 400: {'error': 'name required'}",
+      "record_upserted": true,
+      "result": {
+        "job_id": "23efae0678db",
+        "n_segments": 26,
+        "r2_prefix": "tribev2/jobs/23efae0678db",
+        "sha256": "9bfe3d41855456034f4cbad72116bb4718ff89249daed5411354d3e8cde96a6b"
+      },
+      "saved_to_job_history": true,
+      "submitted_at": "2026-05-04T08:05:51.903865+00:00"
+    },
+    "anchor_finance_pitchbook_001": {
+      "assigned_to_project": false,
+      "call_id": "fc-01KQS0BC3VPZA6XEXEYHGA8AR7",
+      "checked_at": "2026-05-04T08:18:26.086582+00:00",
+      "completed_at": "2026-05-04T08:18:26.086600+00:00",
+      "item": {
+        "category": "anchor",
+        "file": "anchors/anchor_finance_pitchbook_001.txt",
+        "group": "finance",
+        "id": "anchor_finance_pitchbook_001",
+        "level": 0,
+        "role": "reference",
+        "tags": [
+          "yield-fm-copy-v1",
+          "level-0",
+          "anchor",
+          "finance",
+          "pitchbook"
+        ]
+      },
+      "job_id": "ab1f43a27a51",
+      "last_status": "done",
+      "project_assignment_error": "POST /api/tribe/projects/fd59a77a-9c8b-4c21-855c-b9055ed90c8a/jobs failed 400: {'error': 'name required'}",
+      "record_upserted": true,
+      "result": {
+        "job_id": "ab1f43a27a51",
+        "n_segments": 27,
+        "r2_prefix": "tribev2/jobs/ab1f43a27a51",
+        "sha256": "d6e5c96b4bac19736b41bcf82b526054f8e8c170b254b2e6cd9ea28b1c26d330"
+      },
+      "saved_to_job_history": true,
+      "submitted_at": "2026-05-04T08:05:52.504544+00:00"
+    },
+    "anchor_music_mbw_001": {
+      "assigned_to_project": false,
+      "call_id": "fc-01KQS0BCKD8FQDWJD4C815MYYG",
+      "checked_at": "2026-05-04T08:19:23.087875+00:00",
+      "completed_at": "2026-05-04T08:19:23.087895+00:00",
+      "item": {
+        "category": "anchor",
+        "file": "anchors/anchor_music_mbw_001.txt",
+        "group": "music",
+        "id": "anchor_music_mbw_001",
+        "level": 0,
+        "role": "reference",
+        "tags": [
+          "yield-fm-copy-v1",
+          "level-0",
+          "anchor",
+          "music",
+          "mbw"
+        ]
+      },
+      "job_id": "efe2a92bdf3c",
+      "last_status": "done",
+      "project_assignment_error": "POST /api/tribe/projects/fd59a77a-9c8b-4c21-855c-b9055ed90c8a/jobs failed 400: {'error': 'name required'}",
+      "record_upserted": true,
+      "result": {
+        "job_id": "efe2a92bdf3c",
+        "n_segments": 22,
+        "r2_prefix": "tribev2/jobs/efe2a92bdf3c",
+        "sha256": "349b6d4ee5b33ce811b32cd877b1b7ded1ddbe4cd1fa186f8ad361701a4d5a35"
+      },
+      "saved_to_job_history": true,
+      "submitted_at": "2026-05-04T08:05:52.992180+00:00"
+    },
+    "anchor_music_royaltyexchange_001": {
+      "assigned_to_project": false,
+      "call_id": "fc-01KQS0BD0G5JXPKPHABEVHX7EM",
+      "checked_at": "2026-05-04T08:20:43.832265+00:00",
+      "completed_at": "2026-05-04T08:20:43.832288+00:00",
+      "item": {
+        "category": "anchor",
+        "file": "anchors/anchor_music_royaltyexchange_001.txt",
+        "group": "music",
+        "id": "anchor_music_royaltyexchange_001",
+        "level": 0,
+        "role": "reference",
+        "tags": [
+          "yield-fm-copy-v1",
+          "level-0",
+          "anchor",
+          "music",
+          "royalty-exchange"
+        ]
+      },
+      "job_id": "e0e917ce22ae",
+      "last_status": "done",
+      "project_assignment_error": "POST /api/tribe/projects/fd59a77a-9c8b-4c21-855c-b9055ed90c8a/jobs failed 400: {'error': 'name required'}",
+      "record_upserted": true,
+      "result": {
+        "job_id": "e0e917ce22ae",
+        "n_segments": 22,
+        "r2_prefix": "tribev2/jobs/e0e917ce22ae",
+        "sha256": "2160c06b789eea508c42ae9b39371db3c9033d20d27382328a2ecb586c6680d3"
+      },
+      "saved_to_job_history": true,
+      "submitted_at": "2026-05-04T08:05:53.415950+00:00"
+    },
+    "anchor_negative_creator_generic_001": {
+      "assigned_to_project": false,
+      "call_id": "fc-01KQS0BE291P1EXWH595HWSP52",
+      "checked_at": "2026-05-04T08:23:22.763904+00:00",
+      "completed_at": "2026-05-04T08:23:22.763926+00:00",
+      "item": {
+        "category": "anchor",
+        "file": "anchors/anchor_negative_creator_generic_001.txt",
+        "group": "negative",
+        "id": "anchor_negative_creator_generic_001",
+        "level": 0,
+        "role": "reference",
+        "tags": [
+          "yield-fm-copy-v1",
+          "level-0",
+          "anchor",
+          "negative",
+          "creator-generic"
+        ]
+      },
+      "job_id": "452f450019bc",
+      "last_status": "done",
+      "project_assignment_error": "POST /api/tribe/projects/fd59a77a-9c8b-4c21-855c-b9055ed90c8a/jobs failed 400: {'error': 'name required'}",
+      "record_upserted": true,
+      "result": {
+        "job_id": "452f450019bc",
+        "n_segments": 23,
+        "r2_prefix": "tribev2/jobs/452f450019bc",
+        "sha256": "fcd3f6886b44080d452e8cd813a3abc0ef1c48ed8c67ad1c570671b8125905ba"
+      },
+      "saved_to_job_history": true,
+      "submitted_at": "2026-05-04T08:05:54.489880+00:00"
+    },
+    "anchor_negative_crypto_scam_001": {
+      "assigned_to_project": false,
+      "call_id": "fc-01KQS0BDEABGMTMK5D33WQS4S5",
+      "checked_at": "2026-05-04T08:22:05.201547+00:00",
+      "completed_at": "2026-05-04T08:22:05.201567+00:00",
+      "item": {
+        "category": "anchor",
+        "file": "anchors/anchor_negative_crypto_scam_001.txt",
+        "group": "negative",
+        "id": "anchor_negative_crypto_scam_001",
+        "level": 0,
+        "role": "reference",
+        "tags": [
+          "yield-fm-copy-v1",
+          "level-0",
+          "anchor",
+          "negative",
+          "crypto-scam"
+        ]
+      },
+      "job_id": "915ff01c6e86",
+      "last_status": "done",
+      "project_assignment_error": "POST /api/tribe/projects/fd59a77a-9c8b-4c21-855c-b9055ed90c8a/jobs failed 400: {'error': 'name required'}",
+      "record_upserted": true,
+      "result": {
+        "job_id": "915ff01c6e86",
+        "n_segments": 21,
+        "r2_prefix": "tribev2/jobs/915ff01c6e86",
+        "sha256": "409a5233da1c61e9ae19cc1876cfadb508e1d42c8f05ac5f2fbc6089fb9d9992"
+      },
+      "saved_to_job_history": true,
+      "submitted_at": "2026-05-04T08:05:53.852190+00:00"
+    },
+    "candidate_catalog_buyer_001": {
+      "assigned_to_project": false,
+      "call_id": "fc-01KQS0BGNA86SXWPEX883EJWQ5",
+      "checked_at": "2026-05-04T08:29:45.078616+00:00",
+      "completed_at": "2026-05-04T08:29:45.078636+00:00",
+      "item": {
+        "category": "yield-candidate",
+        "direction": "catalog_buyer",
+        "file": "candidates/candidate_catalog_buyer_001.txt",
+        "group": "candidate",
+        "id": "candidate_catalog_buyer_001",
+        "level": 1,
+        "role": "submission",
+        "tags": [
+          "yield-fm-copy-v1",
+          "level-1",
+          "candidate",
+          "catalog-buyer"
+        ]
+      },
+      "job_id": "f024bdd44990",
+      "last_status": "done",
+      "project_assignment_error": "POST /api/tribe/projects/fd59a77a-9c8b-4c21-855c-b9055ed90c8a/jobs failed 400: {'error': 'name required'}",
+      "record_upserted": true,
+      "result": {
+        "job_id": "f024bdd44990",
+        "n_segments": 18,
+        "r2_prefix": "tribev2/jobs/f024bdd44990",
+        "sha256": "ca64a8e39e662c52a9aeb2b5b69f4d5b0b19d827809637a0aaa0d3f4981e1084"
+      },
+      "saved_to_job_history": true,
+      "submitted_at": "2026-05-04T08:05:57.160265+00:00"
+    },
+    "candidate_defi_cashflow_001": {
+      "assigned_to_project": false,
+      "call_id": "fc-01KQS0BF4H5NDJJBD1BJRD897T",
+      "checked_at": "2026-05-04T08:26:00.773073+00:00",
+      "completed_at": "2026-05-04T08:26:00.773095+00:00",
+      "item": {
+        "category": "yield-candidate",
+        "direction": "defi_cashflow",
+        "file": "candidates/candidate_defi_cashflow_001.txt",
+        "group": "candidate",
+        "id": "candidate_defi_cashflow_001",
+        "level": 1,
+        "role": "submission",
+        "tags": [
+          "yield-fm-copy-v1",
+          "level-1",
+          "candidate",
+          "defi",
+          "cashflow"
+        ]
+      },
+      "job_id": "82cdb411ebb3",
+      "last_status": "done",
+      "project_assignment_error": "POST /api/tribe/projects/fd59a77a-9c8b-4c21-855c-b9055ed90c8a/jobs failed 400: {'error': 'name required'}",
+      "record_upserted": true,
+      "result": {
+        "job_id": "82cdb411ebb3",
+        "n_segments": 16,
+        "r2_prefix": "tribev2/jobs/82cdb411ebb3",
+        "sha256": "d4885a4f9969b9b6d51f04c80fb9df6118307781bc5d04da51c64ff17a87470a"
+      },
+      "saved_to_job_history": true,
+      "submitted_at": "2026-05-04T08:05:55.585142+00:00"
+    },
+    "candidate_defi_terminal_001": {
+      "assigned_to_project": false,
+      "call_id": "fc-01KQS0BFKVMZD0PZCMXN8GCTTF",
+      "checked_at": "2026-05-04T08:27:16.110479+00:00",
+      "completed_at": "2026-05-04T08:27:16.110505+00:00",
+      "item": {
+        "category": "yield-candidate",
+        "direction": "defi_terminal",
+        "file": "candidates/candidate_defi_terminal_001.txt",
+        "group": "candidate",
+        "id": "candidate_defi_terminal_001",
+        "level": 1,
+        "role": "submission",
+        "tags": [
+          "yield-fm-copy-v1",
+          "level-1",
+          "candidate",
+          "defi",
+          "terminal"
+        ]
+      },
+      "job_id": "98e054f0f996",
+      "last_status": "done",
+      "project_assignment_error": "POST /api/tribe/projects/fd59a77a-9c8b-4c21-855c-b9055ed90c8a/jobs failed 400: {'error': 'name required'}",
+      "record_upserted": true,
+      "result": {
+        "job_id": "98e054f0f996",
+        "n_segments": 18,
+        "r2_prefix": "tribev2/jobs/98e054f0f996",
+        "sha256": "babcadd94bfc35c55d1bc7ce3267f2d3d40d86fa6fc6b577cd4bc8df46343e85"
+      },
+      "saved_to_job_history": true,
+      "submitted_at": "2026-05-04T08:05:56.148359+00:00"
+    },
+    "candidate_defi_vault_001": {
+      "assigned_to_project": false,
+      "call_id": "fc-01KQS0BG3WBK3RGEG9PMTATHGK",
+      "checked_at": "2026-05-04T08:28:31.041212+00:00",
+      "completed_at": "2026-05-04T08:28:31.041232+00:00",
+      "item": {
+        "category": "yield-candidate",
+        "direction": "defi_vault",
+        "file": "candidates/candidate_defi_vault_001.txt",
+        "group": "candidate",
+        "id": "candidate_defi_vault_001",
+        "level": 1,
+        "role": "submission",
+        "tags": [
+          "yield-fm-copy-v1",
+          "level-1",
+          "candidate",
+          "defi",
+          "vault"
+        ]
+      },
+      "job_id": "73817f1a0994",
+      "last_status": "done",
+      "project_assignment_error": "POST /api/tribe/projects/fd59a77a-9c8b-4c21-855c-b9055ed90c8a/jobs failed 400: {'error': 'name required'}",
+      "record_upserted": true,
+      "result": {
+        "job_id": "73817f1a0994",
+        "n_segments": 18,
+        "r2_prefix": "tribev2/jobs/73817f1a0994",
+        "sha256": "8d97e2cdf403278600eb6d8978f6b72eb2b304d04cb0470f0408c54034a25574"
+      },
+      "saved_to_job_history": true,
+      "submitted_at": "2026-05-04T08:05:56.618293+00:00"
+    },
+    "candidate_market_signal_001": {
+      "assigned_to_project": false,
+      "call_id": "fc-01KQS0BH4J3A4M01GSGNR6P23A",
+      "checked_at": "2026-05-04T08:30:56.642166+00:00",
+      "completed_at": "2026-05-04T08:30:56.642185+00:00",
+      "item": {
+        "category": "yield-candidate",
+        "direction": "market_signal",
+        "file": "candidates/candidate_market_signal_001.txt",
+        "group": "candidate",
+        "id": "candidate_market_signal_001",
+        "level": 1,
+        "role": "submission",
+        "tags": [
+          "yield-fm-copy-v1",
+          "level-1",
+          "candidate",
+          "market-signal"
+        ]
+      },
+      "job_id": "0d71f85d39e7",
+      "last_status": "done",
+      "project_assignment_error": "POST /api/tribe/projects/fd59a77a-9c8b-4c21-855c-b9055ed90c8a/jobs failed 400: {'error': 'name required'}",
+      "record_upserted": true,
+      "result": {
+        "job_id": "0d71f85d39e7",
+        "n_segments": 18,
+        "r2_prefix": "tribev2/jobs/0d71f85d39e7",
+        "sha256": "a43f262ff371215809bf04ee69b03c6687dc9f753ed057197b3e83a7acb5219f"
+      },
+      "saved_to_job_history": true,
+      "submitted_at": "2026-05-04T08:05:57.736839+00:00"
+    },
+    "candidate_music_credit_001": {
+      "assigned_to_project": false,
+      "call_id": "fc-01KQS0BHMPQACKW08VX3HK53NT",
+      "checked_at": "2026-05-04T08:32:30.454158+00:00",
+      "completed_at": "2026-05-04T08:32:30.454181+00:00",
+      "item": {
+        "category": "yield-candidate",
+        "direction": "music_credit",
+        "file": "candidates/candidate_music_credit_001.txt",
+        "group": "candidate",
+        "id": "candidate_music_credit_001",
+        "level": 1,
+        "role": "submission",
+        "tags": [
+          "yield-fm-copy-v1",
+          "level-1",
+          "candidate",
+          "music-credit"
+        ]
+      },
+      "job_id": "20f1c7916cb2",
+      "last_status": "done",
+      "project_assignment_error": "POST /api/tribe/projects/fd59a77a-9c8b-4c21-855c-b9055ed90c8a/jobs failed 400: {'error': 'name required'}",
+      "record_upserted": true,
+      "result": {
+        "job_id": "20f1c7916cb2",
+        "n_segments": 18,
+        "r2_prefix": "tribev2/jobs/20f1c7916cb2",
+        "sha256": "3dcf14d9a1795eb809bfe948697b790fc75c2ab9ab81db7acd076e2311ec7070"
+      },
+      "saved_to_job_history": true,
+      "submitted_at": "2026-05-04T08:05:58.165774+00:00"
+    },
+    "candidate_onchain_rights_001": {
+      "assigned_to_project": false,
+      "call_id": "fc-01KQS0BM1YZRE976N5ANQX555K",
+      "checked_at": "2026-05-04T08:35:49.606020+00:00",
+      "completed_at": "2026-05-04T08:35:49.606041+00:00",
+      "item": {
+        "category": "yield-candidate",
+        "direction": "onchain_rights",
+        "file": "candidates/candidate_onchain_rights_001.txt",
+        "group": "candidate",
+        "id": "candidate_onchain_rights_001",
+        "level": 1,
+        "role": "submission",
+        "tags": [
+          "yield-fm-copy-v1",
+          "level-1",
+          "candidate",
+          "onchain-rights"
+        ]
+      },
+      "job_id": "bcbe3cf48e9a",
+      "last_status": "done",
+      "project_assignment_error": "POST /api/tribe/projects/fd59a77a-9c8b-4c21-855c-b9055ed90c8a/jobs failed 400: {'error': 'name required'}",
+      "record_upserted": true,
+      "result": {
+        "job_id": "bcbe3cf48e9a",
+        "n_segments": 19,
+        "r2_prefix": "tribev2/jobs/bcbe3cf48e9a",
+        "sha256": "aaa0fd1b32e8f021600c569904b5d966ad733199818afe551801257b80a81309"
+      },
+      "saved_to_job_history": true,
+      "submitted_at": "2026-05-04T08:06:00.666920+00:00"
+    },
+    "candidate_repricing_001": {
+      "assigned_to_project": false,
+      "call_id": "fc-01KQS0BJZ8BDM910ER7MJ2TMM2",
+      "checked_at": "2026-05-04T08:33:38.450751+00:00",
+      "completed_at": "2026-05-04T08:33:38.450770+00:00",
+      "item": {
+        "category": "yield-candidate",
+        "direction": "repricing",
+        "file": "candidates/candidate_repricing_001.txt",
+        "group": "candidate",
+        "id": "candidate_repricing_001",
+        "level": 1,
+        "role": "submission",
+        "tags": [
+          "yield-fm-copy-v1",
+          "level-1",
+          "candidate",
+          "repricing"
+        ]
+      },
+      "job_id": "5de792989c7f",
+      "last_status": "done",
+      "project_assignment_error": "POST /api/tribe/projects/fd59a77a-9c8b-4c21-855c-b9055ed90c8a/jobs failed 400: {'error': 'name required'}",
+      "record_upserted": true,
+      "result": {
+        "job_id": "5de792989c7f",
+        "n_segments": 16,
+        "r2_prefix": "tribev2/jobs/5de792989c7f",
+        "sha256": "9a77166aeeec84189b77e46fb29a9783168d676a984115933b381238d35b83f7"
+      },
+      "saved_to_job_history": true,
+      "submitted_at": "2026-05-04T08:05:59.504168+00:00"
+    },
+    "candidate_seller_price_001": {
+      "assigned_to_project": false,
+      "call_id": "fc-01KQS0BMJQP1K0VRZQTTCPDWVE",
+      "checked_at": "2026-05-04T08:37:15.237317+00:00",
+      "completed_at": "2026-05-04T08:37:15.237345+00:00",
+      "item": {
+        "category": "yield-candidate",
+        "direction": "seller_price",
+        "file": "candidates/candidate_seller_price_001.txt",
+        "group": "candidate",
+        "id": "candidate_seller_price_001",
+        "level": 1,
+        "role": "submission",
+        "tags": [
+          "yield-fm-copy-v1",
+          "level-1",
+          "candidate",
+          "seller-price"
+        ]
+      },
+      "job_id": "32b74edbfa6f",
+      "last_status": "done",
+      "project_assignment_error": "POST /api/tribe/projects/fd59a77a-9c8b-4c21-855c-b9055ed90c8a/jobs failed 400: {'error': 'name required'}",
+      "record_upserted": true,
+      "result": {
+        "job_id": "32b74edbfa6f",
+        "n_segments": 18,
+        "r2_prefix": "tribev2/jobs/32b74edbfa6f",
+        "sha256": "4a864ea4d9fd04f83eb4ac7de81156d54b8e31bd0b4c3054fbdae0e120dce2f8"
+      },
+      "saved_to_job_history": true,
+      "submitted_at": "2026-05-04T08:06:01.165419+00:00"
+    },
+    "candidate_song_cashflow_001": {
+      "assigned_to_project": false,
+      "call_id": "fc-01KQS0BKGBFFVEB31HZM62YJZP",
+      "checked_at": "2026-05-04T08:34:45.772978+00:00",
+      "completed_at": "2026-05-04T08:34:45.773001+00:00",
+      "item": {
+        "category": "yield-candidate",
+        "direction": "song_cashflow",
+        "file": "candidates/candidate_song_cashflow_001.txt",
+        "group": "candidate",
+        "id": "candidate_song_cashflow_001",
+        "level": 1,
+        "role": "submission",
+        "tags": [
+          "yield-fm-copy-v1",
+          "level-1",
+          "candidate",
+          "song-cashflow"
+        ]
+      },
+      "job_id": "f35a58932b85",
+      "last_status": "done",
+      "project_assignment_error": "POST /api/tribe/projects/fd59a77a-9c8b-4c21-855c-b9055ed90c8a/jobs failed 400: {'error': 'name required'}",
+      "record_upserted": true,
+      "result": {
+        "job_id": "f35a58932b85",
+        "n_segments": 18,
+        "r2_prefix": "tribev2/jobs/f35a58932b85",
+        "sha256": "5a102f5b8a7d8cf3a9a5da4b47f27fb96254f2bb381b6f2e78b854b639221694"
+      },
+      "saved_to_job_history": true,
+      "submitted_at": "2026-05-04T08:06:00.098041+00:00"
+    },
+    "candidate_yield_current_001": {
+      "assigned_to_project": false,
+      "call_id": "fc-01KQS0BEKSH8E6RZC3PFKKF13G",
+      "checked_at": "2026-05-04T08:24:48.533693+00:00",
+      "completed_at": "2026-05-04T08:24:48.533713+00:00",
+      "item": {
+        "category": "yield-current",
+        "direction": "current",
+        "file": "candidates/candidate_yield_current_001.txt",
+        "group": "candidate",
+        "id": "candidate_yield_current_001",
+        "level": 1,
+        "role": "submission",
+        "tags": [
+          "yield-fm-copy-v1",
+          "level-1",
+          "candidate",
+          "current"
+        ]
+      },
+      "job_id": "b6c9d659a7a1",
+      "last_status": "done",
+      "project_assignment_error": "POST /api/tribe/projects/fd59a77a-9c8b-4c21-855c-b9055ed90c8a/jobs failed 400: {'error': 'name required'}",
+      "record_upserted": true,
+      "result": {
+        "job_id": "b6c9d659a7a1",
+        "n_segments": 21,
+        "r2_prefix": "tribev2/jobs/b6c9d659a7a1",
+        "sha256": "dcf0686583b7f82de1de39a268f26e5f1dcc30a211e60a5525421e3831213383"
+      },
+      "saved_to_job_history": true,
+      "submitted_at": "2026-05-04T08:05:55.079158+00:00"
+    }
+  },
+  "project": {
+    "created_at": "2026-05-04T08:03:20.763Z",
+    "name": "yield.fm copy positioning v1",
+    "project_id": "fd59a77a-9c8b-4c21-855c-b9055ed90c8a"
+  }
+}
