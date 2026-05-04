@@ -317,22 +317,22 @@ export function Hero({ mode, intensity }) {
               rate={42_700_000_000 / (365.25 * 86400)} prefix="$"
             />
             <Stat
-              label="MEDIAN CATALOG MULTIPLE — RE LTM"
-              value={`${catalogData.stats.medianMultipleAll.toFixed(2)}×`}
-              delta={2.31}
+              label="MEDIAN CATALOG MULTIPLE · TTM"
+              value={`${catalogData.stats.medianMultipleTTM.toFixed(2)}×`}
+              delta={catalogData.stats.medianMultipleDelta}
               sparkSeed={3}
             />
             <Stat
-              label="AVG CATALOG YIELD — OPEN + CLOSED"
-              value={`${catalogData.stats.avgYieldBlended.toFixed(2)}%`}
-              delta={0.84}
+              label="AVG CATALOG YIELD · CLOSED COMPS TTM"
+              value={`${catalogData.stats.avgYieldTTM.toFixed(2)}%`}
+              delta={catalogData.stats.avgYieldDelta}
               sparkSeed={5}
               color="var(--accent-c)"
             />
             <Stat
               label="CATALOGS TRACKED"
               value={catalogData.stats.totalListings.toLocaleString()}
-              delta={4.62}
+              delta={catalogData.stats.universeGrowthTTM}
               sparkSeed={7}
               color="var(--accent-b)"
             />

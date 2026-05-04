@@ -15,7 +15,13 @@
     "socialCoverage": 553,
     "totalTiktokUGC": 3188317649,
     "totalSounds": 10538,
-    "deepEnriched": 751
+    "deepEnriched": 751,
+    "asOf": "2026-04-16",
+    "medianMultipleTTM": 7.06,
+    "medianMultipleDelta": 10.31,
+    "avgYieldTTM": 19.82,
+    "avgYieldDelta": 14.61,
+    "universeGrowthTTM": 12.83
   },
   "syncedAt": "2026-04-18T07:08:22.434896Z",
   "catalogs": [
@@ -227,7 +233,7 @@
     },
     {
       "id": 2834,
-      "title": "Jay-Z’s Multi-Platinum “Empire State of Mind”",
+      "title": "Jay-Z\u2019s Multi-Platinum \u201cEmpire State of Mind\u201d",
       "url": "https://auctions.royaltyexchange.com/orderbook/asset-detail/2834/",
       "tags": [
         "ASCAP",
@@ -253,7 +259,7 @@
     },
     {
       "id": 6619,
-      "title": "Rihanna’s “Don’t Stop The Music” — Publishing Royalties",
+      "title": "Rihanna\u2019s \u201cDon\u2019t Stop The Music\u201d \u2014 Publishing Royalties",
       "url": "https://auctions.royaltyexchange.com/orderbook/asset-detail/6619/",
       "tags": [
         "Sony Music Publishing"
@@ -303,7 +309,7 @@
     },
     {
       "id": 3982,
-      "title": "Dirty Dancing’s \"(I've Had) The Time of My Life\"",
+      "title": "Dirty Dancing\u2019s \"(I've Had) The Time of My Life\"",
       "url": "https://auctions.royaltyexchange.com/orderbook/asset-detail/3982/",
       "tags": [
         "ASCAP",

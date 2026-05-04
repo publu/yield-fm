@@ -330,7 +330,7 @@ export function Footer() {
         </div>
         <div className="row footer-meta" style={{ justifyContent: 'space-between', borderTop: '1px solid var(--line)', paddingTop: 20, gap: 24, flexWrap: 'wrap' }}>
           <span className="label">© 2026 MNFST INC. · YIELD.FM IS A PRODUCT OF MNFST INC.</span>
-          <span className="label">NOT INVESTMENT ADVICE · DEMO DATA · NO OFFER OR SOLICITATION</span>
+          <span className="label">NOT INVESTMENT ADVICE · NO OFFER OR SOLICITATION</span>
           <span className="label">SOURCES: IFPI · CISAC · MLC · MIDIA</span>
         </div>
       </div>
