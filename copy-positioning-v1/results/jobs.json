@@ -72,7 +72,59 @@
       "role": "reference",
       "submitted_file": "audio/anchor_music_mbw_001.mp3",
       "stdout": "call_id: fc-01KQS2DY369YNVC7S341Z44T3C\n",
-      "call_id": "fc-01KQS2DY369YNVC7S341Z44T3C"
+      "call_id": "fc-01KQS2DY369YNVC7S341Z44T3C",
+      "job_id": "a3caff9442ae",
+      "sha256": "d7bbd2215ae71ff861e766448c9a5e966f0edcd79142a08365263aedbe26dd34",
+      "n_segments": 21,
+      "r2_prefix": "tribev2/jobs/a3caff9442ae",
+      "assigned": false
+    },
+    {
+      "id": "anchor_music_royaltyexchange_001",
+      "file": "anchors/anchor_music_royaltyexchange_001.txt",
+      "role": "reference",
+      "submitted_file": "audio/anchor_music_royaltyexchange_001.mp3",
+      "stdout": "call_id: fc-01KQS2FXSWWTG7604X0FJYQABK\n",
+      "call_id": "fc-01KQS2FXSWWTG7604X0FJYQABK",
+      "job_id": "d1c4f33b7539",
+      "sha256": "177e3ff9db39d29af460edbfbad3b24e1e38de2edaa01e1295a4c8eb693e045e",
+      "n_segments": 20,
+      "r2_prefix": "tribev2/jobs/d1c4f33b7539",
+      "assigned": false
+    },
+    {
+      "id": "anchor_negative_crypto_scam_001",
+      "file": "anchors/anchor_negative_crypto_scam_001.txt",
+      "role": "reference",
+      "submitted_file": "audio/anchor_negative_crypto_scam_001.mp3",
+      "stdout": "call_id: fc-01KQS2JBZ6MBR9JFN2J2T576TV\n",
+      "call_id": "fc-01KQS2JBZ6MBR9JFN2J2T576TV",
+      "job_id": "53e32c5f79fe",
+      "sha256": "082ed2a645b292413c6b8cb9215cc0ba464183cf44cdbe5911741ae7df8c8eb0",
+      "n_segments": 21,
+      "r2_prefix": "tribev2/jobs/53e32c5f79fe",
+      "assigned": false
+    },
+    {
+      "id": "anchor_negative_creator_generic_001",
+      "file": "anchors/anchor_negative_creator_generic_001.txt",
+      "role": "reference",
+      "submitted_file": "audio/anchor_negative_creator_generic_001.mp3",
+      "stdout": "call_id: fc-01KQS2N9GKW9BG6NG176JF26JV\n",
+      "call_id": "fc-01KQS2N9GKW9BG6NG176JF26JV",
+      "job_id": "ce569b3b159e",
+      "sha256": "d0dca0a983c590a3be6aead755674128cb82d4dd449b1f82d2b1cbe69cb36f52",
+      "n_segments": 21,
+      "r2_prefix": "tribev2/jobs/ce569b3b159e",
+      "assigned": false
+    },
+    {
+      "id": "candidate_yield_current_001",
+      "file": "candidates/candidate_yield_current_001.txt",
+      "role": "submission",
+      "submitted_file": "audio/candidate_yield_current_001.mp3",
+      "stdout": "call_id: fc-01KQS2QR2PV4C2XPMYM3ZA3WZF\n",
+      "call_id": "fc-01KQS2QR2PV4C2XPMYM3ZA3WZF"
     }
   ]
 }
