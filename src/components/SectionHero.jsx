@@ -14,63 +14,97 @@ function tsAgo(s) {
   const f = (n) => String(n).padStart(2, '0')
   return `${f(d.getHours())}:${f(d.getMinutes())}:${f(d.getSeconds())}`
 }
-function pickCents(right) {
-  const ranges = {
-    COMP: [0.0008, 0.012], MAST: [0.003, 0.45], MECH: [0.0005, 0.008],
-    PERF: [0.04, 0.32], SYNC: [120, 950],
+
+const SIGNAL_COLORS = {
+  POST:   'var(--accent-a)',
+  VIEWS:  'var(--accent-b)',
+  LIKES:  'var(--accent-d)',
+  SHARE:  'var(--accent-c)',
+  SPIKE:  'var(--accent-c)',
+  REGION: 'var(--accent-b)',
+}
+
+function fmtCount(n) {
+  if (n >= 1e6) return `${(n / 1e6).toFixed(n >= 1e7 ? 1 : 2)}M`
+  if (n >= 1e3) return `${(n / 1e3).toFixed(n >= 1e4 ? 0 : 1)}K`
+  return String(Math.max(1, Math.floor(n)))
+}
+
+function pickFrom(arr) {
+  return arr[Math.floor(Math.random() * arr.length)]
+}
+
+function buildSignal(sound) {
+  const samples = sound.sample_videos?.length ? sound.sample_videos : []
+  const vid = samples.length ? pickFrom(samples) : null
+  const countries = sound.trending_countries?.length ? sound.trending_countries.slice(0, 8) : ['US']
+
+  const types = ['POST', 'POST']
+  if (vid?.play_count) types.push('VIEWS', 'VIEWS')
+  if (vid?.like_count) types.push('LIKES')
+  if (vid?.share_count) types.push('SHARE')
+  if (sound.videos_per_day_pct > 0) types.push('SPIKE')
+  if (countries.length > 1) types.push('REGION')
+
+  const signal = pickFrom(types)
+  let value = ''
+  let via = vid?.author ? `@${vid.author}` : pickFrom(countries)
+
+  switch (signal) {
+    case 'POST': {
+      const perMin = Math.max(1, (sound.videos_per_day || 60) / 1440)
+      value = `+${fmtCount(Math.max(1, Math.floor(perMin * (0.4 + Math.random() * 1.6))))}`
+      break
+    }
+    case 'VIEWS': {
+      const base = vid?.play_count || 1e5
+      value = `+${fmtCount(Math.floor(base * (0.0008 + Math.random() * 0.012)))}`
+      break
+    }
+    case 'LIKES': {
+      const base = vid?.like_count || 1e4
+      value = `+${fmtCount(Math.floor(base * (0.002 + Math.random() * 0.014)))}`
+      break
+    }
+    case 'SHARE': {
+      const base = vid?.share_count || 800
+      value = `+${fmtCount(Math.floor(base * (0.006 + Math.random() * 0.025)))}`
+      break
+    }
+    case 'SPIKE': {
+      const pct = sound.videos_per_day_pct || 5
+      value = `+${(pct * (0.4 + Math.random() * 0.7)).toFixed(2)}%`
+      via = `${sound.top_category || 'trend'}`.replace(/_/g, ' ')
+      break
+    }
+    case 'REGION': {
+      via = pickFrom(countries)
+      value = `${countries.length} mkt${countries.length === 1 ? '' : 's'}`
+      break
+    }
   }
-  const [a, b] = ranges[right] || [0.001, 0.1]
-  const v = a + Math.random() * (b - a)
-  return v < 1 ? v.toFixed(4) : v.toFixed(0)
-}
 
-const RIGHT_COLORS = {
-  COMP: 'var(--accent-a)', MAST: 'var(--accent-b)',
-  PERF: 'var(--accent-c)', MECH: 'var(--accent-d)',
-  SYNC: 'var(--accent-c)',
-}
-
-const RIGHT_TYPES = ['COMP', 'MAST', 'MECH', 'PERF', 'SYNC']
-
-function classifyRight(sound, i) {
-  if (sound.label) {
-    if (i % 3 === 0) return 'MAST'
-    if (i % 5 === 0) return 'SYNC'
-  }
-  return RIGHT_TYPES[i % RIGHT_TYPES.length]
-}
-
-function viaFor(right, sound) {
-  if (right === 'MAST') return sound.label?.split(/[,/]/)[0]?.trim().slice(0, 14) || 'Distro'
-  if (right === 'PERF') return ['BMI', 'ASCAP', 'PRS', 'SESAC'][Math.floor(Math.random() * 4)]
-  if (right === 'COMP') return ['ASCAP', 'BMI', 'SESAC', 'GMR'][Math.floor(Math.random() * 4)]
-  if (right === 'MECH') return 'MLC'
-  if (right === 'SYNC') return 'Direct'
-  return 'PRO'
-}
-
-function buildPlay(sound, i) {
-  const right = classifyRight(sound, i)
   return {
-    right,
+    signal,
     title: sound.title || 'Unknown',
-    artist: sound.artist || '',
-    via: viaFor(right, sound),
+    artist: sound.artist || sound.author || '',
+    via,
+    value,
   }
 }
 
-const FALLBACK_PLAYS = [
-  { right: 'COMP', title: 'I M The Man',      artist: 'Travis Scott',  via: 'BMI' },
-  { right: 'MAST', title: 'Brand New',        artist: 'Ben Rector',    via: 'Downtown' },
-  { right: 'MECH', title: 'Super Model',      artist: 'SZA',           via: 'MLC' },
-  { right: 'PERF', title: 'She Got The Best Of Me', artist: 'Luke Combs', via: 'ASCAP' },
-  { right: 'SYNC', title: 'Under The Influence',    artist: 'Chris Brown', via: 'Direct' },
+const FALLBACK_SOUNDS = [
+  { title: "Bum Bum Bum - Pegada Diferente", artist: "_william_acosta", videos_per_day: 29453, videos_per_day_pct: 6.32, trending_countries: ['BR', 'US', 'PH', 'MX'], top_category: 'dance_performance', sample_videos: [{ author: 'serikkan_r', play_count: 9400000, like_count: 1600000, share_count: 166000 }] },
+  { title: "Fast Fast", artist: "031choppa, Al Xapo", videos_per_day: 16738, videos_per_day_pct: 15.92, trending_countries: ['ZA', 'NG', 'KE'], top_category: 'selfie_vlog', sample_videos: [{ author: 'tarryn_abigail', play_count: 2800000, like_count: 527000, share_count: 12600 }] },
+  { title: "Se Eu Brotar no Baile Hoje", artist: "gordinhobolad0", videos_per_day: 37021, videos_per_day_pct: 11.41, trending_countries: ['BR', 'PE', 'AR'], top_category: 'dance_performance', sample_videos: [{ author: 'artthuroficial_', play_count: 33100000, like_count: 2600000, share_count: 73900 }] },
+  { title: "Mink", artist: "RosarioRay", videos_per_day: 5400, videos_per_day_pct: 8.22, trending_countries: ['US', 'PH', 'ID'], top_category: 'fashion_outfit', sample_videos: [{ author: 'rosarioray', play_count: 1200000, like_count: 240000, share_count: 8400 }] },
+  { title: "Inspiring Triumphant Trailer", artist: "Veaceslav Draganov", videos_per_day: 3100, videos_per_day_pct: 4.18, trending_countries: ['US', 'UK', 'DE'], top_category: 'gaming_screen', sample_videos: [{ author: 'cinematicfx', play_count: 540000, like_count: 86000, share_count: 4200 }] },
 ]
 
 function HeroFeed() {
-  const [pool, setPool] = useState(FALLBACK_PLAYS)
-  const [feed, setFeed] = useState(() => FALLBACK_PLAYS.slice(0, 8).map((p, i) => ({
-    ...p, ts: tsAgo(i * 1.4), cents: pickCents(p.right),
+  const [pool, setPool] = useState(FALLBACK_SOUNDS)
+  const [feed, setFeed] = useState(() => FALLBACK_SOUNDS.slice(0, 8).map((s, i) => ({
+    ...buildSignal(s), ts: tsAgo(i * 1.4),
   })))
 
   useEffect(() => {
@@ -79,8 +113,7 @@ function HeroFeed() {
       .then(r => r.ok ? r.json() : null)
       .then(data => {
         if (cancelled || !data?.sounds?.length) return
-        const built = data.sounds.map((s, i) => buildPlay(s, i))
-        setPool(built)
+        setPool(data.sounds)
       })
       .catch(() => {})
     return () => { cancelled = true }
@@ -89,8 +122,8 @@ function HeroFeed() {
   useEffect(() => {
     const id = setInterval(() => {
       setFeed((f) => {
-        const sample = pool[Math.floor(Math.random() * pool.length)]
-        return [{ ...sample, ts: tsNow(), cents: pickCents(sample.right) }, ...f].slice(0, 8)
+        const sound = pool[Math.floor(Math.random() * pool.length)]
+        return [{ ...buildSignal(sound), ts: tsNow() }, ...f].slice(0, 8)
       })
     }, 1200)
     return () => clearInterval(id)
@@ -104,9 +137,9 @@ function HeroFeed() {
     }}>
       <div className="row" style={{ padding: '12px 14px', borderBottom: '1px solid var(--line)', gap: 10, alignItems: 'center' }}>
         <PulseDot color="var(--accent-a)" size={6} />
-        <span className="label" style={{ color: 'var(--text)' }}>LIVE · ROYALTY EVENTS</span>
+        <span className="label" style={{ color: 'var(--text)' }}>LIVE · TIKTOK SIGNALS · TRACKED CATALOG</span>
         <span style={{ flex: 1 }} />
-        <span style={{ color: 'var(--dim)', fontSize: 9, letterSpacing: '0.2em' }}>$/EVENT</span>
+        <span style={{ color: 'var(--dim)', fontSize: 9, letterSpacing: '0.2em' }}>Δ / EVENT</span>
       </div>
 
       <div className="col">
@@ -119,21 +152,21 @@ function HeroFeed() {
             <span className="tnum hero-feed-ts" style={{ color: 'var(--dim)', fontSize: 10, width: 64 }}>{row.ts}</span>
             <span style={{
               fontSize: 9, padding: '2px 6px', letterSpacing: '0.1em', fontWeight: 700,
-              background: `color-mix(in oklab, ${RIGHT_COLORS[row.right]} 22%, transparent)`,
-              color: RIGHT_COLORS[row.right],
-              border: `1px solid ${RIGHT_COLORS[row.right]}`,
-              minWidth: 44, textAlign: 'center',
-            }}>{row.right}</span>
+              background: `color-mix(in oklab, ${SIGNAL_COLORS[row.signal]} 22%, transparent)`,
+              color: SIGNAL_COLORS[row.signal],
+              border: `1px solid ${SIGNAL_COLORS[row.signal]}`,
+              minWidth: 52, textAlign: 'center',
+            }}>{row.signal}</span>
             <span style={{ color: 'var(--text)', flex: 1, minWidth: 0,
               overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
             }}>
               {row.title}
               {row.artist && <span style={{ color: 'var(--dim)', marginLeft: 6 }}>· {row.artist}</span>}
             </span>
-            <span className="hero-feed-via" style={{ color: 'var(--dim)', fontSize: 10 }}>{row.via}</span>
+            <span className="hero-feed-via" style={{ color: 'var(--dim)', fontSize: 10, maxWidth: 110, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{row.via}</span>
             <span className="tnum hero-feed-amt" style={{
-              color: 'var(--accent-a)', fontWeight: 700, width: 64, textAlign: 'right',
-            }}>${row.cents}</span>
+              color: SIGNAL_COLORS[row.signal] || 'var(--accent-a)', fontWeight: 700, width: 72, textAlign: 'right',
+            }}>{row.value}</span>
           </div>
         ))}
       </div>
@@ -143,8 +176,8 @@ function HeroFeed() {
         fontSize: 9, letterSpacing: '0.18em', color: 'var(--dim)',
         display: 'flex', justifyContent: 'space-between',
       }}>
-        <span>USE → RIGHT → COLLECTOR → SPLIT → PAYOUT</span>
-        <span style={{ color: 'var(--accent-a)' }}>STREAMING ●</span>
+        <span>POST → VIEW → LIKE → SHARE → CHART</span>
+        <span style={{ color: 'var(--accent-a)' }}>INDEXING ●</span>
       </div>
     </div>
   )
@@ -271,14 +304,17 @@ export function Hero({ mode, intensity }) {
 
           <div className="row" style={{ gap: 36, flexWrap: 'wrap' }}>
             <LiveCounter
-              label="GLOBAL ROYALTIES PAID — 2026 YTD"
+              label="GLOBAL ROYALTIES PAID · ANNUALIZED · IFPI + CISAC"
               base={(() => {
-                const RATE = 1521
-                const yearStart = Date.UTC(2026, 0, 1) / 1000
+                // IFPI 2024 recorded ($29.6B) + CISAC 2024 collections (~$13.1B) ≈ $42.7B/yr
+                const ANNUAL_USD = 42_700_000_000
+                const SECONDS_PER_YEAR = 365.25 * 86400
+                const RATE = ANNUAL_USD / SECONDS_PER_YEAR
+                const yearStart = Date.UTC(new Date().getUTCFullYear(), 0, 1) / 1000
                 const nowSec = Date.now() / 1000
-                return Math.max(0, (nowSec - yearStart)) * RATE
+                return Math.max(0, nowSec - yearStart) * RATE
               })()}
-              rate={1521} prefix="$"
+              rate={42_700_000_000 / (365.25 * 86400)} prefix="$"
             />
             <Stat
               label="MEDIAN CATALOG MULTIPLE — RE LTM"

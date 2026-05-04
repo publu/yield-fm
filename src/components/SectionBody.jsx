@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Sparkline, SectionHead, makeSeries } from './DataComponents'
+import { Sparkline, SectionHead } from './DataComponents'
 import catalogData from '../data/catalogs.json'
 
 const COPYRIGHTS = [
@@ -181,147 +181,6 @@ export function FiveStreams() {
   )
 }
 
-export function Flow() {
-  const stages = [
-    { n: '01', name: 'USE',     remain: 100, lost: 0,  loss: '',                desc: 'A play, sale, sync, or spin emits usage data.' },
-    { n: '02', name: 'MATCH',   remain: 92,  lost: 8,  loss: 'Unmatched pool',  desc: 'ISRC + ISWC identify the recording and the song.' },
-    { n: '03', name: 'COLLECT', remain: 81,  lost: 11, loss: 'Society / admin', desc: 'PROs · MLC · SoundEx · Distros route the cash.' },
-    { n: '04', name: 'SPLIT',   remain: 81,  lost: 0,  loss: '',                desc: 'Writer · publisher · artist · label percentages applied.' },
-    { n: '05', name: 'PAY',     remain: 81,  lost: 0,  loss: '',                desc: 'Cash arrives — quarterly, monthly, or near-real-time.' },
-  ]
-  const totalLost = 100 - stages[stages.length - 1].remain
-
-  return (
-    <section style={{ borderBottom: '1px solid var(--line)', padding: 'clamp(72px, 8vw, 110px) 0' }}>
-      <div className="sec-pad" style={{ maxWidth: 1480, margin: '0 auto', padding: '0 32px' }}>
-        <div className="col" style={{ gap: 14, marginBottom: 32 }}>
-          <div className="row" style={{ gap: 14, alignItems: 'center' }}>
-            <span className="tnum" style={{
-              fontFamily: 'var(--mono)', fontSize: 11,
-              color: 'var(--accent-a)', letterSpacing: '0.2em',
-            }}>§ 03</span>
-            <span className="label">FOLLOW THE MONEY</span>
-            <div style={{ flex: 1, height: 1, background: 'var(--line)' }} />
-          </div>
-          <h2 style={{
-            margin: 0,
-            fontFamily: 'var(--face-display)',
-            fontWeight: 'var(--weight-display)',
-            fontSize: 'clamp(28px, 3.4vw, 52px)',
-            letterSpacing: 'var(--tracking-display)',
-            lineHeight: 1.04,
-            color: 'var(--text)',
-          }}>Every dollar of usage leaks {totalLost}¢ before payout.</h2>
-          <p style={{
-            margin: 0, maxWidth: 820, color: 'var(--sub)',
-            fontSize: 'clamp(14px, 1vw, 16px)', lineHeight: 1.55,
-          }}>
-            Royalties don't pay through one pipe. Every play splits into multiple paths — different rates, different cadences, different collectors. Most leakage happens at MATCH and COLLECT: when a song's ID isn't recognized, the cash sits in the unmatched pool until claimed.
-          </p>
-        </div>
-
-        <div className="flow-grid" style={{
-          display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)',
-          border: '1px solid var(--line)', background: 'var(--bg-2)',
-        }}>
-          {stages.map((s, i) => (
-            <div key={s.n} style={{
-              padding: '28px 24px 26px',
-              borderRight: i < stages.length - 1 ? '1px solid var(--line)' : 'none',
-              display: 'flex', flexDirection: 'column', gap: 18, position: 'relative',
-            }}>
-              <div className="row" style={{ alignItems: 'baseline', gap: 10 }}>
-                <span className="tnum" style={{
-                  fontFamily: 'var(--mono)', fontSize: 11, color: 'var(--accent-a)',
-                  letterSpacing: '0.22em', fontWeight: 700,
-                }}>{s.n}</span>
-                <span style={{
-                  fontFamily: 'var(--face-display)', fontSize: 22,
-                  fontWeight: 'var(--weight-display)',
-                  letterSpacing: 'var(--tracking-display)', color: 'var(--text)',
-                }}>{s.name}</span>
-              </div>
-
-              <div style={{ position: 'relative', height: 132 }}>
-                <div style={{
-                  position: 'absolute', left: 0, right: 0, top: 0,
-                  height: 1, background: 'var(--line-soft)',
-                }} />
-                <div style={{
-                  position: 'absolute', left: 0, right: 0, bottom: 0,
-                  height: 1, background: 'var(--line-soft)',
-                }} />
-                {s.lost > 0 && (
-                  <div style={{
-                    position: 'absolute', left: 0, right: 0,
-                    top: 0, height: `${s.lost}%`,
-                    background: 'repeating-linear-gradient(135deg, var(--accent-c) 0 1px, transparent 1px 6px)',
-                    opacity: 0.7,
-                    borderBottom: '1px dashed var(--accent-c)',
-                  }} />
-                )}
-                <div style={{
-                  position: 'absolute', left: 0, right: 0, bottom: 0,
-                  height: `${s.remain}%`,
-                  background: 'var(--accent-a)', opacity: 0.92,
-                }} />
-                <div style={{
-                  position: 'absolute', right: 6, bottom: `${s.remain}%`,
-                  transform: 'translateY(50%)',
-                  fontFamily: 'var(--mono)', fontSize: 9,
-                  letterSpacing: '0.14em', color: 'var(--bg)',
-                  background: 'var(--accent-a)', padding: '2px 5px',
-                }}>{s.remain}¢</div>
-              </div>
-
-              <div className="col" style={{ gap: 4, minHeight: 32 }}>
-                <div style={{
-                  fontFamily: 'var(--mono)', fontSize: 10, letterSpacing: '0.14em',
-                  color: s.lost > 0 ? 'var(--accent-c)' : 'var(--dim)',
-                  fontWeight: 700,
-                }}>
-                  {s.lost > 0 ? `−${s.lost}¢ LEAK` : '— NO LOSS'}
-                </div>
-                <div style={{
-                  fontFamily: 'var(--mono)', fontSize: 10, letterSpacing: '0.08em',
-                  color: 'var(--sub)', textTransform: 'uppercase',
-                  minHeight: 12,
-                }}>
-                  {s.loss || ' '}
-                </div>
-              </div>
-
-              <p style={{
-                margin: 0, fontSize: 12, color: 'var(--sub)',
-                lineHeight: 1.55, borderTop: '1px solid var(--line)', paddingTop: 14,
-              }}>{s.desc}</p>
-            </div>
-          ))}
-        </div>
-
-        <div className="row" style={{
-          marginTop: 16, gap: 24, flexWrap: 'wrap',
-          fontFamily: 'var(--mono)', fontSize: 10,
-          letterSpacing: '0.14em', color: 'var(--dim)',
-        }}>
-          <span>BAR HEIGHT = ¢ REMAINING PER $1.00 OF USAGE</span>
-          <span style={{ color: 'var(--sub)' }}>
-            <span style={{
-              display: 'inline-block', width: 10, height: 10, marginRight: 8,
-              background: 'repeating-linear-gradient(135deg, var(--accent-c) 0 1px, transparent 1px 4px)',
-              verticalAlign: '-1px',
-            }} />
-            HATCHED = LEAKAGE
-          </span>
-          <span style={{ marginLeft: 'auto', color: 'var(--dim)' }}>
-            ILLUSTRATIVE INDUSTRY AVERAGE · VARIES BY GENRE / TERRITORY / COLLECTOR
-          </span>
-        </div>
-      </div>
-    </section>
-  )
-}
-
 function shortenTitle(t) {
   return t
     .replace(/Songwriter Royalties|Publishing Royalties|Royalties|- /gi, '')
@@ -349,9 +208,7 @@ const CATALOGS = catalogData.catalogs
       hot: c.isPick,
       tags: c.tags,
       ltm: c.ltm,
-      url: c.url,
       sparkData: ebyArr && ebyArr.length >= 3 ? ebyArr : null,
-      spark: c.id % 100,
     }
   })
 
@@ -396,7 +253,7 @@ export function CatalogIndex() {
             ))}
           </div>
           {CATALOGS.map((c, i) => (
-            <a key={c.code} href={c.url} target="_blank" rel="noopener noreferrer" className="cat-row" style={{
+            <div key={c.code} className="cat-row" style={{
               display: 'grid',
               gridTemplateColumns: '120px 1.6fr 130px 100px 100px 100px 160px',
               gap: 16, padding: '18px 22px', alignItems: 'center',
@@ -416,13 +273,15 @@ export function CatalogIndex() {
               <span className="cat-mult tnum" style={{ fontFamily: 'var(--mono)', fontSize: 14, color: 'var(--text)', fontWeight: 700 }}>{c.mult.toFixed(2)}×</span>
               <span className="cat-yld tnum" style={{ fontFamily: 'var(--mono)', fontSize: 14, color: c.yld > 8 ? 'var(--positive)' : 'var(--accent-c)', fontWeight: 700 }}>{c.yld.toFixed(1)}%</span>
               <span className="cat-spark">
-                <Sparkline
-                  data={c.sparkData || makeSeries(c.spark, 36, 50, 6)}
-                  color={c.hot ? 'var(--accent-a)' : 'var(--accent-b)'}
-                  width={150} height={26} fill
-                />
+                {c.sparkData && (
+                  <Sparkline
+                    data={c.sparkData}
+                    color={c.hot ? 'var(--accent-a)' : 'var(--accent-b)'}
+                    width={150} height={26} fill
+                  />
+                )}
               </span>
-            </a>
+            </div>
           ))}
         </div>
 
@@ -441,7 +300,7 @@ export function CatalogIndex() {
             </p>
           </div>
           <form onSubmit={(e) => e.preventDefault()} className="row" style={{ gap: 8, flex: '1 1 360px' }}>
-            <input type="email" placeholder="you@fund.com" style={{
+            <input type="email" placeholder="ListenTo@Music.com" style={{
               flex: 1, minWidth: 0, background: 'var(--bg-2)', border: '1px solid var(--line)',
               padding: '14px 16px', color: 'var(--text)', fontFamily: 'var(--mono)', fontSize: 13,
             }} />
