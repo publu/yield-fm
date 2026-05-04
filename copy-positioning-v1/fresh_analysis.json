@@ -1,0 +1,139 @@
+{
+  "n_items": 20,
+  "n_parcels": 181,
+  "project_id": "fd59a77a-9c8b-4c21-855c-b9055ed90c8a",
+  "scores": [
+    {
+      "balance_penalty": 0.026669877635748185,
+      "defi": 0.9540580944889465,
+      "direction": "onchain_rights",
+      "final": 0.651805155807315,
+      "finance": 0.9148180885211329,
+      "id": "candidate_onchain_rights_001",
+      "job_id": "a07ab378a676",
+      "music": 0.9796701280246403,
+      "negative": 0.8740412909528403,
+      "weighted": 0.6784750334430631
+    },
+    {
+      "balance_penalty": 0.021011402102773455,
+      "defi": 0.895855989193965,
+      "direction": "music_credit",
+      "final": 0.6308142050374547,
+      "finance": 0.9206646022358796,
+      "id": "candidate_music_credit_001",
+      "job_id": "947f2ba6bfb8",
+      "music": 0.9473122498486447,
+      "negative": 0.8737571610529238,
+      "weighted": 0.6518256071402281
+    },
+    {
+      "balance_penalty": 0.01750054470556536,
+      "defi": 0.8826114597700828,
+      "direction": "defi_terminal",
+      "final": 0.6187855396711543,
+      "finance": 0.8729018600336813,
+      "id": "candidate_defi_terminal_001",
+      "job_id": "954e3c7414fc",
+      "music": 0.9139160784146412,
+      "negative": 0.8148875207828695,
+      "weighted": 0.6362860843767197
+    },
+    {
+      "balance_penalty": 0.016806824082486956,
+      "defi": 0.8712428438561067,
+      "direction": "defi_vault",
+      "final": 0.6079175493803012,
+      "finance": 0.8486200193005471,
+      "id": "candidate_defi_vault_001",
+      "job_id": "5d99a88427a2",
+      "music": 0.8897184735206676,
+      "negative": 0.7861312302859014,
+      "weighted": 0.6247243734627881
+    },
+    {
+      "balance_penalty": 0.03861081909714811,
+      "defi": 0.7574920115800811,
+      "direction": "current",
+      "final": 0.5304243190986594,
+      "finance": 0.8440569951527076,
+      "id": "candidate_yield_current_001",
+      "job_id": "c6cc9e37a687",
+      "music": 0.8337662719669151,
+      "negative": 0.7887286619738086,
+      "weighted": 0.5690351381958075
+    },
+    {
+      "balance_penalty": 0.0917270944781399,
+      "defi": 0.8714112323346207,
+      "direction": "defi_cashflow",
+      "final": 0.4880646289854591,
+      "finance": 0.6481171883741839,
+      "id": "candidate_defi_cashflow_001",
+      "job_id": "d3eb76331f13",
+      "music": 0.7813789466505751,
+      "negative": 0.5749105051420855,
+      "weighted": 0.579791723463599
+    },
+    {
+      "balance_penalty": 0.1063783655676495,
+      "defi": 0.8878721276281513,
+      "direction": "catalog_buyer",
+      "final": 0.4847241020810649,
+      "finance": 0.6298285628732233,
+      "id": "candidate_catalog_buyer_001",
+      "job_id": "411d84c75f80",
+      "music": 0.7902150386212132,
+      "negative": 0.5307755276920442,
+      "weighted": 0.5911024676487144
+    },
+    {
+      "balance_penalty": 0.05834237980778309,
+      "defi": 0.776306959716558,
+      "direction": "song_cashflow",
+      "final": 0.4737548545055108,
+      "finance": 0.6334170768791665,
+      "id": "candidate_song_cashflow_001",
+      "job_id": "2ad4b2020317",
+      "music": 0.7068895301714792,
+      "negative": 0.531788535970605,
+      "weighted": 0.5320972343132939
+    },
+    {
+      "balance_penalty": 0.07202283019889291,
+      "defi": 0.7765431287164998,
+      "direction": "seller_price",
+      "final": 0.4545979501740697,
+      "finance": 0.6009027949997487,
+      "id": "candidate_seller_price_001",
+      "job_id": "e74b0f1b396e",
+      "music": 0.7030635055460314,
+      "negative": 0.5060301478212241,
+      "weighted": 0.5266207803729626
+    },
+    {
+      "balance_penalty": 0.12748607032048825,
+      "defi": 0.8152385683068613,
+      "direction": "repricing",
+      "final": 0.3928502361739247,
+      "finance": 0.5036710674263484,
+      "id": "candidate_repricing_001",
+      "job_id": "f7c42dc9c4d0",
+      "music": 0.6776595112786302,
+      "negative": 0.42756695230275266,
+      "weighted": 0.520336306494413
+    },
+    {
+      "balance_penalty": 0.10562166152569236,
+      "defi": 0.7599871326518557,
+      "direction": "market_signal",
+      "final": 0.38948109550638205,
+      "finance": 0.5013836005924656,
+      "id": "candidate_market_signal_001",
+      "job_id": "d273233fd2fa",
+      "music": 0.6373838090024178,
+      "negative": 0.40326885912209576,
+      "weighted": 0.4951027570320744
+    }
+  ]
+}
