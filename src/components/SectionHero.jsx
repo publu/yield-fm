@@ -140,20 +140,172 @@ function MetricLink({ href, label, value, color, title, compact = false }) {
         display: 'inline-flex',
         flexDirection: 'column',
         justifyContent: 'center',
-        minWidth: compact ? 54 : 66,
-        minHeight: 34,
-        padding: '4px 7px',
+        minWidth: compact ? 58 : 82,
+        minHeight: compact ? 36 : 48,
+        padding: compact ? '5px 7px' : '7px 9px',
         border: `1px solid color-mix(in oklab, ${color} 58%, var(--line))`,
-        background: `color-mix(in oklab, ${color} 10%, transparent)`,
+        background: `linear-gradient(180deg, color-mix(in oklab, ${color} 16%, transparent), color-mix(in oklab, ${color} 5%, transparent))`,
         color: 'inherit',
         textDecoration: 'none',
+        boxShadow: `inset 0 0 18px color-mix(in oklab, ${color} 9%, transparent)`,
       }}
     >
       <span className="label" style={{ fontSize: 7, letterSpacing: '0.12em', color }}>{label}</span>
-      <span className="tnum" style={{ marginTop: 2, color: 'var(--text)', fontWeight: 700, fontSize: compact ? 10 : 11, lineHeight: 1 }}>
+      <span className="tnum" style={{ marginTop: 3, color: 'var(--text)', fontWeight: 700, fontSize: compact ? 11 : 15, lineHeight: 1 }}>
         {value}
       </span>
     </a>
+  )
+}
+
+function SourceButton({ href, children, title }) {
+  return (
+    <a
+      href={href}
+      target="_blank" rel="noopener noreferrer"
+      title={title}
+      style={{
+        minHeight: 34,
+        display: 'inline-flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: '0 10px',
+        border: '1px solid var(--line)',
+        background: 'color-mix(in oklab, var(--bg) 78%, transparent)',
+        color: 'var(--sub)',
+        textDecoration: 'none',
+        fontSize: 9,
+        fontWeight: 700,
+        letterSpacing: '0.14em',
+        whiteSpace: 'nowrap',
+      }}
+    >
+      {children}
+    </a>
+  )
+}
+
+function SignalStrength({ row }) {
+  const width = Math.max(12, Math.min(100, (row.score || 0) / 10))
+  return (
+    <div style={{ height: 4, background: 'var(--line-soft)', overflow: 'hidden' }}>
+      <div style={{
+        width: `${width}%`,
+        height: '100%',
+        background: 'linear-gradient(90deg, var(--accent-a), var(--accent-c), var(--accent-b))',
+        boxShadow: '0 0 16px color-mix(in oklab, var(--accent-a) 45%, transparent)',
+      }} />
+    </div>
+  )
+}
+
+function FeaturedSignal({ row }) {
+  if (!row) return null
+  const countries = row.countries?.length ? row.countries.join(' / ') : 'GLOBAL'
+  const growth = Number.isFinite(row.growthPct) && row.growthPct > 0 ? `+${row.growthPct.toFixed(1)}% growth` : `${row.videoCount || 1} source videos`
+  return (
+    <div style={{
+      padding: 16,
+      borderBottom: '1px solid var(--line)',
+      background: `
+        linear-gradient(135deg, color-mix(in oklab, var(--accent-a) 13%, transparent), transparent 42%),
+        radial-gradient(circle at 92% 20%, color-mix(in oklab, var(--accent-b) 20%, transparent), transparent 36%),
+        var(--bg)
+      `,
+    }}>
+      <div className="row" style={{ alignItems: 'start', justifyContent: 'space-between', gap: 14, marginBottom: 14 }}>
+        <div style={{ minWidth: 0 }}>
+          <div className="row" style={{ alignItems: 'center', gap: 8, marginBottom: 8, flexWrap: 'wrap' }}>
+            <span className="label" style={{ color: 'var(--accent-a)' }}>LIVE SOUND #{row.rank || 1}</span>
+            <span className="label" style={{ color: 'var(--dim)' }}>{countries}</span>
+            <span className="label" style={{ color: 'var(--accent-c)' }}>{growth}</span>
+          </div>
+          <a
+            href={row.soundLink}
+            target="_blank" rel="noopener noreferrer"
+            title="Open TikTok sound"
+            style={{
+              display: 'block',
+              color: 'var(--text)',
+              textDecoration: 'none',
+              fontFamily: 'var(--face-display)',
+              fontWeight: 'var(--weight-display)',
+              fontSize: 'clamp(20px, 2vw, 28px)',
+              lineHeight: 1.05,
+              letterSpacing: 'var(--tracking-display)',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              whiteSpace: 'nowrap',
+            }}
+          >
+            {row.title}
+          </a>
+          <div style={{ marginTop: 7, color: 'var(--sub)', fontSize: 11, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+            {row.artist || 'Unknown artist'} · top source {row.author || 'unknown'} · {fmtAgo(row.postedAt)}
+          </div>
+        </div>
+        <div style={{ minWidth: 72, textAlign: 'right' }}>
+          <div className="label" style={{ fontSize: 7, color: 'var(--dim)' }}>SCORE</div>
+          <div className="tnum" style={{ color: 'var(--accent-a)', fontSize: 28, fontWeight: 700, lineHeight: 1 }}>{row.score || '---'}</div>
+        </div>
+      </div>
+
+      <SignalStrength row={row} />
+
+      <div className="hero-feature-metrics" style={{ display: 'grid', gridTemplateColumns: 'repeat(6, minmax(0, 1fr))', gap: 6, marginTop: 14 }}>
+        <MetricLink href={row.highscoreLink} label="CREATES" value={fmtCount(row.creations)} color={METRIC_COLORS.creations} title="Open sound signal on Highscore" />
+        <MetricLink href={row.highscoreLink} label="VELOCITY" value={`${fmtCount(row.velocity)}/d`} color={METRIC_COLORS.velocity} title="Open velocity on Highscore" />
+        <MetricLink compact href={row.videoLink} label="VIEWS" value={fmtCount(row.metrics.views)} color={METRIC_COLORS.views} title="Open source TikTok video" />
+        <MetricLink compact href={row.videoLink} label="SHARES" value={fmtCount(row.metrics.shares)} color={METRIC_COLORS.shares} title="Open source TikTok video" />
+        <MetricLink compact href={row.videoLink} label="CMNTS" value={fmtCount(row.metrics.comments)} color={METRIC_COLORS.comments} title="Open source TikTok video" />
+        <MetricLink compact href={row.videoLink} label="LIKES" value={fmtCount(row.metrics.likes)} color={METRIC_COLORS.likes} title="Open source TikTok video" />
+      </div>
+
+      <div className="row hero-source-buttons" style={{ gap: 8, marginTop: 12, flexWrap: 'wrap' }}>
+        <SourceButton href={row.highscoreLink} title="Open this sound on Highscore">HIGHSCORE SOUND</SourceButton>
+        <SourceButton href={row.soundLink} title="Open the TikTok sound">TIKTOK SOUND</SourceButton>
+        <SourceButton href={row.videoLink} title="Open the source TikTok video">TOP VIDEO</SourceButton>
+        {row.authorLink && <SourceButton href={row.authorLink} title="Open the creator profile">CREATOR</SourceButton>}
+      </div>
+    </div>
+  )
+}
+
+function TapeRow({ row, i }) {
+  const countries = row.countries?.length ? row.countries.join('/') : 'GLOBAL'
+  return (
+    <div className="hero-tape-row" style={{
+      display: 'grid',
+      gridTemplateColumns: '42px minmax(0, 1fr) 72px 72px 64px',
+      gap: 10,
+      alignItems: 'center',
+      padding: '9px 14px',
+      borderBottom: i < 4 ? '1px solid var(--line-soft)' : 'none',
+      color: 'inherit',
+    }}>
+      <span className="tnum" style={{ color: 'var(--accent-a)', fontWeight: 700 }}>#{row.rank || i + 2}</span>
+      <a href={row.soundLink} target="_blank" rel="noopener noreferrer" title="Open TikTok sound" style={{
+        minWidth: 0,
+        color: 'var(--text)',
+        textDecoration: 'none',
+        overflow: 'hidden',
+        textOverflow: 'ellipsis',
+        whiteSpace: 'nowrap',
+        fontSize: 11,
+      }}>
+        {row.title}
+        <span style={{ color: 'var(--dim)', marginLeft: 6 }}>{countries}</span>
+      </a>
+      <a href={row.highscoreLink} target="_blank" rel="noopener noreferrer" className="tnum" title="Open sound on Highscore" style={{ color: 'var(--accent-a)', textDecoration: 'none', fontWeight: 700, textAlign: 'right' }}>
+        {fmtCount(row.creations)}
+      </a>
+      <a href={row.highscoreLink} target="_blank" rel="noopener noreferrer" className="tnum" title="Open velocity on Highscore" style={{ color: 'var(--accent-c)', textDecoration: 'none', fontWeight: 700, textAlign: 'right' }}>
+        {fmtCount(row.velocity)}/d
+      </a>
+      <a href={row.videoLink} target="_blank" rel="noopener noreferrer" className="tnum" title="Open source TikTok video" style={{ color: 'var(--accent-b)', textDecoration: 'none', fontWeight: 700, textAlign: 'right' }}>
+        {fmtCount(row.metrics.views)}
+      </a>
+    </div>
   )
 }
 
@@ -189,6 +341,8 @@ function HeroFeed() {
   for (let i = 0; i < Math.min(8, events.length); i++) {
     visible.push(events[(head + i) % events.length])
   }
+  const active = visible[0]
+  const tape = visible.slice(1, 6)
 
   return (
     <div style={{
@@ -210,61 +364,22 @@ function HeroFeed() {
         </a>
       </div>
 
-      <div className="col">
-        {visible.map((row, i) => {
-          const countries = row.countries?.length ? row.countries.join(' / ') : 'GLOBAL'
-          return (
-            <div
-              key={`${row.videoLink}-${i}`}
-              className="row hero-feed-row"
-              style={{
-                padding: '9px 14px', gap: 12, alignItems: 'center', flexWrap: 'wrap',
-                borderBottom: i < visible.length - 1 ? '1px solid var(--line-soft)' : 'none',
-                opacity: 1 - i * 0.05,
-                color: 'inherit',
-              }}
-            >
-              <div className="hero-feed-rank" style={{ width: 42, flexShrink: 0 }}>
-                <div className="label" style={{ fontSize: 7, color: 'var(--dim)' }}>RANK</div>
-                <div className="tnum" style={{ color: 'var(--accent-a)', fontWeight: 700, fontSize: 14 }}>#{row.rank || i + 1}</div>
-              </div>
-              <div className="hero-feed-track" style={{ flex: '1 1 170px', minWidth: 0 }}>
-                <a
-                  href={row.soundLink}
-                  target="_blank" rel="noopener noreferrer"
-                  title="Open TikTok sound"
-                  style={{
-                    display: 'block',
-                    color: 'var(--text)',
-                    textDecoration: 'none',
-                    overflow: 'hidden',
-                    textOverflow: 'ellipsis',
-                    whiteSpace: 'nowrap',
-                    fontSize: 12,
-                  }}
-                >
-                  {row.title}
-                  {row.artist && <span style={{ color: 'var(--dim)', marginLeft: 6 }}>· {row.artist}</span>}
-                </a>
-                <div className="row" style={{ gap: 8, alignItems: 'center', marginTop: 4, color: 'var(--dim)', fontSize: 9 }}>
-                  <span>{fmtAgo(row.postedAt)}</span>
-                  <span>{row.author}</span>
-                  <span>{countries}</span>
-                </div>
-              </div>
-              <div className="row hero-sound-metrics" style={{ gap: 6, flexShrink: 0 }}>
-                <MetricLink href={row.highscoreLink} label="CREATES" value={fmtCount(row.creations)} color={METRIC_COLORS.creations} title="Open sound signal on Highscore" />
-                <MetricLink href={row.highscoreLink} label="VELOCITY" value={`${fmtCount(row.velocity)}/d`} color={METRIC_COLORS.velocity} title="Open velocity on Highscore" />
-              </div>
-              <div className="row hero-video-metrics" style={{ gap: 6, flexShrink: 0 }}>
-                <MetricLink compact href={row.videoLink} label="VIEWS" value={fmtCount(row.metrics.views)} color={METRIC_COLORS.views} title="Open source TikTok video" />
-                <MetricLink compact href={row.videoLink} label="SHARES" value={fmtCount(row.metrics.shares)} color={METRIC_COLORS.shares} title="Open source TikTok video" />
-                <MetricLink compact href={row.videoLink} label="CMNTS" value={fmtCount(row.metrics.comments)} color={METRIC_COLORS.comments} title="Open source TikTok video" />
-                <MetricLink compact href={row.videoLink} label="LIKES" value={fmtCount(row.metrics.likes)} color={METRIC_COLORS.likes} title="Open source TikTok video" />
-              </div>
-            </div>
-          )
-        })}
+      <FeaturedSignal row={active} />
+
+      <div>
+        <div className="hero-tape-head" style={{
+          display: 'grid',
+          gridTemplateColumns: '42px minmax(0, 1fr) 72px 72px 64px',
+          gap: 10,
+          padding: '9px 14px',
+          borderBottom: '1px solid var(--line)',
+          background: 'color-mix(in oklab, var(--bg-2) 76%, transparent)',
+        }}>
+          {['RANK', 'SIGNAL TAPE', 'CREATES', 'VELOCITY', 'VIEWS'].map(h => (
+            <span key={h} className="label" style={{ fontSize: 7, textAlign: ['CREATES', 'VELOCITY', 'VIEWS'].includes(h) ? 'right' : 'left' }}>{h}</span>
+          ))}
+        </div>
+        {tape.map((row, i) => <TapeRow key={`${row.videoLink}-${i}`} row={row} i={i} />)}
       </div>
 
       <div style={{
