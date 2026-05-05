@@ -4,11 +4,13 @@ import { Crosshair } from './AppShell'
 import { LiveCounter, Stat, PulseDot } from './DataComponents'
 import catalogData from '../data/catalogs.json'
 
-const SIGNAL_COLORS = {
-  PLAYS:    'var(--accent-b)',
-  LIKES:    'var(--accent-d)',
-  SHARES:   'var(--accent-c)',
-  COMMENTS: 'var(--accent-a)',
+const METRIC_COLORS = {
+  creations: 'var(--accent-a)',
+  velocity: 'var(--accent-c)',
+  views: 'var(--accent-b)',
+  shares: 'var(--accent-c)',
+  comments: 'var(--accent-a)',
+  likes: 'var(--accent-d)',
 }
 
 function fmtCount(n) {
@@ -47,40 +49,45 @@ function soundLink(sound) {
   return `https://www.tiktok.com/search?q=${q}`
 }
 
+function highscoreSoundLink(sound) {
+  if (sound?.sound_id) return `https://tiktok.highscore.page/sounds/${sound.sound_id}`
+  const q = encodeURIComponent(`${sound?.title || ''} ${sound?.artist || sound?.author || ''}`.trim())
+  return `https://tiktok.highscore.page/search?q=${q}`
+}
+
 function buildEvents(sounds) {
   const out = []
   for (const s of sounds) {
     if (!s?.sample_videos?.length) continue
-    for (const v of s.sample_videos) {
-      if (!v?.link) continue
-      const metrics = [
-        ['PLAYS',    v.play_count    || 0],
-        ['LIKES',    v.like_count    || 0],
-        ['SHARES',   v.share_count   || 0],
-        ['COMMENTS', v.comment_count || 0],
-      ].filter(([, n]) => n > 0)
-      if (!metrics.length) continue
-      // Pick the metric whose normalized magnitude is biggest.
-      // (plays scale > likes > shares > comments — normalize to surface the standout signal.)
-      const NORM = { PLAYS: 1, LIKES: 5, SHARES: 80, COMMENTS: 200 }
-      metrics.sort((a, b) => (b[1] * NORM[b[0]]) - (a[1] * NORM[a[0]]))
-      const [signal, value] = metrics[0]
-      out.push({
-        signal,
-        value,
-        title: s.title || 'Unknown',
-        artist: s.artist || s.author || '',
-        author: v.author ? `@${v.author}` : '',
-        videoLink: v.link,
-        soundLink: soundLink(s),
-        authorLink: v.author ? `https://www.tiktok.com/@${v.author}` : null,
-        postedAt: tiktokTime(v.link),
-        playRank: v.play_count || 0,
-      })
-    }
+    const videos = s.sample_videos.filter(v => v?.link)
+    if (!videos.length) continue
+    const topVideo = [...videos].sort((a, b) => (b.play_count || 0) - (a.play_count || 0))[0]
+    out.push({
+      title: s.title || 'Unknown',
+      artist: s.artist || s.author || '',
+      author: topVideo.author ? `@${topVideo.author}` : '',
+      videoLink: topVideo.link,
+      soundLink: soundLink(s),
+      highscoreLink: highscoreSoundLink(s),
+      authorLink: topVideo.author ? `https://www.tiktok.com/@${topVideo.author}` : null,
+      postedAt: tiktokTime(topVideo.link),
+      rank: s.rank,
+      score: s.score || 0,
+      creations: s.ugc_count || s.score_breakdown?.ugc_factor || 0,
+      velocity: s.videos_per_day || s.score_breakdown?.velocity || 0,
+      growthPct: Number(s.videos_per_day_pct ?? s.score_breakdown?.growth_pct ?? 0),
+      category: s.top_category,
+      countries: Array.isArray(s.trending_countries) ? s.trending_countries.slice(0, 3) : [],
+      videoCount: videos.length,
+      metrics: {
+        views: topVideo.play_count || 0,
+        likes: topVideo.like_count || 0,
+        shares: topVideo.share_count || 0,
+        comments: topVideo.comment_count || 0,
+      },
+    })
   }
-  // Highest-engagement first, then de-dupe consecutive same-sound entries
-  out.sort((a, b) => b.playRank - a.playRank)
+  out.sort((a, b) => (b.score || b.velocity || b.metrics.views) - (a.score || a.velocity || a.metrics.views))
   const seen = new Set()
   return out.filter(e => {
     if (seen.has(e.title)) return false
@@ -90,27 +97,65 @@ function buildEvents(sounds) {
 }
 
 const FALLBACK_EVENTS = [
-  { signal: 'PLAYS', value: 33100000, title: 'Se Eu Brotar no Baile Hoje', artist: 'gordinhobolad0', author: '@artthuroficial_',
+  { title: 'Se Eu Brotar no Baile Hoje', artist: 'Mar 2026', author: '@artthuroficial_',
     videoLink: 'https://www.tiktok.com/@artthuroficial_/video/7630280983421521173',
     authorLink: 'https://www.tiktok.com/@artthuroficial_',
     soundLink: 'https://www.tiktok.com/search?q=Se%20Eu%20Brotar%20no%20Baile%20Hoje',
-    postedAt: tiktokTime('https://www.tiktok.com/@artthuroficial_/video/7630280983421521173') },
-  { signal: 'PLAYS', value: 9400000, title: 'Bum Bum Bum - Pegada Diferente', artist: '_william_acosta', author: '@serikkan_r',
-    videoLink: 'https://www.tiktok.com/search?q=Bum%20Bum%20Bum%20Pegada%20Diferente',
+    highscoreLink: 'https://tiktok.highscore.page/sounds/7619693396002622228',
+    postedAt: tiktokTime('https://www.tiktok.com/@artthuroficial_/video/7630280983421521173'),
+    rank: 1, score: 984, creations: 433290, velocity: 32804, growthPct: 8.19, countries: ['BR', 'PE', 'US'], videoCount: 5,
+    metrics: { views: 33100000, likes: 2600000, shares: 73900, comments: 7535 } },
+  { title: 'Bum Bum Bum - Pegada Diferente', artist: '_william_acosta', author: '@serikkan_r',
+    videoLink: 'https://www.tiktok.com/@serikkan_r/video/7607833975620685076',
     authorLink: 'https://www.tiktok.com/@serikkan_r',
     soundLink: 'https://www.tiktok.com/search?q=Bum%20Bum%20Bum%20Pegada%20Diferente',
-    postedAt: null },
-  { signal: 'LIKES', value: 527000, title: 'Fast Fast', artist: '031choppa, Al Xapo', author: '@tarryn_abigail',
+    highscoreLink: 'https://tiktok.highscore.page/sounds/7362712172960779014',
+    postedAt: tiktokTime('https://www.tiktok.com/@serikkan_r/video/7607833975620685076'),
+    rank: 2, score: 981, creations: 544535, velocity: 22505, growthPct: 4.31, countries: ['PH', 'US', 'CO'], videoCount: 5,
+    metrics: { views: 9400000, likes: 1600000, shares: 166000, comments: 8440 } },
+  { title: 'Fast Fast', artist: '031choppa, Al Xapo', author: '@tarryn_abigail',
     videoLink: 'https://www.tiktok.com/search?q=Fast%20Fast%20031choppa',
     authorLink: 'https://www.tiktok.com/@tarryn_abigail',
     soundLink: 'https://www.tiktok.com/search?q=Fast%20Fast%20031choppa',
-    postedAt: null },
-  { signal: 'PLAYS', value: 1200000, title: 'Mink', artist: 'RosarioRay', author: '@rosarioray',
+    highscoreLink: 'https://tiktok.highscore.page/search?q=Fast%20Fast%20031choppa',
+    postedAt: null, rank: 3, score: 940, creations: 88100, velocity: 9200, growthPct: 12.4, countries: ['ZA', 'UK', 'US'], videoCount: 4,
+    metrics: { views: 12400000, likes: 1420000, shares: 128000, comments: 21300 } },
+  { title: 'Mink', artist: 'RosarioRay', author: '@rosarioray',
     videoLink: 'https://www.tiktok.com/@rosarioray',
     authorLink: 'https://www.tiktok.com/@rosarioray',
     soundLink: 'https://www.tiktok.com/search?q=Mink%20RosarioRay',
-    postedAt: null },
+    highscoreLink: 'https://tiktok.highscore.page/search?q=Mink%20RosarioRay',
+    postedAt: null, rank: 4, score: 902, creations: 31700, velocity: 4800, growthPct: 9.7, countries: ['US', 'CA', 'UK'], videoCount: 3,
+    metrics: { views: 3800000, likes: 721000, shares: 47400, comments: 9200 } },
 ]
+
+function MetricLink({ href, label, value, color, title, compact = false }) {
+  return (
+    <a
+      href={href}
+      target="_blank" rel="noopener noreferrer"
+      title={title || `Open source for ${label}`}
+      onClick={(e) => e.stopPropagation()}
+      style={{
+        display: 'inline-flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        minWidth: compact ? 54 : 66,
+        minHeight: 34,
+        padding: '4px 7px',
+        border: `1px solid color-mix(in oklab, ${color} 58%, var(--line))`,
+        background: `color-mix(in oklab, ${color} 10%, transparent)`,
+        color: 'inherit',
+        textDecoration: 'none',
+      }}
+    >
+      <span className="label" style={{ fontSize: 7, letterSpacing: '0.12em', color }}>{label}</span>
+      <span className="tnum" style={{ marginTop: 2, color: 'var(--text)', fontWeight: 700, fontSize: compact ? 10 : 11, lineHeight: 1 }}>
+        {value}
+      </span>
+    </a>
+  )
+}
 
 function HeroFeed() {
   const [events, setEvents] = useState(FALLBACK_EVENTS)
@@ -153,7 +198,7 @@ function HeroFeed() {
     }}>
       <div className="row" style={{ padding: '12px 14px', borderBottom: '1px solid var(--line)', gap: 10, alignItems: 'center' }}>
         <PulseDot color="var(--accent-a)" size={6} />
-        <span className="label" style={{ color: 'var(--text)' }}>TOP TIKTOK VIDEOS · TRACKED CATALOG</span>
+        <span className="label" style={{ color: 'var(--text)' }}>TIKTOK SIGNALS · RAW SOURCE DATA</span>
         <span style={{ flex: 1 }} />
         <a
           href="https://tiktok.highscore.page"
@@ -167,49 +212,57 @@ function HeroFeed() {
 
       <div className="col">
         {visible.map((row, i) => {
-          const color = SIGNAL_COLORS[row.signal] || 'var(--accent-a)'
+          const countries = row.countries?.length ? row.countries.join(' / ') : 'GLOBAL'
           return (
-            <a
+            <div
               key={`${row.videoLink}-${i}`}
-              href={row.videoLink}
-              target="_blank" rel="noopener noreferrer"
               className="row hero-feed-row"
-              title={`Open on TikTok · ${row.signal.toLowerCase()}: ${row.value.toLocaleString()}`}
               style={{
-                padding: '8px 14px', gap: 10, alignItems: 'center',
+                padding: '9px 14px', gap: 12, alignItems: 'center', flexWrap: 'wrap',
                 borderBottom: i < visible.length - 1 ? '1px solid var(--line-soft)' : 'none',
                 opacity: 1 - i * 0.05,
-                color: 'inherit', textDecoration: 'none',
-                transition: 'background 140ms',
+                color: 'inherit',
               }}
             >
-              <span className="tnum hero-feed-ts" style={{ color: 'var(--dim)', fontSize: 10, width: 64 }}>
-                {fmtAgo(row.postedAt)}
-              </span>
-              <span style={{
-                fontSize: 9, padding: '2px 6px', letterSpacing: '0.1em', fontWeight: 700,
-                background: `color-mix(in oklab, ${color} 22%, transparent)`,
-                color, border: `1px solid ${color}`,
-                minWidth: 64, textAlign: 'center',
-              }}>{row.signal}</span>
-              <span style={{
-                color: 'var(--text)', flex: 1, minWidth: 0,
-                overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
-              }}>
-                {row.title}
-                {row.artist && <span style={{ color: 'var(--dim)', marginLeft: 6 }}>· {row.artist}</span>}
-              </span>
-              <span
-                className="hero-feed-via"
-                style={{
-                  color: 'var(--dim)', fontSize: 10, maxWidth: 120,
-                  overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
-                }}
-              >{row.author}</span>
-              <span className="tnum hero-feed-amt" style={{
-                color, fontWeight: 700, width: 78, textAlign: 'right',
-              }}>{fmtCount(row.value)}</span>
-            </a>
+              <div className="hero-feed-rank" style={{ width: 42, flexShrink: 0 }}>
+                <div className="label" style={{ fontSize: 7, color: 'var(--dim)' }}>RANK</div>
+                <div className="tnum" style={{ color: 'var(--accent-a)', fontWeight: 700, fontSize: 14 }}>#{row.rank || i + 1}</div>
+              </div>
+              <div className="hero-feed-track" style={{ flex: '1 1 170px', minWidth: 0 }}>
+                <a
+                  href={row.soundLink}
+                  target="_blank" rel="noopener noreferrer"
+                  title="Open TikTok sound"
+                  style={{
+                    display: 'block',
+                    color: 'var(--text)',
+                    textDecoration: 'none',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                    whiteSpace: 'nowrap',
+                    fontSize: 12,
+                  }}
+                >
+                  {row.title}
+                  {row.artist && <span style={{ color: 'var(--dim)', marginLeft: 6 }}>· {row.artist}</span>}
+                </a>
+                <div className="row" style={{ gap: 8, alignItems: 'center', marginTop: 4, color: 'var(--dim)', fontSize: 9 }}>
+                  <span>{fmtAgo(row.postedAt)}</span>
+                  <span>{row.author}</span>
+                  <span>{countries}</span>
+                </div>
+              </div>
+              <div className="row hero-sound-metrics" style={{ gap: 6, flexShrink: 0 }}>
+                <MetricLink href={row.highscoreLink} label="CREATES" value={fmtCount(row.creations)} color={METRIC_COLORS.creations} title="Open sound signal on Highscore" />
+                <MetricLink href={row.highscoreLink} label="VELOCITY" value={`${fmtCount(row.velocity)}/d`} color={METRIC_COLORS.velocity} title="Open velocity on Highscore" />
+              </div>
+              <div className="row hero-video-metrics" style={{ gap: 6, flexShrink: 0 }}>
+                <MetricLink compact href={row.videoLink} label="VIEWS" value={fmtCount(row.metrics.views)} color={METRIC_COLORS.views} title="Open source TikTok video" />
+                <MetricLink compact href={row.videoLink} label="SHARES" value={fmtCount(row.metrics.shares)} color={METRIC_COLORS.shares} title="Open source TikTok video" />
+                <MetricLink compact href={row.videoLink} label="CMNTS" value={fmtCount(row.metrics.comments)} color={METRIC_COLORS.comments} title="Open source TikTok video" />
+                <MetricLink compact href={row.videoLink} label="LIKES" value={fmtCount(row.metrics.likes)} color={METRIC_COLORS.likes} title="Open source TikTok video" />
+              </div>
+            </div>
           )
         })}
       </div>
@@ -219,7 +272,7 @@ function HeroFeed() {
         fontSize: 9, letterSpacing: '0.18em', color: 'var(--dim)',
         display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 10,
       }}>
-        <span>REAL VIDEO METRICS · CLICK ANY ROW</span>
+        <span>SOUND METRICS → HIGHSCORE · VIDEO METRICS → TIKTOK</span>
         <span style={{ color: 'var(--accent-a)', display: 'inline-flex', alignItems: 'center', gap: 6 }}>
           {fetchedAt
             ? <>SYNCED {fmtAgo(fetchedAt).replace(' ago', '')} ●</>

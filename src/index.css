@@ -221,10 +221,9 @@ html { scroll-behavior: smooth; }
   animation: section-flash 1.4s ease-out;
 }
 
-a.hero-feed-row:hover,
-a.hero-feed-row:focus-visible {
+.hero-feed-row:hover,
+.hero-feed-row:focus-within {
   background: color-mix(in oklab, var(--bg) 88%, var(--accent-a));
-  outline: none;
 }
 a[href]:focus-visible,
 button:focus-visible,
@@ -364,9 +363,14 @@ a.cat-row:focus-visible {
     min-height: 300px !important;
   }
   .hero-feed-row { padding: 7px 10px !important; gap: 6px !important; }
-  .hero-feed-via { display: none !important; }
-  .hero-feed-ts  { width: 56px !important; font-size: 9px !important; }
-  .hero-feed-amt { width: 56px !important; }
+  .hero-feed-rank { display: none !important; }
+  .hero-feed-track { flex-basis: 100% !important; }
+  .hero-sound-metrics, .hero-video-metrics {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    width: 100%;
+  }
+  .hero-video-metrics a:nth-child(n + 3) { display: none !important; }
 }
 
 @media (max-width: 640px) {
