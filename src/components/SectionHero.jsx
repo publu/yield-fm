@@ -4,108 +4,118 @@ import { Crosshair } from './AppShell'
 import { LiveCounter, Stat, PulseDot } from './DataComponents'
 import catalogData from '../data/catalogs.json'
 
-function tsNow() {
-  const d = new Date()
-  const f = (n) => String(n).padStart(2, '0')
-  return `${f(d.getHours())}:${f(d.getMinutes())}:${f(d.getSeconds())}`
-}
-function tsAgo(s) {
-  const d = new Date(Date.now() - s * 1000)
-  const f = (n) => String(n).padStart(2, '0')
-  return `${f(d.getHours())}:${f(d.getMinutes())}:${f(d.getSeconds())}`
-}
-
 const SIGNAL_COLORS = {
-  POST:   'var(--accent-a)',
-  VIEWS:  'var(--accent-b)',
-  LIKES:  'var(--accent-d)',
-  SHARE:  'var(--accent-c)',
-  SPIKE:  'var(--accent-c)',
-  REGION: 'var(--accent-b)',
+  PLAYS:    'var(--accent-b)',
+  LIKES:    'var(--accent-d)',
+  SHARES:   'var(--accent-c)',
+  COMMENTS: 'var(--accent-a)',
 }
 
 function fmtCount(n) {
   if (n >= 1e6) return `${(n / 1e6).toFixed(n >= 1e7 ? 1 : 2)}M`
   if (n >= 1e3) return `${(n / 1e3).toFixed(n >= 1e4 ? 0 : 1)}K`
-  return String(Math.max(1, Math.floor(n)))
+  return String(Math.max(0, Math.floor(n)))
 }
 
-function pickFrom(arr) {
-  return arr[Math.floor(Math.random() * arr.length)]
+function fmtAgo(date) {
+  if (!date) return '— —'
+  const sec = Math.max(0, (Date.now() - date.getTime()) / 1000)
+  if (sec < 60) return `${Math.floor(sec)}s ago`
+  if (sec < 3600) return `${Math.floor(sec / 60)}m ago`
+  if (sec < 86400) return `${Math.floor(sec / 3600)}h ago`
+  if (sec < 86400 * 30) return `${Math.floor(sec / 86400)}d ago`
+  if (sec < 86400 * 365) return `${Math.floor(sec / 86400 / 30)}mo ago`
+  return `${Math.floor(sec / 86400 / 365)}y ago`
 }
 
-function buildSignal(sound) {
-  const samples = sound.sample_videos?.length ? sound.sample_videos : []
-  const vid = samples.length ? pickFrom(samples) : null
-  const countries = sound.trending_countries?.length ? sound.trending_countries.slice(0, 8) : ['US']
+// TikTok video IDs are 64-bit snowflakes. Top 32 bits = unix-seconds posted-at.
+function tiktokTime(link) {
+  try {
+    const m = /\/video\/(\d{15,21})/.exec(link || '')
+    if (!m) return null
+    const id = BigInt(m[1])
+    const ts = Number(id >> 32n)
+    if (ts < 1_400_000_000 || ts > Date.now() / 1000 + 86400) return null
+    return new Date(ts * 1000)
+  } catch { return null }
+}
 
-  const types = ['POST', 'POST']
-  if (vid?.play_count) types.push('VIEWS', 'VIEWS')
-  if (vid?.like_count) types.push('LIKES')
-  if (vid?.share_count) types.push('SHARE')
-  if (sound.videos_per_day_pct > 0) types.push('SPIKE')
-  if (countries.length > 1) types.push('REGION')
+function soundLink(sound) {
+  if (sound.tiktok_link) return sound.tiktok_link
+  if (sound.sound_id) return `https://www.tiktok.com/music/-${sound.sound_id}`
+  const q = encodeURIComponent(`${sound.title || ''} ${sound.artist || sound.author || ''}`.trim())
+  return `https://www.tiktok.com/search?q=${q}`
+}
 
-  const signal = pickFrom(types)
-  let value = ''
-  let via = vid?.author ? `@${vid.author}` : pickFrom(countries)
-
-  switch (signal) {
-    case 'POST': {
-      const perMin = Math.max(1, (sound.videos_per_day || 60) / 1440)
-      value = `+${fmtCount(Math.max(1, Math.floor(perMin * (0.4 + Math.random() * 1.6))))}`
-      break
-    }
-    case 'VIEWS': {
-      const base = vid?.play_count || 1e5
-      value = `+${fmtCount(Math.floor(base * (0.0008 + Math.random() * 0.012)))}`
-      break
-    }
-    case 'LIKES': {
-      const base = vid?.like_count || 1e4
-      value = `+${fmtCount(Math.floor(base * (0.002 + Math.random() * 0.014)))}`
-      break
-    }
-    case 'SHARE': {
-      const base = vid?.share_count || 800
-      value = `+${fmtCount(Math.floor(base * (0.006 + Math.random() * 0.025)))}`
-      break
-    }
-    case 'SPIKE': {
-      const pct = sound.videos_per_day_pct || 5
-      value = `+${(pct * (0.4 + Math.random() * 0.7)).toFixed(2)}%`
-      via = `${sound.top_category || 'trend'}`.replace(/_/g, ' ')
-      break
-    }
-    case 'REGION': {
-      via = pickFrom(countries)
-      value = `${countries.length} mkt${countries.length === 1 ? '' : 's'}`
-      break
+function buildEvents(sounds) {
+  const out = []
+  for (const s of sounds) {
+    if (!s?.sample_videos?.length) continue
+    for (const v of s.sample_videos) {
+      if (!v?.link) continue
+      const metrics = [
+        ['PLAYS',    v.play_count    || 0],
+        ['LIKES',    v.like_count    || 0],
+        ['SHARES',   v.share_count   || 0],
+        ['COMMENTS', v.comment_count || 0],
+      ].filter(([, n]) => n > 0)
+      if (!metrics.length) continue
+      // Pick the metric whose normalized magnitude is biggest.
+      // (plays scale > likes > shares > comments — normalize to surface the standout signal.)
+      const NORM = { PLAYS: 1, LIKES: 5, SHARES: 80, COMMENTS: 200 }
+      metrics.sort((a, b) => (b[1] * NORM[b[0]]) - (a[1] * NORM[a[0]]))
+      const [signal, value] = metrics[0]
+      out.push({
+        signal,
+        value,
+        title: s.title || 'Unknown',
+        artist: s.artist || s.author || '',
+        author: v.author ? `@${v.author}` : '',
+        videoLink: v.link,
+        soundLink: soundLink(s),
+        authorLink: v.author ? `https://www.tiktok.com/@${v.author}` : null,
+        postedAt: tiktokTime(v.link),
+        playRank: v.play_count || 0,
+      })
     }
   }
-
-  return {
-    signal,
-    title: sound.title || 'Unknown',
-    artist: sound.artist || sound.author || '',
-    via,
-    value,
-  }
+  // Highest-engagement first, then de-dupe consecutive same-sound entries
+  out.sort((a, b) => b.playRank - a.playRank)
+  const seen = new Set()
+  return out.filter(e => {
+    if (seen.has(e.title)) return false
+    seen.add(e.title)
+    return true
+  })
 }
 
-const FALLBACK_SOUNDS = [
-  { title: "Bum Bum Bum - Pegada Diferente", artist: "_william_acosta", videos_per_day: 29453, videos_per_day_pct: 6.32, trending_countries: ['BR', 'US', 'PH', 'MX'], top_category: 'dance_performance', sample_videos: [{ author: 'serikkan_r', play_count: 9400000, like_count: 1600000, share_count: 166000 }] },
-  { title: "Fast Fast", artist: "031choppa, Al Xapo", videos_per_day: 16738, videos_per_day_pct: 15.92, trending_countries: ['ZA', 'NG', 'KE'], top_category: 'selfie_vlog', sample_videos: [{ author: 'tarryn_abigail', play_count: 2800000, like_count: 527000, share_count: 12600 }] },
-  { title: "Se Eu Brotar no Baile Hoje", artist: "gordinhobolad0", videos_per_day: 37021, videos_per_day_pct: 11.41, trending_countries: ['BR', 'PE', 'AR'], top_category: 'dance_performance', sample_videos: [{ author: 'artthuroficial_', play_count: 33100000, like_count: 2600000, share_count: 73900 }] },
-  { title: "Mink", artist: "RosarioRay", videos_per_day: 5400, videos_per_day_pct: 8.22, trending_countries: ['US', 'PH', 'ID'], top_category: 'fashion_outfit', sample_videos: [{ author: 'rosarioray', play_count: 1200000, like_count: 240000, share_count: 8400 }] },
-  { title: "Inspiring Triumphant Trailer", artist: "Veaceslav Draganov", videos_per_day: 3100, videos_per_day_pct: 4.18, trending_countries: ['US', 'UK', 'DE'], top_category: 'gaming_screen', sample_videos: [{ author: 'cinematicfx', play_count: 540000, like_count: 86000, share_count: 4200 }] },
+const FALLBACK_EVENTS = [
+  { signal: 'PLAYS', value: 33100000, title: 'Se Eu Brotar no Baile Hoje', artist: 'gordinhobolad0', author: '@artthuroficial_',
+    videoLink: 'https://www.tiktok.com/@artthuroficial_/video/7630280983421521173',
+    authorLink: 'https://www.tiktok.com/@artthuroficial_',
+    soundLink: 'https://www.tiktok.com/search?q=Se%20Eu%20Brotar%20no%20Baile%20Hoje',
+    postedAt: tiktokTime('https://www.tiktok.com/@artthuroficial_/video/7630280983421521173') },
+  { signal: 'PLAYS', value: 9400000, title: 'Bum Bum Bum - Pegada Diferente', artist: '_william_acosta', author: '@serikkan_r',
+    videoLink: 'https://www.tiktok.com/search?q=Bum%20Bum%20Bum%20Pegada%20Diferente',
+    authorLink: 'https://www.tiktok.com/@serikkan_r',
+    soundLink: 'https://www.tiktok.com/search?q=Bum%20Bum%20Bum%20Pegada%20Diferente',
+    postedAt: null },
+  { signal: 'LIKES', value: 527000, title: 'Fast Fast', artist: '031choppa, Al Xapo', author: '@tarryn_abigail',
+    videoLink: 'https://www.tiktok.com/search?q=Fast%20Fast%20031choppa',
+    authorLink: 'https://www.tiktok.com/@tarryn_abigail',
+    soundLink: 'https://www.tiktok.com/search?q=Fast%20Fast%20031choppa',
+    postedAt: null },
+  { signal: 'PLAYS', value: 1200000, title: 'Mink', artist: 'RosarioRay', author: '@rosarioray',
+    videoLink: 'https://www.tiktok.com/@rosarioray',
+    authorLink: 'https://www.tiktok.com/@rosarioray',
+    soundLink: 'https://www.tiktok.com/search?q=Mink%20RosarioRay',
+    postedAt: null },
 ]
 
 function HeroFeed() {
-  const [pool, setPool] = useState(FALLBACK_SOUNDS)
-  const [feed, setFeed] = useState(() => FALLBACK_SOUNDS.slice(0, 8).map((s, i) => ({
-    ...buildSignal(s), ts: tsAgo(i * 1.4),
-  })))
+  const [events, setEvents] = useState(FALLBACK_EVENTS)
+  const [head, setHead] = useState(0)
+  const [fetchedAt, setFetchedAt] = useState(null)
 
   useEffect(() => {
     let cancelled = false
@@ -113,21 +123,27 @@ function HeroFeed() {
       .then(r => r.ok ? r.json() : null)
       .then(data => {
         if (cancelled || !data?.sounds?.length) return
-        setPool(data.sounds)
+        const built = buildEvents(data.sounds)
+        if (built.length) {
+          setEvents(built)
+          setFetchedAt(new Date())
+        }
       })
       .catch(() => {})
     return () => { cancelled = true }
   }, [])
 
+  // Slowly cycle the head so the feed feels alive without faking new data.
   useEffect(() => {
-    const id = setInterval(() => {
-      setFeed((f) => {
-        const sound = pool[Math.floor(Math.random() * pool.length)]
-        return [{ ...buildSignal(sound), ts: tsNow() }, ...f].slice(0, 8)
-      })
-    }, 1200)
+    if (events.length <= 8) return
+    const id = setInterval(() => setHead(h => (h + 1) % events.length), 2400)
     return () => clearInterval(id)
-  }, [pool])
+  }, [events.length])
+
+  const visible = []
+  for (let i = 0; i < Math.min(8, events.length); i++) {
+    visible.push(events[(head + i) % events.length])
+  }
 
   return (
     <div style={{
@@ -137,47 +153,78 @@ function HeroFeed() {
     }}>
       <div className="row" style={{ padding: '12px 14px', borderBottom: '1px solid var(--line)', gap: 10, alignItems: 'center' }}>
         <PulseDot color="var(--accent-a)" size={6} />
-        <span className="label" style={{ color: 'var(--text)' }}>LIVE · TIKTOK SIGNALS · TRACKED CATALOG</span>
+        <span className="label" style={{ color: 'var(--text)' }}>TOP TIKTOK VIDEOS · TRACKED CATALOG</span>
         <span style={{ flex: 1 }} />
-        <span style={{ color: 'var(--dim)', fontSize: 9, letterSpacing: '0.2em' }}>Δ / EVENT</span>
+        <a
+          href="https://tiktok.highscore.page"
+          target="_blank" rel="noopener noreferrer"
+          style={{ color: 'var(--dim)', fontSize: 9, letterSpacing: '0.2em', textDecoration: 'none' }}
+          title="Open the highscore index"
+        >
+          INDEX ↗
+        </a>
       </div>
 
       <div className="col">
-        {feed.map((row, i) => (
-          <div key={`${row.ts}-${i}`} className="row hero-feed-row" style={{
-            padding: '8px 14px', gap: 10, alignItems: 'center',
-            borderBottom: i < feed.length - 1 ? '1px solid var(--line-soft)' : 'none',
-            opacity: 1 - i * 0.06,
-          }}>
-            <span className="tnum hero-feed-ts" style={{ color: 'var(--dim)', fontSize: 10, width: 64 }}>{row.ts}</span>
-            <span style={{
-              fontSize: 9, padding: '2px 6px', letterSpacing: '0.1em', fontWeight: 700,
-              background: `color-mix(in oklab, ${SIGNAL_COLORS[row.signal]} 22%, transparent)`,
-              color: SIGNAL_COLORS[row.signal],
-              border: `1px solid ${SIGNAL_COLORS[row.signal]}`,
-              minWidth: 52, textAlign: 'center',
-            }}>{row.signal}</span>
-            <span style={{ color: 'var(--text)', flex: 1, minWidth: 0,
-              overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
-            }}>
-              {row.title}
-              {row.artist && <span style={{ color: 'var(--dim)', marginLeft: 6 }}>· {row.artist}</span>}
-            </span>
-            <span className="hero-feed-via" style={{ color: 'var(--dim)', fontSize: 10, maxWidth: 110, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{row.via}</span>
-            <span className="tnum hero-feed-amt" style={{
-              color: SIGNAL_COLORS[row.signal] || 'var(--accent-a)', fontWeight: 700, width: 72, textAlign: 'right',
-            }}>{row.value}</span>
-          </div>
-        ))}
+        {visible.map((row, i) => {
+          const color = SIGNAL_COLORS[row.signal] || 'var(--accent-a)'
+          return (
+            <a
+              key={`${row.videoLink}-${i}`}
+              href={row.videoLink}
+              target="_blank" rel="noopener noreferrer"
+              className="row hero-feed-row"
+              title={`Open on TikTok · ${row.signal.toLowerCase()}: ${row.value.toLocaleString()}`}
+              style={{
+                padding: '8px 14px', gap: 10, alignItems: 'center',
+                borderBottom: i < visible.length - 1 ? '1px solid var(--line-soft)' : 'none',
+                opacity: 1 - i * 0.05,
+                color: 'inherit', textDecoration: 'none',
+                transition: 'background 140ms',
+              }}
+            >
+              <span className="tnum hero-feed-ts" style={{ color: 'var(--dim)', fontSize: 10, width: 64 }}>
+                {fmtAgo(row.postedAt)}
+              </span>
+              <span style={{
+                fontSize: 9, padding: '2px 6px', letterSpacing: '0.1em', fontWeight: 700,
+                background: `color-mix(in oklab, ${color} 22%, transparent)`,
+                color, border: `1px solid ${color}`,
+                minWidth: 64, textAlign: 'center',
+              }}>{row.signal}</span>
+              <span style={{
+                color: 'var(--text)', flex: 1, minWidth: 0,
+                overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
+              }}>
+                {row.title}
+                {row.artist && <span style={{ color: 'var(--dim)', marginLeft: 6 }}>· {row.artist}</span>}
+              </span>
+              <span
+                className="hero-feed-via"
+                style={{
+                  color: 'var(--dim)', fontSize: 10, maxWidth: 120,
+                  overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
+                }}
+              >{row.author}</span>
+              <span className="tnum hero-feed-amt" style={{
+                color, fontWeight: 700, width: 78, textAlign: 'right',
+              }}>{fmtCount(row.value)}</span>
+            </a>
+          )
+        })}
       </div>
 
       <div style={{
         padding: '10px 14px', borderTop: '1px solid var(--line)',
         fontSize: 9, letterSpacing: '0.18em', color: 'var(--dim)',
-        display: 'flex', justifyContent: 'space-between',
+        display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 10,
       }}>
-        <span>POST → VIEW → LIKE → SHARE → CHART</span>
-        <span style={{ color: 'var(--accent-a)' }}>INDEXING ●</span>
+        <span>REAL VIDEO METRICS · CLICK ANY ROW</span>
+        <span style={{ color: 'var(--accent-a)', display: 'inline-flex', alignItems: 'center', gap: 6 }}>
+          {fetchedAt
+            ? <>SYNCED {fmtAgo(fetchedAt).replace(' ago', '')} ●</>
+            : <>FETCHING ●</>}
+        </span>
       </div>
     </div>
   )
@@ -328,6 +375,15 @@ export function Hero({ mode, intensity }) {
               delta={catalogData.stats.avgYieldDelta}
               sparkSeed={5}
               color="var(--accent-c)"
+              hint="How is this calculated?"
+              onClick={() => {
+                const el = document.getElementById('yield-methodology')
+                if (!el) return
+                const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+                el.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' })
+                el.setAttribute('data-flash', '1')
+                setTimeout(() => el.removeAttribute('data-flash'), 1400)
+              }}
             />
             <Stat
               label="CATALOGS TRACKED"

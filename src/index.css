@@ -202,6 +202,35 @@ button { font-family: inherit; cursor: pointer; }
   to   { stroke-dashoffset: 0; }
 }
 
+.stat-clickable:hover .tnum,
+.stat-clickable:focus-visible .tnum {
+  color: var(--accent-c);
+}
+.stat-clickable:focus-visible {
+  outline: 1px dashed var(--accent-c);
+  outline-offset: 4px;
+}
+
+@keyframes section-flash {
+  0%   { box-shadow: inset 0 0 0 0 transparent; background-color: var(--bg); }
+  20%  { box-shadow: inset 0 0 0 2px var(--accent-c); background-color: color-mix(in oklab, var(--accent-c) 10%, var(--bg)); }
+  100% { box-shadow: inset 0 0 0 0 transparent; background-color: var(--bg); }
+}
+[data-flash="1"] {
+  animation: section-flash 1.4s ease-out;
+}
+
+a.hero-feed-row:hover,
+a.hero-feed-row:focus-visible {
+  background: color-mix(in oklab, var(--bg) 88%, var(--accent-a));
+  outline: none;
+}
+a.cat-row:hover,
+a.cat-row:focus-visible {
+  background: color-mix(in oklab, var(--bg) 90%, var(--accent-a));
+  outline: none;
+}
+
 /* ────────────────────────────────────────────────
    Responsive
    ──────────────────────────────────────────────── */

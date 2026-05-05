@@ -181,6 +181,235 @@ export function FiveStreams() {
   )
 }
 
+export function YieldMethodology() {
+  const stats = catalogData.stats
+  const cohortN = 1479
+  const meanY = stats.avgYieldTTM
+  const medianY = 15.69
+  const lorMean = 15.98
+  const lorMedian = 13.64
+  const conservativeY = stats.avgYieldClosedComps
+
+  // Computed from royalty-exchange/catalog.json closed comps with LTM > $1,000.
+  const buckets = [
+    { range: '0-5%',    pct: 1,  n: 22  },
+    { range: '5-10%',   pct: 15, n: 227 },
+    { range: '10-15%',  pct: 29, n: 436 },
+    { range: '15-25%',  pct: 33, n: 482 },
+    { range: '25-50%',  pct: 18, n: 259 },
+    { range: '50-100%', pct: 3,  n: 42  },
+    { range: '>100%',   pct: 1,  n: 11  },
+  ]
+  const maxPct = Math.max(...buckets.map(b => b.pct))
+
+  return (
+    <section
+      id="yield-methodology"
+      style={{
+        scrollMarginTop: 80,
+        borderBottom: '1px solid var(--line)',
+        padding: 'clamp(72px, 8vw, 110px) 0',
+        background: 'var(--bg)',
+      }}
+    >
+      <div className="sec-pad" style={{ maxWidth: 1480, margin: '0 auto', padding: '0 32px' }}>
+        <SectionHead num="03" kicker="METHODOLOGY"
+          title="The 19.82% number, taken apart."
+          sub="The hero card averages implied yield across closed comps from royaltyexchange.com. This is real, but it's a trailing snapshot, not a forward promise. Here's the math, the cohort, and where the number comes from."
+        />
+
+        <div style={{
+          display: 'grid', gap: 1, marginBottom: 24,
+          gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
+          background: 'var(--line)', border: '1px solid var(--line)',
+        }}>
+          <div style={{ background: 'var(--bg-2)', padding: '22px 24px' }}>
+            <div className="label" style={{ color: 'var(--accent-c)' }}>FORMULA</div>
+            <div style={{
+              marginTop: 12, fontFamily: 'var(--mono)', fontSize: 14,
+              lineHeight: 1.7, color: 'var(--text)',
+            }}>
+              <span style={{ color: 'var(--dim)' }}>implied_yield = </span>
+              <br />
+              <span style={{ color: 'var(--accent-a)' }}>ltm_royalties</span>
+              <span style={{ color: 'var(--dim)' }}> ÷ </span>
+              <span style={{ color: 'var(--accent-b)' }}>deal_price</span>
+              <span style={{ color: 'var(--dim)' }}> × 100</span>
+            </div>
+            <div style={{ marginTop: 12, color: 'var(--sub)', fontSize: 12, lineHeight: 1.6 }}>
+              LTM = trailing 12 months of royalties for the asset, as reported at sale.
+              Deal price = USD-converted clearing price.
+            </div>
+          </div>
+          <div style={{ background: 'var(--bg-2)', padding: '22px 24px' }}>
+            <div className="label" style={{ color: 'var(--accent-c)' }}>COHORT</div>
+            <div className="tnum" style={{
+              marginTop: 8, fontFamily: 'var(--face-data)', fontWeight: 700,
+              fontSize: 32, color: 'var(--text)', lineHeight: 1,
+            }}>{cohortN.toLocaleString()}</div>
+            <div style={{ marginTop: 6, color: 'var(--sub)', fontSize: 12, lineHeight: 1.6 }}>
+              closed comps with state=<span style={{ fontFamily: 'var(--mono)', color: 'var(--text)' }}>filled</span>{' '}
+              and LTM royalties &gt; <span className="tnum">$1,000</span> (drops empty / placeholder rows).
+            </div>
+          </div>
+          <div style={{ background: 'var(--bg-2)', padding: '22px 24px' }}>
+            <div className="label" style={{ color: 'var(--accent-c)' }}>RESULT</div>
+            <div className="row" style={{ alignItems: 'baseline', gap: 14, marginTop: 8 }}>
+              <span className="tnum" style={{
+                fontFamily: 'var(--face-data)', fontWeight: 700, fontSize: 32,
+                color: 'var(--accent-c)', lineHeight: 1,
+              }}>{meanY.toFixed(2)}%</span>
+              <span className="label" style={{ color: 'var(--dim)' }}>MEAN</span>
+            </div>
+            <div className="row" style={{ alignItems: 'baseline', gap: 14, marginTop: 8 }}>
+              <span className="tnum" style={{
+                fontFamily: 'var(--face-data)', fontWeight: 700, fontSize: 22,
+                color: 'var(--text)', lineHeight: 1,
+              }}>{medianY.toFixed(2)}%</span>
+              <span className="label" style={{ color: 'var(--dim)' }}>MEDIAN</span>
+            </div>
+            <div style={{ marginTop: 10, color: 'var(--sub)', fontSize: 12, lineHeight: 1.6 }}>
+              Right-skewed distribution. Mean is pulled up by short-term partial deals.
+            </div>
+          </div>
+        </div>
+
+        <div style={{
+          border: '1px solid var(--line)', background: 'var(--bg-2)',
+          padding: '24px 28px', marginBottom: 24,
+        }}>
+          <div className="row" style={{ justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 16 }}>
+            <span className="label">DISTRIBUTION · IMPLIED YIELD ACROSS COHORT</span>
+            <span className="label tnum" style={{ color: 'var(--dim)' }}>n = {cohortN.toLocaleString()}</span>
+          </div>
+          <div className="col" style={{ gap: 8 }}>
+            {buckets.map(b => (
+              <div key={b.range} className="row" style={{ gap: 14, alignItems: 'center' }}>
+                <span className="tnum" style={{
+                  fontFamily: 'var(--mono)', fontSize: 11,
+                  color: 'var(--sub)', width: 76, textAlign: 'right',
+                }}>{b.range}</span>
+                <div style={{
+                  flex: 1, height: 14, background: 'var(--bg)',
+                  border: '1px solid var(--line)', position: 'relative', overflow: 'hidden',
+                }}>
+                  <div style={{
+                    width: `${(b.pct / maxPct) * 100}%`, height: '100%',
+                    background: b.range === '15-25%'
+                      ? 'var(--accent-c)'
+                      : 'color-mix(in oklab, var(--accent-a) 65%, transparent)',
+                    transition: 'width 800ms ease-out',
+                  }} />
+                </div>
+                <span className="tnum" style={{
+                  fontFamily: 'var(--mono)', fontSize: 11,
+                  color: 'var(--text)', width: 50, textAlign: 'right',
+                }}>{b.pct}%</span>
+                <span className="tnum" style={{
+                  fontFamily: 'var(--mono)', fontSize: 10,
+                  color: 'var(--dim)', width: 60, textAlign: 'right',
+                }}>n={b.n}</span>
+              </div>
+            ))}
+          </div>
+          <div style={{
+            marginTop: 16, paddingTop: 14, borderTop: '1px solid var(--line)',
+            color: 'var(--sub)', fontSize: 12, lineHeight: 1.6,
+          }}>
+            The bucket containing the mean (15-25%) is highlighted. ~33% of comps sit there;
+            ~45% below, ~22% above. The right tail (50%+ yields, ~4% of cohort) is what
+            pulls the mean (19.82%) above the median (15.69%).
+          </div>
+        </div>
+
+        <div style={{
+          display: 'grid', gap: 1, marginBottom: 24,
+          gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))',
+          background: 'var(--line)', border: '1px solid var(--line)',
+        }}>
+          {[
+            { lab: 'ALL CLOSED COMPS · FILTERED', val: `${meanY.toFixed(2)}%`,  sub: `n=${cohortN.toLocaleString()} · headline number`, hi: true },
+            { lab: 'LIFE OF RIGHTS · FILLED ONLY',  val: `${lorMean.toFixed(2)}%`, sub: `n=948 · permanent ownership only` },
+            { lab: 'LIFE OF RIGHTS · MEDIAN',       val: `${lorMedian.toFixed(2)}%`, sub: `the typical permanent comp` },
+            { lab: 'CONSERVATIVE BLEND · MNFST',    val: `${conservativeY.toFixed(2)}%`, sub: `also stored as avgYieldClosedComps` },
+          ].map(c => (
+            <div key={c.lab} style={{ background: 'var(--bg-2)', padding: '18px 22px' }}>
+              <div className="label" style={{ fontSize: 9, color: c.hi ? 'var(--accent-c)' : 'var(--dim)' }}>{c.lab}</div>
+              <div className="tnum" style={{
+                marginTop: 6, fontFamily: 'var(--face-data)', fontWeight: 700,
+                fontSize: 26, lineHeight: 1,
+                color: c.hi ? 'var(--accent-c)' : 'var(--text)',
+              }}>{c.val}</div>
+              <div style={{ marginTop: 6, color: 'var(--sub)', fontSize: 11, lineHeight: 1.5 }}>{c.sub}</div>
+            </div>
+          ))}
+        </div>
+
+        <div className="primer-grid" style={{
+          display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))',
+          gap: 1, background: 'var(--line)', border: '1px solid var(--line)',
+        }}>
+          {[
+            {
+              k: 'WHY IT LOOKS HIGH',
+              title: 'Trailing snapshot, not a forward yield.',
+              body: 'Numerator is last year\'s royalties; denominator is the historical clearing price. New buyers pay current market multiples, so realized cash-on-cash for a fresh purchase is materially lower. Royalty curves also decay year-over-year for most catalogs — LTM almost always overstates run-rate.',
+              color: 'var(--accent-c)',
+            },
+            {
+              k: 'THE PARTIAL-DEAL EFFECT',
+              title: 'Short-term terms inflate the mean.',
+              body: 'About a third of the cohort are partial-rights deals (10y, 30y, fixed-return) where the price already discounts for principal recovery. That makes price-to-LTM ratios optically juicy — yields like 96%, 99%, 111% in the data are typically these. Strip them out and the life-of-rights mean drops to 15.98% (median 13.64%).',
+              color: 'var(--accent-b)',
+            },
+            {
+              k: 'WHAT A BUYER ACTUALLY GETS',
+              title: 'Honest range: 12 - 16% on permanent rights.',
+              body: 'For a clean life-of-rights catalog at today\'s asks, target net cash yield sits roughly between the LoR median (13%) and LoR mean (16%). Anything above that needs a story — viral moment, sync flip, undermarketed catalog — which is exactly the gap our TikTok / Shorts pipeline is built to spot.',
+              color: 'var(--accent-a)',
+            },
+            {
+              k: 'WHY WE STILL SHOW 19.82%',
+              title: 'The market clears here. So the comps say what they say.',
+              body: 'We don\'t want to massage the headline. The figure reflects what royaltyexchange.com\'s closed comps actually averaged, with only a noise filter (LTM > $1k). Investors deserve the full distribution, not a cherry-picked midpoint. The methodology section is one click away on purpose.',
+              color: 'var(--accent-d)',
+            },
+          ].map((c) => (
+            <div key={c.k} style={{
+              background: 'var(--bg)', padding: '28px 28px',
+              display: 'flex', flexDirection: 'column', gap: 12,
+            }}>
+              <span className="label" style={{ color: c.color }}>{c.k}</span>
+              <h3 style={{
+                margin: 0, fontFamily: 'var(--face-display)',
+                fontWeight: 'var(--weight-display)', fontSize: 'clamp(20px, 1.8vw, 26px)',
+                lineHeight: 1.15, letterSpacing: 'var(--tracking-display)', color: 'var(--text)',
+              }}>{c.title}</h3>
+              <p style={{ margin: 0, color: 'var(--sub)', fontSize: 13, lineHeight: 1.65 }}>{c.body}</p>
+            </div>
+          ))}
+        </div>
+
+        <div className="row" style={{
+          marginTop: 24, padding: '16px 22px',
+          border: '1px solid var(--line)', background: 'var(--bg-2)',
+          gap: 18, alignItems: 'center', flexWrap: 'wrap',
+        }}>
+          <span className="label" style={{ color: 'var(--dim)' }}>SOURCE</span>
+          <span style={{ fontFamily: 'var(--mono)', fontSize: 12, color: 'var(--text)' }}>
+            royaltyexchange.com closed-comp database · synced {stats.asOf}
+          </span>
+          <span style={{ flex: 1 }} />
+          <span className="label" style={{ color: 'var(--dim)' }}>LAST RECOMPUTED</span>
+          <span className="tnum" style={{ fontFamily: 'var(--mono)', fontSize: 12, color: 'var(--text)' }}>
+            {stats.asOf}
+          </span>
+        </div>
+      </div>
+    </section>
+  )
+}
+
 function shortenTitle(t) {
   return t
     .replace(/Songwriter Royalties|Publishing Royalties|Royalties|- /gi, '')
@@ -208,6 +437,7 @@ const CATALOGS = catalogData.catalogs
       hot: c.isPick,
       tags: c.tags,
       ltm: c.ltm,
+      url: c.url,
       sparkData: ebyArr && ebyArr.length >= 3 ? ebyArr : null,
     }
   })
@@ -253,13 +483,21 @@ export function CatalogIndex() {
             ))}
           </div>
           {CATALOGS.map((c, i) => (
-            <div key={c.code} className="cat-row" style={{
-              display: 'grid',
-              gridTemplateColumns: '120px 1.6fr 130px 100px 100px 100px 160px',
-              gap: 16, padding: '18px 22px', alignItems: 'center',
-              borderBottom: i < CATALOGS.length - 1 ? '1px solid var(--line-soft)' : 'none',
-              color: 'inherit',
-            }}>
+            <a
+              key={c.code}
+              href={c.url || '#'}
+              target={c.url ? '_blank' : undefined}
+              rel={c.url ? 'noopener noreferrer' : undefined}
+              className="cat-row"
+              title={c.url ? 'Open on Royalty Exchange' : undefined}
+              style={{
+                display: 'grid',
+                gridTemplateColumns: '120px 1.6fr 130px 100px 100px 100px 160px',
+                gap: 16, padding: '18px 22px', alignItems: 'center',
+                borderBottom: i < CATALOGS.length - 1 ? '1px solid var(--line-soft)' : 'none',
+                color: 'inherit', textDecoration: 'none',
+                transition: 'background 140ms',
+              }}>
               <span className="cat-code" style={{ fontFamily: 'var(--mono)', fontSize: 11, color: c.hot ? 'var(--accent-c)' : 'var(--dim)', letterSpacing: '0.1em' }}>
                 {c.hot && <span style={{ color: 'var(--accent-c)', marginRight: 6 }}>●</span>}{c.code}
               </span>
@@ -272,16 +510,21 @@ export function CatalogIndex() {
               <span className="cat-tracks tnum" style={{ fontFamily: 'var(--mono)', fontSize: 13, color: 'var(--text)' }}>{c.tracks}</span>
               <span className="cat-mult tnum" style={{ fontFamily: 'var(--mono)', fontSize: 14, color: 'var(--text)', fontWeight: 700 }}>{c.mult.toFixed(2)}×</span>
               <span className="cat-yld tnum" style={{ fontFamily: 'var(--mono)', fontSize: 14, color: c.yld > 8 ? 'var(--positive)' : 'var(--accent-c)', fontWeight: 700 }}>{c.yld.toFixed(1)}%</span>
-              <span className="cat-spark">
+              <span className="cat-spark" style={{ display: 'inline-flex', alignItems: 'center', gap: 8, justifyContent: 'flex-end' }}>
                 {c.sparkData && (
                   <Sparkline
                     data={c.sparkData}
                     color={c.hot ? 'var(--accent-a)' : 'var(--accent-b)'}
-                    width={150} height={26} fill
+                    width={130} height={26} fill
                   />
                 )}
+                {c.url && (
+                  <span aria-hidden="true" style={{
+                    fontFamily: 'var(--mono)', fontSize: 10, color: 'var(--dim)',
+                  }}>↗</span>
+                )}
               </span>
-            </div>
+            </a>
           ))}
         </div>
 

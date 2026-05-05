@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { TopNav } from './components/AppShell'
 import { Hero } from './components/SectionHero'
-import { Primer, FiveStreams, CatalogIndex, Footer } from './components/SectionBody'
+import { Primer, FiveStreams, YieldMethodology, CatalogIndex, Footer } from './components/SectionBody'
 
 const DVD_COLORS = [
   '#00d4a8',
@@ -99,6 +99,7 @@ export default function App() {
       <Hero mode={mode} intensity={1.0} />
       <Primer />
       <FiveStreams />
+      <YieldMethodology />
       <CatalogIndex />
       <Footer />
     </div>

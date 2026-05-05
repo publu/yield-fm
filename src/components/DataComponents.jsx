@@ -44,11 +44,40 @@ export function Sparkline({ data, color, height = 28, width = 120, fill = false,
   )
 }
 
-export function Stat({ label, value, delta, color, sparkSeed = 1 }) {
+export function Stat({ label, value, delta, color, sparkSeed = 1, onClick, hint }) {
   const data = useMemo(() => makeSeries(sparkSeed, 40, 60, 6), [sparkSeed])
+  const clickable = typeof onClick === 'function'
+  const handleKey = clickable
+    ? (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onClick(e) } }
+    : undefined
   return (
-    <div className="col" style={{ gap: 6, minWidth: 0 }}>
-      <div className="label" style={{ fontSize: 9, letterSpacing: '0.2em' }}>{label}</div>
+    <div
+      className={clickable ? 'col stat-clickable' : 'col'}
+      onClick={clickable ? onClick : undefined}
+      onKeyDown={handleKey}
+      role={clickable ? 'button' : undefined}
+      tabIndex={clickable ? 0 : undefined}
+      title={clickable ? (hint || 'Click for methodology') : undefined}
+      style={{
+        gap: 6, minWidth: 0,
+        cursor: clickable ? 'pointer' : 'default',
+        transition: 'transform 160ms ease-out, opacity 160ms ease-out',
+      }}
+    >
+      <div className="label" style={{
+        fontSize: 9, letterSpacing: '0.2em',
+        display: 'flex', alignItems: 'center', gap: 6,
+      }}>
+        <span>{label}</span>
+        {clickable && (
+          <span aria-hidden="true" style={{
+            fontFamily: 'var(--mono)', fontSize: 9,
+            color: color || 'var(--accent-a)',
+            border: `1px solid ${color || 'var(--accent-a)'}`,
+            padding: '0 4px', lineHeight: '12px', letterSpacing: '0.1em',
+          }}>?</span>
+        )}
+      </div>
       <div className="row" style={{ alignItems: 'baseline', gap: 8, flexWrap: 'wrap' }}>
         <span
           className="tnum"
@@ -58,6 +87,9 @@ export function Stat({ label, value, delta, color, sparkSeed = 1 }) {
             fontWeight: 700,
             color: 'var(--text)',
             lineHeight: 1,
+            textDecoration: clickable ? 'underline dotted' : 'none',
+            textDecorationColor: clickable ? (color || 'var(--accent-a)') : 'transparent',
+            textUnderlineOffset: 4,
           }}
         >{value}</span>
         {delta != null && (
