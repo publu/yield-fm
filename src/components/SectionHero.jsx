@@ -504,9 +504,9 @@ export function Hero({ mode, intensity }) {
             fontSize: 'clamp(14px, 1.2vw, 17px)', lineHeight: 1.55,
             color: 'var(--sub)', textWrap: 'pretty',
           }}>
-            yield.fm maps 3,177 royalty catalogs, 1,592 closed comps, trailing
-            cash yields, and live short-form video traction so buyers can see
-            which songs are about to be repriced.
+            Music royalty comps have cleared at a 19.82% average trailing cash
+            yield across the filtered TTM cohort. yield.fm maps the catalogs,
+            the comp set, and the short-form demand signals that can change the price.
           </p>
 
           <div className="row" style={{ gap: 12, flexWrap: 'wrap' }}>
@@ -531,9 +531,9 @@ export function Hero({ mode, intensity }) {
             maxWidth: 720,
           }}>
             {[
+              ['AVG ROI PROXY', `${catalogData.stats.avgYieldTTM.toFixed(2)}% TTM`, 'closed-comp cash yield'],
               ['DATA', `${catalogData.stats.closedComps.toLocaleString()} closed comps`, `synced ${catalogData.stats.asOf}`],
-              ['SOCIAL', `${(catalogData.stats.totalTiktokUGC / 1e9).toFixed(2)}B TikTok UGC`, `${catalogData.stats.totalSounds.toLocaleString()} sounds indexed`],
-              ['YIELD', `${catalogData.stats.avgYieldTTM.toFixed(2)}% avg TTM`, 'methodology one click away'],
+              ['SOCIAL SIGNALS', `${(catalogData.stats.totalTiktokUGC / 1e9).toFixed(2)}B TikTok UGC`, `${catalogData.stats.totalSounds.toLocaleString()} sounds indexed`],
             ].map(([k, v, s]) => (
               <div key={k} style={{ background: 'color-mix(in oklab, var(--bg) 86%, transparent)', padding: '14px 16px' }}>
                 <div className="label" style={{ color: 'var(--accent-a)', fontSize: 9 }}>{k}</div>

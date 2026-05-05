@@ -114,17 +114,113 @@ const STREAMS = [
 
 export function FiveStreams() {
   const [hover, setHover] = useState(null)
+  const stats = catalogData.stats
+  const roiCards = [
+    {
+      lab: 'AVG TRAILING ROI PROXY',
+      val: `${stats.avgYieldTTM.toFixed(2)}%`,
+      sub: 'closed-comp cash yield · TTM cohort',
+      color: 'var(--accent-c)',
+    },
+    {
+      lab: 'CONSERVATIVE BLEND',
+      val: `${stats.avgYieldBlended.toFixed(2)}%`,
+      sub: 'blended average across sampled comps',
+      color: 'var(--accent-a)',
+    },
+    {
+      lab: 'CLOSED COMPS',
+      val: stats.closedComps.toLocaleString(),
+      sub: 'historical royalty transactions indexed',
+      color: 'var(--accent-b)',
+    },
+    {
+      lab: 'GLOBAL ROYALTY BASE',
+      val: '$42.7B',
+      sub: 'annual recorded + publishing collections',
+      color: 'var(--accent-d)',
+    },
+  ]
+
   return (
     <section style={{ borderBottom: '1px solid var(--line)', padding: 'clamp(72px, 8vw, 110px) 0', background: 'var(--bg-2)' }}>
       <div className="sec-pad" style={{ maxWidth: 1480, margin: '0 auto', padding: '0 32px' }}>
-        <SectionHead num="02" kicker="REVENUE STREAMS"
-          title="Five pipes. Each one pays differently."
-          sub="A single recording can earn through all five at once. The mix shifts with age, genre, geography, and how the song gets used. Read the mix and you read the asset."
+        <SectionHead num="02" kicker="RETURN PROFILE"
+          title="Music royalties have a visible cash-yield history."
+          sub="The point is not that there are five royalty pipes. The point is that music catalogs have repeatable cash flows, public comps, and a measurable trailing return profile. The pipe mix explains the durability after the ROI is clear."
         />
+
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: 'minmax(0, 1.25fr) minmax(280px, 0.75fr)',
+          gap: 1,
+          border: '1px solid var(--line)',
+          background: 'var(--line)',
+          marginBottom: 28,
+        }} className="roi-profile-grid">
+          <div style={{
+            background: `
+              linear-gradient(135deg, color-mix(in oklab, var(--accent-c) 13%, transparent), transparent 46%),
+              radial-gradient(circle at 78% 22%, color-mix(in oklab, var(--accent-a) 18%, transparent), transparent 32%),
+              var(--bg)
+            `,
+            padding: '32px 32px',
+            minHeight: 280,
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'space-between',
+            gap: 28,
+          }}>
+            <div>
+              <div className="label" style={{ color: 'var(--accent-c)' }}>AVERAGE OVERALL ROI SIGNAL</div>
+              <div className="row" style={{ alignItems: 'baseline', gap: 16, flexWrap: 'wrap', marginTop: 14 }}>
+                <span className="tnum" style={{
+                  fontFamily: 'var(--face-data)',
+                  fontWeight: 700,
+                  fontSize: 'clamp(58px, 8vw, 118px)',
+                  lineHeight: 0.9,
+                  color: 'var(--accent-c)',
+                }}>{stats.avgYieldTTM.toFixed(2)}%</span>
+                <span className="label" style={{ color: 'var(--text)' }}>AVG TTM CASH YIELD</span>
+              </div>
+              <p style={{ margin: '18px 0 0', maxWidth: 760, color: 'var(--sub)', fontSize: 15, lineHeight: 1.65 }}>
+                Computed from filtered Royalty Exchange closed comps using trailing royalties divided by clearing price.
+                It is a return proxy, not a guarantee, but it makes the category legible: music royalties can behave
+                like a diversified cash-flow market instead of a one-off collectible.
+              </p>
+            </div>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(6, minmax(0, 1fr))', gap: 6, alignItems: 'end', minHeight: 96 }}>
+              {[15, 29, 33, 18, 3, 1].map((h, i) => (
+                <div key={i} style={{ display: 'flex', flexDirection: 'column', gap: 7, justifyContent: 'end', height: '100%' }}>
+                  <div style={{
+                    height: `${Math.max(10, h * 2.35)}px`,
+                    background: i === 2 ? 'var(--accent-c)' : 'color-mix(in oklab, var(--accent-a) 62%, transparent)',
+                    border: '1px solid color-mix(in oklab, var(--accent-a) 56%, var(--line))',
+                    boxShadow: i === 2 ? '0 0 22px color-mix(in oklab, var(--accent-c) 30%, transparent)' : 'none',
+                  }} />
+                  <span className="label tnum" style={{ fontSize: 7, textAlign: 'center', color: 'var(--dim)' }}>{['5-10', '10-15', '15-25', '25-50', '50-100', '100+'][i]}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div style={{ background: 'var(--bg-2)', display: 'grid', gridTemplateRows: 'repeat(4, minmax(0, 1fr))' }}>
+            {roiCards.map((c, i) => (
+              <div key={c.lab} style={{
+                padding: '20px 22px',
+                borderBottom: i < roiCards.length - 1 ? '1px solid var(--line)' : 'none',
+              }}>
+                <div className="label" style={{ color: c.color, fontSize: 9 }}>{c.lab}</div>
+                <div className="tnum" style={{ marginTop: 8, color: 'var(--text)', fontFamily: 'var(--face-data)', fontSize: 30, fontWeight: 700, lineHeight: 1 }}>{c.val}</div>
+                <div style={{ marginTop: 7, color: 'var(--sub)', fontSize: 12, lineHeight: 1.45 }}>{c.sub}</div>
+              </div>
+            ))}
+          </div>
+        </div>
 
         <div className="col" style={{ gap: 10, marginBottom: 22 }}>
           <div className="row" style={{ justifyContent: 'space-between', alignItems: 'baseline' }}>
-            <span className="label">2024 GLOBAL ROYALTY MIX · $45.2B</span>
+            <span className="label">WHY THE CASH FLOW PERSISTS · 2024 GLOBAL ROYALTY MIX</span>
             <span className="label tnum">100.0%</span>
           </div>
           <div className="row" style={{ height: 64, border: '1px solid var(--line)' }}>
