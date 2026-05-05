@@ -250,7 +250,7 @@ function BillBackdrop() {
         alt=""
         decoding="async"
         loading="eager"
-        fetchpriority="high"
+        fetchPriority="high"
         onLoad={() => setLoaded(true)}
         style={{
           position: 'absolute', inset: 0,
@@ -273,6 +273,13 @@ export function Hero({ mode, intensity }) {
     }, 1000)
     return () => clearInterval(id)
   }, [])
+
+  const scrollToId = (id) => {
+    const el = document.getElementById(id)
+    if (!el) return
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    el.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' })
+  }
 
   return (
     <section className="hero-section" style={{ position: 'relative', borderBottom: '1px solid var(--line)', overflow: 'hidden', minHeight: 'calc(100svh - 60px)' }}>
@@ -301,7 +308,7 @@ export function Hero({ mode, intensity }) {
         <div className="col hero-copy" style={{ gap: 'clamp(14px, 2.4vh, 28px)' }}>
           <div className="row" style={{ alignItems: 'center', gap: 14, flexWrap: 'wrap' }}>
             <PulseDot color="var(--accent-c)" />
-            <span className="label" style={{ color: 'var(--accent-c)' }}>EARLY ACCESS · WAITLIST OPEN</span>
+            <span className="label" style={{ color: 'var(--accent-c)' }}>ROYALTYEXCHANGE COMPS · TIKTOK SIGNALS · WAITLIST OPEN</span>
             <span style={{ height: 1, flex: 1, maxWidth: 120, background: 'var(--line)' }} />
             <span className="label tnum">{time}</span>
           </div>
@@ -315,12 +322,12 @@ export function Hero({ mode, intensity }) {
             letterSpacing: 'var(--tracking-display)',
             color: 'var(--text)', textWrap: 'balance',
           }}>
-            Music is{' '}
+            Find mispriced music catalogs.
+            <br />
             <span style={{
               background: 'linear-gradient(94deg, var(--accent-a) 0%, var(--accent-b) 70%)',
               WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent',
-            }}>a yield curve.</span>
-            <br />Most people don't read it.
+            }}>Before the market hears them.</span>
           </h1>
 
           <p style={{
@@ -329,22 +336,43 @@ export function Hero({ mode, intensity }) {
             fontSize: 'clamp(14px, 1.2vw, 17px)', lineHeight: 1.55,
             color: 'var(--sub)', textWrap: 'pretty',
           }}>
-            yield.fm is a royalty investing terminal for music catalogs. We map
-            rights, collectors, cash flows, and market multiples so investors
-            can understand how songs become financial assets.
+            yield.fm maps 3,177 royalty catalogs, 1,592 closed comps, trailing
+            cash yields, and live short-form video traction so buyers can see
+            which songs are about to be repriced.
           </p>
 
           <div className="row" style={{ gap: 12, flexWrap: 'wrap' }}>
-            <button style={{
+            <button onClick={() => scrollToId('waitlist')} style={{
               background: 'var(--accent-a)', color: 'var(--bg)', border: 'none',
               padding: '16px 26px', fontFamily: 'var(--mono)', fontSize: 12,
               letterSpacing: '0.22em', fontWeight: 700,
             }}>REQUEST ACCESS →</button>
-            <button style={{
+            <button onClick={() => scrollToId('catalog-index')} style={{
               background: 'transparent', color: 'var(--text)',
               border: '1px solid var(--text)', padding: '16px 26px',
               fontFamily: 'var(--mono)', fontSize: 12, letterSpacing: '0.22em', fontWeight: 700,
-            }}>EXPLORE THE ROYALTY MAP</button>
+            }}>SCAN THE MISPRICING MAP</button>
+          </div>
+
+          <div className="hero-proof-grid" style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(3, minmax(0, 1fr))',
+            gap: 1,
+            border: '1px solid var(--line)',
+            background: 'var(--line)',
+            maxWidth: 720,
+          }}>
+            {[
+              ['DATA', `${catalogData.stats.closedComps.toLocaleString()} closed comps`, `synced ${catalogData.stats.asOf}`],
+              ['SOCIAL', `${(catalogData.stats.totalTiktokUGC / 1e9).toFixed(2)}B TikTok UGC`, `${catalogData.stats.totalSounds.toLocaleString()} sounds indexed`],
+              ['YIELD', `${catalogData.stats.avgYieldTTM.toFixed(2)}% avg TTM`, 'methodology one click away'],
+            ].map(([k, v, s]) => (
+              <div key={k} style={{ background: 'color-mix(in oklab, var(--bg) 86%, transparent)', padding: '14px 16px' }}>
+                <div className="label" style={{ color: 'var(--accent-a)', fontSize: 9 }}>{k}</div>
+                <div className="tnum" style={{ marginTop: 7, color: 'var(--text)', fontFamily: 'var(--face-data)', fontSize: 18, fontWeight: 700, lineHeight: 1.1 }}>{v}</div>
+                <div style={{ marginTop: 6, color: 'var(--dim)', fontFamily: 'var(--mono)', fontSize: 10, letterSpacing: '0.08em', textTransform: 'uppercase' }}>{s}</div>
+              </div>
+            ))}
           </div>
 
           <div className="hr" style={{ marginTop: 12 }} />

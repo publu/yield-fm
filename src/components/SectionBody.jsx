@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useMemo, useState } from 'react'
 import { Sparkline, SectionHead } from './DataComponents'
 import catalogData from '../data/catalogs.json'
 
@@ -422,29 +422,275 @@ function termLabel(t) {
   if (t === 'fixed_return') return 'FIXED TERM'
   return (t || '').toUpperCase()
 }
-const CATALOGS = catalogData.catalogs
+
+function fmtMoney(n) {
+  if (!Number.isFinite(n)) return '—'
+  if (n >= 1_000_000) return `$${(n / 1_000_000).toFixed(2)}M`
+  if (n >= 1_000) return `$${Math.round(n / 1_000)}K`
+  return `$${Math.round(n).toLocaleString()}`
+}
+
+function fmtUgc(n) {
+  if (!Number.isFinite(n) || n <= 0) return '—'
+  if (n >= 1_000_000) return `${(n / 1_000_000).toFixed(1)}M`
+  if (n >= 1_000) return `${Math.round(n / 1_000)}K`
+  return n.toLocaleString()
+}
+
+function normalizeCatalog(c) {
+  const ebyArr = c.earningsByYear ? Object.values(c.earningsByYear) : null
+  return {
+    code: `CAT-${String(c.id).padStart(4, '0')}`,
+    id: c.id,
+    name: shortenTitle(c.title),
+    title: c.title,
+    era: termLabel(c.term),
+    tracks: c.trackCount || 0,
+    mult: c.multiple,
+    yld: c.yieldPct,
+    hot: c.isPick,
+    tags: c.tags || [],
+    ltm: c.ltm,
+    url: c.url,
+    topSong: c.topSong,
+    topUgc: c.topUgc || 0,
+    sparkData: ebyArr && ebyArr.length >= 3 ? ebyArr : null,
+  }
+}
+
+const MAPPED_CATALOGS = catalogData.catalogs
+  .filter(c => c.multiple != null && c.yieldPct != null)
+  .map(normalizeCatalog)
+
+const CATALOGS = MAPPED_CATALOGS
   .filter(c => c.multiple != null && c.yieldPct != null)
   .slice(0, 8)
-  .map((c) => {
-    const ebyArr = c.earningsByYear ? Object.values(c.earningsByYear) : null
-    return {
-      code: `CAT-${String(c.id).padStart(4, '0')}`,
-      name: shortenTitle(c.title),
-      era: termLabel(c.term),
-      tracks: c.trackCount || 0,
-      mult: c.multiple,
-      yld: c.yieldPct,
-      hot: c.isPick,
-      tags: c.tags,
-      ltm: c.ltm,
-      url: c.url,
-      sparkData: ebyArr && ebyArr.length >= 3 ? ebyArr : null,
-    }
-  })
+
+function RoyaltyMap() {
+  const [filter, setFilter] = useState('all')
+  const [activeId, setActiveId] = useState(MAPPED_CATALOGS.find(c => c.hot)?.id || MAPPED_CATALOGS[0]?.id)
+  const mapped = useMemo(() => {
+    const pool = MAPPED_CATALOGS
+      .filter(c => {
+        if (filter === 'picks') return c.hot
+        if (filter === 'social') return c.topUgc > 500_000
+        if (filter === 'yield') return c.yld >= 15
+        return true
+      })
+      .slice(0, 72)
+    return pool
+  }, [filter])
+  const active = mapped.find(c => c.id === activeId) || mapped[0] || MAPPED_CATALOGS[0]
+  const xMin = 3
+  const xMax = 12
+  const yMin = 0
+  const yMax = 45
+  const xPct = (v) => Math.max(4, Math.min(96, ((v - xMin) / (xMax - xMin)) * 100))
+  const yPct = (v) => Math.max(5, Math.min(94, 100 - ((v - yMin) / (yMax - yMin)) * 100))
+
+  return (
+    <div style={{
+      display: 'grid',
+      gridTemplateColumns: 'minmax(0, 1.55fr) minmax(300px, 0.85fr)',
+      gap: 1,
+      background: 'var(--line)',
+      border: '1px solid var(--line)',
+      marginBottom: 28,
+    }} className="royalty-map-grid">
+      <div style={{ background: 'var(--bg)', padding: '22px 22px 18px' }}>
+        <div className="row" style={{ justifyContent: 'space-between', gap: 16, alignItems: 'start', marginBottom: 18, flexWrap: 'wrap' }}>
+          <div className="col" style={{ gap: 7 }}>
+            <span className="label" style={{ color: 'var(--accent-a)' }}>ROYALTY MAP · CASH FLOW VS PRICE</span>
+            <h3 style={{
+              margin: 0,
+              fontFamily: 'var(--face-display)',
+              fontWeight: 'var(--weight-display)',
+              fontSize: 'clamp(24px, 2.4vw, 38px)',
+              letterSpacing: 'var(--tracking-display)',
+              lineHeight: 1.05,
+              color: 'var(--text)',
+            }}>Find the catalogs that look cheap before the demand signal hits the comp set.</h3>
+          </div>
+          <div className="row royalty-map-filters" style={{ gap: 0, border: '1px solid var(--line)', flexShrink: 0 }}>
+            {[
+              ['all', 'All'],
+              ['picks', 'Picks'],
+              ['social', 'Social heat'],
+              ['yield', '15%+ yield'],
+            ].map(([id, label], i) => (
+              <button
+                key={id}
+                onClick={() => { setFilter(id); setActiveId(null) }}
+                style={{
+                  minHeight: 40,
+                  padding: '0 12px',
+                  border: 'none',
+                  borderLeft: i === 0 ? 'none' : '1px solid var(--line)',
+                  background: filter === id ? 'var(--accent-a)' : 'transparent',
+                  color: filter === id ? 'var(--bg)' : 'var(--sub)',
+                  fontFamily: 'var(--mono)',
+                  fontSize: 10,
+                  fontWeight: 700,
+                  letterSpacing: '0.12em',
+                  textTransform: 'uppercase',
+                }}
+              >{label}</button>
+            ))}
+          </div>
+        </div>
+
+        <div className="royalty-map-plot" style={{
+          position: 'relative',
+          minHeight: 430,
+          border: '1px solid var(--line)',
+          overflow: 'hidden',
+          background: `
+            linear-gradient(var(--line-soft) 1px, transparent 1px),
+            linear-gradient(90deg, var(--line-soft) 1px, transparent 1px),
+            radial-gradient(circle at 72% 24%, color-mix(in oklab, var(--accent-c) 14%, transparent), transparent 32%),
+            var(--bg-2)
+          `,
+          backgroundSize: '100% 25%, 16.66% 100%, 100% 100%, 100% 100%',
+        }}>
+          <div aria-hidden="true" style={{
+            position: 'absolute', left: '4%', right: '4%', top: `${yPct(15)}%`,
+            borderTop: '1px dashed color-mix(in oklab, var(--accent-c) 70%, transparent)',
+          }} />
+          <div aria-hidden="true" style={{
+            position: 'absolute', left: `${xPct(8)}%`, top: '5%', bottom: '9%',
+            borderLeft: '1px dashed color-mix(in oklab, var(--accent-b) 70%, transparent)',
+          }} />
+          <span className="label" style={{ position: 'absolute', left: 14, top: 12, color: 'var(--accent-c)' }}>HIGH YIELD</span>
+          <span className="label" style={{ position: 'absolute', right: 14, bottom: 12, color: 'var(--dim)' }}>HIGH MULTIPLE</span>
+          <span className="label" style={{ position: 'absolute', left: 14, bottom: 12, color: 'var(--dim)' }}>LOW MULTIPLE</span>
+          <span className="label" style={{
+            position: 'absolute', right: 14, top: 12,
+            color: 'var(--accent-a)',
+          }}>SIGNAL HEAT = POINT SIZE</span>
+
+          {mapped.map((c) => {
+            const isActive = active?.id === c.id
+            const socialBoost = c.topUgc > 0 ? Math.log10(c.topUgc + 10) : 0
+            const size = Math.max(12, Math.min(34, 10 + socialBoost * 3 + (c.hot ? 7 : 0)))
+            return (
+              <button
+                key={c.id}
+                onMouseEnter={() => setActiveId(c.id)}
+                onFocus={() => setActiveId(c.id)}
+                onClick={() => setActiveId(c.id)}
+                title={`${c.name} · ${c.mult.toFixed(2)}x · ${c.yld.toFixed(1)}%`}
+                aria-label={`${c.name}, ${c.mult.toFixed(2)} multiple, ${c.yld.toFixed(1)} percent yield`}
+                style={{
+                  position: 'absolute',
+                  left: `${xPct(c.mult)}%`,
+                  top: `${yPct(c.yld)}%`,
+                  width: size,
+                  height: size,
+                  transform: 'translate(-50%, -50%)',
+                  borderRadius: 999,
+                  border: isActive ? '2px solid var(--text)' : `1px solid ${c.hot ? 'var(--accent-c)' : 'var(--accent-a)'}`,
+                  background: c.hot
+                    ? 'color-mix(in oklab, var(--accent-c) 42%, var(--bg))'
+                    : 'color-mix(in oklab, var(--accent-a) 30%, var(--bg))',
+                  boxShadow: isActive
+                    ? '0 0 0 6px color-mix(in oklab, var(--accent-a) 18%, transparent), 0 0 24px color-mix(in oklab, var(--accent-a) 36%, transparent)'
+                    : '0 0 16px color-mix(in oklab, var(--accent-a) 18%, transparent)',
+                  opacity: isActive ? 1 : 0.76,
+                  transition: 'transform 160ms ease-out, opacity 160ms ease-out, box-shadow 160ms ease-out',
+                }}
+              />
+            )
+          })}
+        </div>
+      </div>
+
+      <div style={{ background: 'var(--bg-2)', padding: '22px 22px', minWidth: 0 }}>
+        {active && (
+          <div className="col" style={{ gap: 18 }}>
+            <div className="row" style={{ justifyContent: 'space-between', alignItems: 'start', gap: 14 }}>
+              <div className="col" style={{ gap: 8, minWidth: 0 }}>
+                <span className="label" style={{ color: active.hot ? 'var(--accent-c)' : 'var(--accent-a)' }}>
+                  {active.hot ? 'MNFST PICK' : active.code}
+                </span>
+                <h3 style={{
+                  margin: 0,
+                  fontFamily: 'var(--face-display)',
+                  fontWeight: 'var(--weight-display)',
+                  fontSize: 28,
+                  lineHeight: 1.05,
+                  letterSpacing: 'var(--tracking-display)',
+                  color: 'var(--text)',
+                }}>{active.name}</h3>
+              </div>
+              {active.url && (
+                <a href={active.url} target="_blank" rel="noopener noreferrer" className="label" style={{ color: 'var(--accent-a)', whiteSpace: 'nowrap' }}>
+                  SOURCE ↗
+                </a>
+              )}
+            </div>
+
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: 1, background: 'var(--line)', border: '1px solid var(--line)' }}>
+              {[
+                ['MULTIPLE', `${active.mult.toFixed(2)}x`],
+                ['IMPLIED YIELD', `${active.yld.toFixed(1)}%`],
+                ['LTM ROYALTIES', fmtMoney(active.ltm)],
+                ['TIKTOK UGC', fmtUgc(active.topUgc)],
+              ].map(([k, v]) => (
+                <div key={k} style={{ background: 'var(--bg)', padding: '14px 14px' }}>
+                  <div className="label" style={{ fontSize: 9 }}>{k}</div>
+                  <div className="tnum" style={{ marginTop: 5, color: 'var(--text)', fontFamily: 'var(--face-data)', fontSize: 22, fontWeight: 700, lineHeight: 1 }}>{v}</div>
+                </div>
+              ))}
+            </div>
+
+            <div className="col" style={{ gap: 9 }}>
+              <span className="label">WHY IT MATTERS</span>
+              <p style={{ margin: 0, color: 'var(--sub)', fontSize: 13, lineHeight: 1.65 }}>
+                This point sits at <span className="tnum" style={{ color: 'var(--text)' }}>{active.mult.toFixed(2)}x</span> price-to-cash-flow
+                and <span className="tnum" style={{ color: 'var(--text)' }}>{active.yld.toFixed(1)}%</span> trailing yield.
+                {active.topUgc > 0
+                  ? ` The social layer adds ${fmtUgc(active.topUgc)} TikTok creations tied to the catalog signal.`
+                  : ' No major TikTok heat is attached yet, so the thesis is mostly cash-flow driven.'}
+              </p>
+            </div>
+
+            <div className="col" style={{ gap: 9 }}>
+              <span className="label">TAGS</span>
+              <div className="row" style={{ gap: 6, flexWrap: 'wrap' }}>
+                {[active.era, `${active.tracks} TRACKS`, ...(active.tags || []).slice(0, 4)].map(t => (
+                  <span key={t} style={{
+                    border: '1px solid var(--line)',
+                    color: 'var(--sub)',
+                    padding: '5px 8px',
+                    fontFamily: 'var(--mono)',
+                    fontSize: 10,
+                    letterSpacing: '0.08em',
+                  }}>{t}</span>
+                ))}
+              </div>
+            </div>
+
+            {active.sparkData && (
+              <div className="col" style={{ gap: 10 }}>
+                <div className="row" style={{ justifyContent: 'space-between', alignItems: 'center' }}>
+                  <span className="label">EARNINGS HISTORY</span>
+                  <span className="label tnum" style={{ color: 'var(--dim)' }}>{active.sparkData.length}Y</span>
+                </div>
+                <div style={{ border: '1px solid var(--line)', background: 'var(--bg)', padding: '16px' }}>
+                  <Sparkline data={active.sparkData} color={active.hot ? 'var(--accent-c)' : 'var(--accent-a)'} width={280} height={58} fill />
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+      </div>
+    </div>
+  )
+}
 
 export function CatalogIndex() {
   return (
-    <section style={{ borderBottom: '1px solid var(--line)', padding: 'clamp(72px, 8vw, 110px) 0', background: 'var(--bg-2)' }}>
+    <section id="catalog-index" style={{ scrollMarginTop: 80, borderBottom: '1px solid var(--line)', padding: 'clamp(72px, 8vw, 110px) 0', background: 'var(--bg-2)' }}>
       <div className="sec-pad" style={{ maxWidth: 1480, margin: '0 auto', padding: '0 32px' }}>
         <SectionHead num="04" kicker="THE INDEX"
           title="Catalogs trade like bonds. Read the curve before it prices in."
@@ -471,6 +717,7 @@ export function CatalogIndex() {
             </div>
           ))}
         </div>
+        <RoyaltyMap />
         <div style={{ border: '1px solid var(--line)', background: 'var(--bg)' }}>
           <div className="cat-header" style={{
             display: 'grid',
@@ -528,7 +775,8 @@ export function CatalogIndex() {
           ))}
         </div>
 
-        <div className="row" style={{
+        <div id="waitlist" className="row" style={{
+          scrollMarginTop: 90,
           marginTop: 32, padding: '32px 28px', border: '1px solid var(--line)',
           background: 'var(--bg)', gap: 32, alignItems: 'center', flexWrap: 'wrap',
         }}>

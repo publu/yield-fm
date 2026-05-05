@@ -31,7 +31,28 @@ export function Logo() {
   )
 }
 
-export function TopNav({ mode, onMode }) {
+function NavLink({ href, children }) {
+  return (
+    <a
+      href={href}
+      style={{
+        minHeight: 44,
+        display: 'inline-flex',
+        alignItems: 'center',
+        color: 'var(--sub)',
+        fontFamily: 'var(--mono)',
+        fontSize: 10,
+        fontWeight: 700,
+        letterSpacing: '0.18em',
+        textTransform: 'uppercase',
+      }}
+    >
+      {children}
+    </a>
+  )
+}
+
+export function TopNav() {
   return (
     <header style={{
       position: 'sticky', top: 0, zIndex: 50,
@@ -50,27 +71,31 @@ export function TopNav({ mode, onMode }) {
             paddingLeft: 12, borderLeft: '1px solid var(--line)',
             fontFamily: 'var(--mono)', fontSize: 10, letterSpacing: '0.2em', color: 'var(--dim)',
             textTransform: 'uppercase',
-          }}>ROYALTY INVESTING TERMINAL</span>
+          }}>ROYALTY INTELLIGENCE FOR CATALOG BUYERS</span>
         </div>
 
-        <nav className="nav-modes row" style={{
-          gap: 0, border: '1px solid var(--line)',
-          fontFamily: 'var(--mono)', fontSize: 10, letterSpacing: '0.18em', fontWeight: 700,
-        }}>
-          {['EDM', 'CLASSICAL', 'HIP-HOP'].map((m, i) => {
-            const v = m === 'HIP-HOP' ? 'hiphop' : m.toLowerCase()
-            const on = mode === v
-            return (
-              <button key={v} onClick={() => onMode(v)} style={{
-                padding: '8px 16px',
-                background: on ? 'var(--accent-a)' : 'transparent',
-                color: on ? 'var(--bg)' : 'var(--sub)',
-                border: 'none',
-                borderLeft: i === 0 ? 'none' : '1px solid var(--line)',
-                letterSpacing: 'inherit', fontFamily: 'inherit', fontSize: 'inherit', fontWeight: 'inherit',
-              }}>{m}</button>
-            )
-          })}
+        <nav className="nav-modes row" style={{ gap: 22, alignItems: 'center' }}>
+          <NavLink href="#yield-methodology">Methodology</NavLink>
+          <NavLink href="#catalog-index">Index</NavLink>
+          <a
+            href="#waitlist"
+            className="nav-cta"
+            style={{
+              minHeight: 44,
+              display: 'inline-flex',
+              alignItems: 'center',
+              background: 'var(--accent-a)',
+              color: 'var(--bg)',
+              padding: '0 16px',
+              fontFamily: 'var(--mono)',
+              fontSize: 10,
+              fontWeight: 700,
+              letterSpacing: '0.18em',
+              textTransform: 'uppercase',
+            }}
+          >
+            Access
+          </a>
         </nav>
       </div>
     </header>
