@@ -85,7 +85,7 @@ function useBouncingFavicon() {
 }
 
 export default function App() {
-  const [mode, setMode] = useState('hiphop')
+  const [mode, setMode] = useState('edm')
   const [debug, setDebug] = useState(false)
   useBouncingFavicon()
 
