@@ -533,6 +533,12 @@ function fmtUgc(n) {
   return n.toLocaleString()
 }
 
+function dataRoomUrlForCatalog(c) {
+  const match = c.url?.match(/asset-detail\/(\d+)\/?/)
+  const id = match?.[1] || c.id
+  return id ? `https://mnfst-data-room.vercel.app/#${id}/mnfst` : null
+}
+
 function normalizeCatalog(c) {
   const ebyArr = c.earningsByYear ? Object.values(c.earningsByYear) : null
   return {
@@ -548,6 +554,7 @@ function normalizeCatalog(c) {
     tags: c.tags || [],
     ltm: c.ltm,
     url: c.url,
+    dataRoomUrl: dataRoomUrlForCatalog(c),
     topSong: c.topSong,
     topUgc: c.topUgc || 0,
     sparkData: ebyArr && ebyArr.length >= 3 ? ebyArr : null,
@@ -828,11 +835,11 @@ export function CatalogIndex() {
           {CATALOGS.map((c, i) => (
             <a
               key={c.code}
-              href={c.url || '#'}
-              target={c.url ? '_blank' : undefined}
-              rel={c.url ? 'noopener noreferrer' : undefined}
+              href={c.dataRoomUrl || '#'}
+              target={c.dataRoomUrl ? '_blank' : undefined}
+              rel={c.dataRoomUrl ? 'noopener noreferrer' : undefined}
               className="cat-row"
-              title={c.url ? 'Open on Royalty Exchange' : undefined}
+              title={c.dataRoomUrl ? 'Open data room' : undefined}
               style={{
                 display: 'grid',
                 gridTemplateColumns: '120px 1.6fr 130px 100px 100px 100px 160px',
@@ -861,7 +868,7 @@ export function CatalogIndex() {
                     width={130} height={26} fill
                   />
                 )}
-                {c.url && (
+                {c.dataRoomUrl && (
                   <span aria-hidden="true" style={{
                     fontFamily: 'var(--mono)', fontSize: 10, color: 'var(--dim)',
                   }}>↗</span>
