@@ -225,6 +225,58 @@ html { scroll-behavior: smooth; }
 .hero-feed-row:focus-within {
   background: color-mix(in oklab, var(--bg) 88%, var(--accent-a));
 }
+.signal-metric-link,
+.source-button {
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  transition:
+    transform 160ms ease,
+    color 160ms ease,
+    border-color 160ms ease,
+    background-color 160ms ease,
+    box-shadow 160ms ease;
+}
+.signal-metric-link::after,
+.source-button::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(110deg, transparent 0%, color-mix(in oklab, var(--accent-a) 26%, transparent) 48%, transparent 72%);
+  opacity: 0;
+  transform: translateX(-80%);
+  transition: opacity 160ms ease, transform 360ms ease;
+}
+.signal-metric-link:hover,
+.signal-metric-link:focus-visible,
+.source-button:hover,
+.source-button:focus-visible {
+  transform: translateY(-2px);
+  color: var(--text) !important;
+  border-color: var(--accent-a) !important;
+  background: color-mix(in oklab, var(--accent-a) 12%, var(--bg)) !important;
+  box-shadow:
+    0 0 0 1px color-mix(in oklab, var(--accent-a) 18%, transparent),
+    0 0 22px color-mix(in oklab, var(--accent-a) 18%, transparent);
+}
+.signal-metric-link:hover::after,
+.signal-metric-link:focus-visible::after,
+.source-button:hover::before,
+.source-button:focus-visible::before {
+  opacity: 1;
+  transform: translateX(90%);
+}
+.source-button-arrow {
+  color: var(--accent-a);
+  transform: translate(-1px, 1px);
+  transition: transform 160ms ease, color 160ms ease;
+}
+.source-button:hover .source-button-arrow,
+.source-button:focus-visible .source-button-arrow {
+  color: var(--accent-c);
+  transform: translate(2px, -2px);
+}
 a[href]:focus-visible,
 button:focus-visible,
 input:focus-visible {
@@ -402,5 +454,6 @@ a.cat-row:focus-visible {
   *, *::before, *::after {
     animation-duration: 0.001ms !important;
     animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
   }
 }

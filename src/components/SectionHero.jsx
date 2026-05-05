@@ -136,6 +136,7 @@ function MetricLink({ href, label, value, color, title, compact = false }) {
       target="_blank" rel="noopener noreferrer"
       title={title || `Open source for ${label}`}
       onClick={(e) => e.stopPropagation()}
+      className="signal-metric-link"
       style={{
         display: 'inline-flex',
         flexDirection: 'column',
@@ -164,11 +165,13 @@ function SourceButton({ href, children, title }) {
       href={href}
       target="_blank" rel="noopener noreferrer"
       title={title}
+      className="source-button"
       style={{
         minHeight: 34,
         display: 'inline-flex',
         alignItems: 'center',
         justifyContent: 'center',
+        gap: 7,
         padding: '0 10px',
         border: '1px solid var(--line)',
         background: 'color-mix(in oklab, var(--bg) 78%, transparent)',
@@ -180,7 +183,8 @@ function SourceButton({ href, children, title }) {
         whiteSpace: 'nowrap',
       }}
     >
-      {children}
+      <span>{children}</span>
+      <span className="source-button-arrow" aria-hidden="true">↗</span>
     </a>
   )
 }
@@ -262,10 +266,10 @@ function FeaturedSignal({ row }) {
       </div>
 
       <div className="row hero-source-buttons" style={{ gap: 8, marginTop: 12, flexWrap: 'wrap' }}>
-        <SourceButton href={row.highscoreLink} title="Open this sound on Highscore">HIGHSCORE SOUND</SourceButton>
-        <SourceButton href={row.soundLink} title="Open the TikTok sound">TIKTOK SOUND</SourceButton>
-        <SourceButton href={row.videoLink} title="Open the source TikTok video">TOP VIDEO</SourceButton>
-        {row.authorLink && <SourceButton href={row.authorLink} title="Open the creator profile">CREATOR</SourceButton>}
+        <SourceButton href={row.highscoreLink} title="Open analytics for this sound">Analytics</SourceButton>
+        <SourceButton href={row.soundLink} title="Open the TikTok sound">TikTok</SourceButton>
+        <SourceButton href={row.videoLink} title="Open the source TikTok video">Top Video</SourceButton>
+        {row.authorLink && <SourceButton href={row.authorLink} title="Open the creator profile">Creator</SourceButton>}
       </div>
     </div>
   )
