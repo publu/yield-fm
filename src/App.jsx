@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { TopNav } from './components/AppShell'
 import { Hero } from './components/SectionHero'
 import { Primer, FiveStreams, YieldMethodology, CatalogIndex, Footer } from './components/SectionBody'
@@ -85,17 +85,23 @@ function useBouncingFavicon() {
 }
 
 export default function App() {
+  const [mode, setMode] = useState('hiphop')
+  const [debug, setDebug] = useState(false)
   useBouncingFavicon()
 
   useEffect(() => {
-    document.documentElement.setAttribute('data-mode', 'hiphop')
+    setDebug(new URLSearchParams(window.location.search).get('debug') === 'true')
   }, [])
+
+  useEffect(() => {
+    document.documentElement.setAttribute('data-mode', mode)
+  }, [mode])
 
   return (
     <div>
       <div className="grain" />
-      <TopNav />
-      <Hero mode="hiphop" intensity={1.0} />
+      <TopNav mode={mode} onMode={setMode} debug={debug} />
+      <Hero mode={mode} intensity={1.0} />
       <Primer />
       <FiveStreams />
       <YieldMethodology />

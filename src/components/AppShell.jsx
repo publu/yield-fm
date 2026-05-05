@@ -52,7 +52,45 @@ function NavLink({ href, children }) {
   )
 }
 
-export function TopNav() {
+function ThemeToggle({ mode, onMode }) {
+  return (
+    <div className="row nav-theme-toggle" style={{
+      gap: 0,
+      border: '1px solid var(--line)',
+      fontFamily: 'var(--mono)',
+      fontSize: 10,
+      letterSpacing: '0.14em',
+      fontWeight: 700,
+    }}>
+      {['EDM', 'CLASSICAL', 'HIP-HOP'].map((m, i) => {
+        const v = m === 'HIP-HOP' ? 'hiphop' : m.toLowerCase()
+        const on = mode === v
+        return (
+          <button
+            key={v}
+            onClick={() => onMode(v)}
+            style={{
+              minHeight: 40,
+              padding: '0 12px',
+              background: on ? 'var(--accent-a)' : 'transparent',
+              color: on ? 'var(--bg)' : 'var(--sub)',
+              border: 'none',
+              borderLeft: i === 0 ? 'none' : '1px solid var(--line)',
+              letterSpacing: 'inherit',
+              fontFamily: 'inherit',
+              fontSize: 'inherit',
+              fontWeight: 'inherit',
+            }}
+          >
+            {m}
+          </button>
+        )
+      })}
+    </div>
+  )
+}
+
+export function TopNav({ mode, onMode, debug = false }) {
   return (
     <header style={{
       position: 'sticky', top: 0, zIndex: 50,
@@ -77,6 +115,7 @@ export function TopNav() {
         <nav className="nav-modes row" style={{ gap: 22, alignItems: 'center' }}>
           <NavLink href="#yield-methodology">Methodology</NavLink>
           <NavLink href="#catalog-index">Index</NavLink>
+          {debug && <ThemeToggle mode={mode} onMode={onMode} />}
           <a
             href="#waitlist"
             className="nav-cta"
