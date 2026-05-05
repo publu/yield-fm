@@ -216,7 +216,7 @@ function FeaturedSignal({ row }) {
       <div className="row" style={{ alignItems: 'start', justifyContent: 'space-between', gap: 14, marginBottom: 14 }}>
         <div style={{ minWidth: 0 }}>
           <div className="row" style={{ alignItems: 'center', gap: 8, marginBottom: 8, flexWrap: 'wrap' }}>
-            <span className="label" style={{ color: 'var(--accent-a)' }}>LIVE SOUND #{row.rank || 1}</span>
+            <span className="label" style={{ color: 'var(--accent-a)' }}>LIVE SOUND</span>
             <span className="label" style={{ color: 'var(--dim)' }}>{countries}</span>
             <span className="label" style={{ color: 'var(--accent-c)' }}>{growth}</span>
           </div>
