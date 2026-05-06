@@ -493,7 +493,7 @@ export function YieldMethodology() {
         }}>
           <span className="label" style={{ color: 'var(--dim)' }}>SOURCE</span>
           <span style={{ fontFamily: 'var(--mono)', fontSize: 12, color: 'var(--text)' }}>
-            royaltyexchange.com closed-comp database · synced {stats.asOf}
+            mnfst-data-room.vercel.app · synced {stats.asOf}
           </span>
           <span style={{ flex: 1 }} />
           <span className="label" style={{ color: 'var(--dim)' }}>LAST RECOMPUTED</span>
