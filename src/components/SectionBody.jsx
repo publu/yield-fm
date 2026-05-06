@@ -792,6 +792,48 @@ function RoyaltyMap() {
 }
 
 export function CatalogIndex() {
+  const [waitlistEmail, setWaitlistEmail] = useState('')
+  const [waitlistStatus, setWaitlistStatus] = useState('idle')
+  const [waitlistMessage, setWaitlistMessage] = useState('')
+
+  async function submitWaitlist(event) {
+    event.preventDefault()
+
+    const email = waitlistEmail.trim().toLowerCase()
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      setWaitlistStatus('error')
+      setWaitlistMessage('ENTER A VALID EMAIL')
+      return
+    }
+
+    setWaitlistStatus('loading')
+    setWaitlistMessage('')
+
+    try {
+      const response = await fetch('/api/waitlist', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email,
+          source: 'yield.fm waitlist',
+          page: window.location.href,
+        }),
+      })
+      const result = await response.json().catch(() => ({}))
+
+      if (!response.ok) {
+        throw new Error(result.error || 'Could not join waitlist')
+      }
+
+      setWaitlistStatus('success')
+      setWaitlistMessage('YOU ARE ON THE LIST')
+      setWaitlistEmail('')
+    } catch (error) {
+      setWaitlistStatus('error')
+      setWaitlistMessage(error.message || 'TRY AGAIN')
+    }
+  }
+
   return (
     <section id="catalog-index" style={{ scrollMarginTop: 80, borderBottom: '1px solid var(--line)', padding: 'clamp(72px, 8vw, 110px) 0', background: 'var(--bg-2)' }}>
       <div className="sec-pad" style={{ maxWidth: 1480, margin: '0 auto', padding: '0 32px' }}>
@@ -893,16 +935,41 @@ export function CatalogIndex() {
               Track catalog multiples, royalty streams, and pricing signals before the market catches up.
             </p>
           </div>
-          <form onSubmit={(e) => e.preventDefault()} className="row" style={{ gap: 8, flex: '1 1 360px' }}>
-            <input type="email" placeholder="ListenTo@Music.com" style={{
+          <form onSubmit={submitWaitlist} className="row" style={{ gap: 8, flex: '1 1 360px', alignItems: 'stretch' }}>
+            <input
+              type="email"
+              name="email"
+              value={waitlistEmail}
+              onChange={(e) => setWaitlistEmail(e.target.value)}
+              placeholder="ListenTo@Music.com"
+              autoComplete="email"
+              required
+              disabled={waitlistStatus === 'loading'}
+              aria-label="Email address"
+              style={{
               flex: 1, minWidth: 0, background: 'var(--bg-2)', border: '1px solid var(--line)',
               padding: '14px 16px', color: 'var(--text)', fontFamily: 'var(--mono)', fontSize: 13,
+              opacity: waitlistStatus === 'loading' ? 0.72 : 1,
             }} />
-            <button style={{
-              background: 'var(--accent-a)', color: 'var(--bg)', border: 'none',
+            <input type="text" name="company" tabIndex="-1" autoComplete="off" aria-hidden="true" style={{
+              position: 'absolute', left: '-10000px', width: 1, height: 1, opacity: 0,
+            }} />
+            <button
+              type="submit"
+              disabled={waitlistStatus === 'loading'}
+              style={{
+              background: waitlistStatus === 'success' ? 'var(--positive)' : 'var(--accent-a)', color: 'var(--bg)', border: 'none',
               padding: '14px 22px', fontFamily: 'var(--mono)', fontSize: 11,
-              letterSpacing: '0.22em', fontWeight: 700,
-            }}>JOIN →</button>
+              letterSpacing: '0.22em', fontWeight: 700, cursor: waitlistStatus === 'loading' ? 'wait' : 'pointer',
+              minWidth: 112,
+            }}>{waitlistStatus === 'loading' ? 'JOINING' : waitlistStatus === 'success' ? 'JOINED' : 'JOIN →'}</button>
+            {waitlistMessage && (
+              <span className="label" role="status" style={{
+                flexBasis: '100%',
+                color: waitlistStatus === 'error' ? 'var(--accent-c)' : 'var(--positive)',
+                marginTop: 2,
+              }}>{waitlistMessage}</span>
+            )}
           </form>
         </div>
       </div>
