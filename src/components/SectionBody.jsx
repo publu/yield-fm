@@ -534,8 +534,7 @@ function fmtUgc(n) {
 }
 
 function dataRoomUrlForCatalog(c) {
-  const match = c.url?.match(/asset-detail\/(\d+)\/?/)
-  const id = match?.[1] || c.id
+  const id = c.id
   return id ? `https://mnfst-data-room.vercel.app/#${id}/mnfst` : null
 }
 
@@ -553,7 +552,7 @@ function normalizeCatalog(c) {
     hot: c.isPick,
     tags: c.tags || [],
     ltm: c.ltm,
-    url: c.url,
+    url: dataRoomUrlForCatalog(c),
     dataRoomUrl: dataRoomUrlForCatalog(c),
     topSong: c.topSong,
     topUgc: c.topUgc || 0,
