@@ -1,5 +1,11 @@
 {
   "buildCommand": "npm run build",
   "outputDirectory": "dist",
-  "framework": "vite"
+  "framework": "vite",
+  "rewrites": [
+    {
+      "source": "/api/sync",
+      "destination": "https://yield-fm-track.pablo12335.workers.dev"
+    }
+  ]
 }
