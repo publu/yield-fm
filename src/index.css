@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 /* ─────────────────────────────────────────────────────────
-   yield.fm — royalty investing terminal
+   yield.fm — music royalty cashflow data
    Three aesthetic modes: classical / edm / vinyl
    ───────────────────────────────────────────────────────── */
 
@@ -329,6 +329,10 @@ a.cat-row:focus-visible {
 @media (max-width: 720px) {
   .hero-proof-grid {
     grid-template-columns: minmax(0, 1fr) !important;
+  }
+  .hero-feature-metrics {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    row-gap: 6px;
   }
 }
 

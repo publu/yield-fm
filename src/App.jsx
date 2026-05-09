@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import { TopNav } from './components/AppShell'
 import { Hero } from './components/SectionHero'
-import { Primer, FiveStreams, YieldMethodology, CatalogIndex, Footer } from './components/SectionBody'
+import { Primer, FiveStreams, YieldMethodology, Platform, CatalogIndex, Footer } from './components/SectionBody'
+import { initTracking, track } from './lib/track'
 
 const DVD_COLORS = [
   '#00d4a8',
@@ -90,21 +91,29 @@ export default function App() {
   useBouncingFavicon()
 
   useEffect(() => {
-    setDebug(new URLSearchParams(window.location.search).get('debug') === 'true')
+    const isDebug = new URLSearchParams(window.location.search).get('debug') === 'true'
+    setDebug(isDebug)
+    initTracking({ debug: isDebug })
   }, [])
 
   useEffect(() => {
     document.documentElement.setAttribute('data-mode', mode)
   }, [mode])
 
+  function handleMode(next) {
+    if (next !== mode) track('mode_change', { from: mode, to: next })
+    setMode(next)
+  }
+
   return (
     <div>
       <div className="grain" />
-      <TopNav mode={mode} onMode={setMode} debug={debug} />
+      <TopNav mode={mode} onMode={handleMode} debug={debug} />
       <Hero mode={mode} intensity={1.0} />
       <Primer />
       <FiveStreams />
       <YieldMethodology />
+      <Platform />
       <CatalogIndex />
       <Footer />
     </div>

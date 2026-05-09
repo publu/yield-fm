@@ -141,7 +141,7 @@ function MetricLink({ href, label, value, color, title, compact = false }) {
         display: 'inline-flex',
         flexDirection: 'column',
         justifyContent: 'center',
-        minWidth: compact ? 58 : 82,
+        minWidth: 0,
         minHeight: compact ? 36 : 48,
         padding: compact ? '5px 7px' : '7px 9px',
         border: `1px solid color-mix(in oklab, ${color} 58%, var(--line))`,
@@ -152,7 +152,7 @@ function MetricLink({ href, label, value, color, title, compact = false }) {
       }}
     >
       <span className="label" style={{ fontSize: 7, letterSpacing: '0.12em', color }}>{label}</span>
-      <span className="tnum" style={{ marginTop: 3, color: 'var(--text)', fontWeight: 700, fontSize: compact ? 11 : 15, lineHeight: 1 }}>
+      <span className="tnum" style={{ marginTop: 3, color: 'var(--text)', fontWeight: 700, fontSize: compact ? 11 : 15, lineHeight: 1, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
         {value}
       </span>
     </a>
@@ -480,7 +480,7 @@ export function Hero({ mode, intensity }) {
         <div className="col hero-copy" style={{ gap: 'clamp(14px, 2.4vh, 28px)' }}>
           <div className="row" style={{ alignItems: 'center', gap: 14, flexWrap: 'wrap' }}>
             <PulseDot color="var(--accent-c)" />
-            <span className="label" style={{ color: 'var(--accent-c)' }}>ROYALTYEXCHANGE COMPS · TIKTOK SIGNALS · WAITLIST OPEN</span>
+            <span className="label" style={{ color: 'var(--accent-c)' }}>MANIFEST MUSIC INTELLIGENCE · DATA LAYER LIVE · CASHFLOW PLATFORM IN FLIGHT</span>
             <span style={{ height: 1, flex: 1, maxWidth: 120, background: 'var(--line)' }} />
             <span className="label tnum">{time}</span>
           </div>
@@ -494,36 +494,37 @@ export function Hero({ mode, intensity }) {
             letterSpacing: 'var(--tracking-display)',
             color: 'var(--text)', textWrap: 'balance',
           }}>
-            Find mispriced music catalogs.
+            Music royalty cashflows,
             <br />
             <span style={{
               background: 'linear-gradient(94deg, var(--accent-a) 0%, var(--accent-b) 70%)',
               WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent',
-            }}>Before the market hears them.</span>
+            }}>tokenized with structure.</span>
           </h1>
 
           <p style={{
-            margin: 0, maxWidth: 600,
+            margin: 0, maxWidth: 620,
             fontFamily: 'var(--face-body)',
-            fontSize: 'clamp(14px, 1.2vw, 17px)', lineHeight: 1.55,
+            fontSize: 'clamp(14px, 1.2vw, 17px)', lineHeight: 1.6,
             color: 'var(--sub)', textWrap: 'pretty',
           }}>
-            Music royalty comps have cleared at a 19.82% average trailing cash
-            yield across the filtered TTM cohort. yield.fm maps the catalogs,
-            the comp set, and the short-form demand signals that can change the price.
+            Manifest Music Intelligence Corporation runs a daily data pipeline across
+            short-form video and the secondary catalog market, and is building a
+            compliant tokenization platform on top — proper legal seniority, real
+            cashflows, novel structuring underneath.
           </p>
 
           <div className="row" style={{ gap: 12, flexWrap: 'wrap' }}>
-            <button onClick={() => scrollToId('waitlist')} style={{
+            <button onClick={() => scrollToId('catalog-index')} style={{
               background: 'var(--accent-a)', color: 'var(--bg)', border: 'none',
               padding: '16px 26px', fontFamily: 'var(--mono)', fontSize: 12,
               letterSpacing: '0.22em', fontWeight: 700,
-            }}>REQUEST ACCESS →</button>
-            <button onClick={() => scrollToId('catalog-index')} style={{
+            }}>BROWSE THE INDEX →</button>
+            <button onClick={() => scrollToId('platform')} style={{
               background: 'transparent', color: 'var(--text)',
               border: '1px solid var(--text)', padding: '16px 26px',
               fontFamily: 'var(--mono)', fontSize: 12, letterSpacing: '0.22em', fontWeight: 700,
-            }}>SCAN THE MISPRICING MAP</button>
+            }}>READ THE PLATFORM NOTE</button>
           </div>
 
           <div className="hero-proof-grid" style={{
@@ -537,7 +538,7 @@ export function Hero({ mode, intensity }) {
             {[
               ['AVG ROI PROXY', `${catalogData.stats.avgYieldTTM.toFixed(2)}% TTM`, 'closed-comp cash yield'],
               ['DATA', `${catalogData.stats.closedComps.toLocaleString()} closed comps`, `synced ${catalogData.stats.asOf}`],
-              ['SOCIAL SIGNALS', `${(catalogData.stats.totalTiktokUGC / 1e9).toFixed(2)}B TikTok UGC`, `${catalogData.stats.totalSounds.toLocaleString()} sounds indexed`],
+              ['SOCIAL SIGNALS', `${(catalogData.stats.totalTiktokUGC / 1e9).toFixed(2)}B TikTok videos`, `${catalogData.stats.totalSounds.toLocaleString()} sounds indexed`],
             ].map(([k, v, s]) => (
               <div key={k} style={{ background: 'color-mix(in oklab, var(--bg) 86%, transparent)', padding: '14px 16px' }}>
                 <div className="label" style={{ color: 'var(--accent-a)', fontSize: 9 }}>{k}</div>

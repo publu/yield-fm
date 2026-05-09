@@ -1,6 +1,7 @@
 import React, { useMemo, useState } from 'react'
 import { Sparkline, SectionHead } from './DataComponents'
 import catalogData from '../data/catalogs.json'
+import { track } from '../lib/track'
 
 const COPYRIGHTS = [
   {
@@ -467,7 +468,7 @@ export function YieldMethodology() {
             {
               k: 'WHY WE STILL SHOW 19.82%',
               title: 'The market clears here. So the comps say what they say.',
-              body: 'We don\'t want to massage the headline. The figure reflects what royaltyexchange.com\'s closed comps actually averaged, with only a noise filter (LTM > $1k). Investors deserve the full distribution, not a cherry-picked midpoint. The methodology section is one click away on purpose.',
+              body: 'We don\'t want to massage the headline. The figure reflects what royaltyexchange.com\'s closed comps actually averaged, with only a noise filter (LTM > $1k). The full distribution stays visible — nothing cherry-picked. The methodology section is one click away on purpose.',
               color: 'var(--accent-d)',
             },
           ].map((c) => (
@@ -611,7 +612,7 @@ function RoyaltyMap() {
               letterSpacing: 'var(--tracking-display)',
               lineHeight: 1.05,
               color: 'var(--text)',
-            }}>Find the catalogs that look cheap before the demand signal hits the comp set.</h3>
+            }}>Where catalogs sit on the cashflow versus price plane.</h3>
           </div>
           <div className="row royalty-map-filters" style={{ gap: 0, border: '1px solid var(--line)', flexShrink: 0 }}>
             {[
@@ -679,7 +680,7 @@ function RoyaltyMap() {
                 key={c.id}
                 onMouseEnter={() => setActiveId(c.id)}
                 onFocus={() => setActiveId(c.id)}
-                onClick={() => setActiveId(c.id)}
+                onClick={() => { setActiveId(c.id); track('catalog_hover', { code: c.code, name: c.name, source: 'map' }) }}
                 title={`${c.name} · ${c.mult.toFixed(2)}x · ${c.yld.toFixed(1)}%`}
                 aria-label={`${c.name}, ${c.mult.toFixed(2)} multiple, ${c.yld.toFixed(1)} percent yield`}
                 style={{
@@ -736,7 +737,7 @@ function RoyaltyMap() {
                 ['MULTIPLE', `${active.mult.toFixed(2)}x`],
                 ['IMPLIED YIELD', `${active.yld.toFixed(1)}%`],
                 ['LTM ROYALTIES', fmtMoney(active.ltm)],
-                ['TIKTOK UGC', fmtUgc(active.topUgc)],
+                ['TIKTOK VIDEOS', fmtUgc(active.topUgc)],
               ].map(([k, v]) => (
                 <div key={k} style={{ background: 'var(--bg)', padding: '14px 14px' }}>
                   <div className="label" style={{ fontSize: 9 }}>{k}</div>
@@ -790,6 +791,107 @@ function RoyaltyMap() {
   )
 }
 
+export function Platform() {
+  const stats = catalogData.stats
+  const layers = [
+    {
+      n: 'I',
+      label: 'DATA LAYER',
+      color: 'var(--accent-a)',
+      title: 'Daily pipeline across short-form video and the secondary market.',
+      body: 'TikTok and YouTube Shorts indexed across 68 countries, cross-platform audio matched, content-typed past metadata. Closed and open Royalty Exchange comps modeled alongside, with multi-year earnings histories per catalog.',
+      stats: [
+        ['VIDEOS INDEXED', '184M+'],
+        ['SOUNDS TRACKED', '1M+'],
+        ['CLOSED COMPS', stats.closedComps.toLocaleString()],
+        ['COUNTRIES', '68'],
+      ],
+    },
+    {
+      n: 'II',
+      label: 'UNDERWRITING',
+      color: 'var(--accent-c)',
+      title: 'Cashflow-first. Social signal layered on top.',
+      body: 'A catalog is a portfolio of repeatable cashflows. We underwrite on the trailing royalty curve and overlay the social-demand signal that statements will reflect months later. Diversified by genre, decade, and geography. No leverage at the asset layer.',
+    },
+    {
+      n: 'III',
+      label: 'TOKENIZATION',
+      color: 'var(--accent-b)',
+      title: 'Compliant cashflow wrapper. Novel structure underneath.',
+      body: 'Royalty cashflows wrapped in an on-chain instrument with proper legal seniority over the underlying. UCC Article 9 framework over royalty collateral, dedicated catalog SPV, securities counsel engaged on classification. Settlement is on-chain because it earns its place there, not because the token is the product.',
+    },
+  ]
+
+  return (
+    <section id="platform" style={{ scrollMarginTop: 80, borderBottom: '1px solid var(--line)', padding: 'clamp(72px, 8vw, 110px) 0', background: 'var(--bg)' }}>
+      <div className="sec-pad" style={{ maxWidth: 1480, margin: '0 auto', padding: '0 32px' }}>
+        <SectionHead num="04" kicker="THE PLATFORM"
+          title="Manifest Music Intelligence Corporation."
+          sub="A data layer, an underwriting framework, and a compliant tokenization platform built around the cashflows themselves."
+        />
+
+        <div className="col" style={{ gap: 1, background: 'var(--line)', border: '1px solid var(--line)' }}>
+          {layers.map(l => (
+            <div key={l.n} style={{ background: 'var(--bg)', padding: 'clamp(24px, 3vw, 36px)' }}>
+              <div className="row" style={{ alignItems: 'baseline', gap: 16, marginBottom: 14, flexWrap: 'wrap' }}>
+                <span style={{
+                  fontFamily: 'var(--face-display)',
+                  fontWeight: 'var(--weight-display)',
+                  fontSize: 28,
+                  color: l.color,
+                  letterSpacing: 'var(--tracking-display)',
+                  lineHeight: 1,
+                }}>{l.n}</span>
+                <span className="label" style={{ color: l.color }}>{l.label}</span>
+              </div>
+              <h3 style={{
+                margin: 0,
+                fontFamily: 'var(--face-display)',
+                fontWeight: 'var(--weight-display)',
+                fontSize: 'clamp(20px, 2vw, 30px)',
+                lineHeight: 1.15,
+                letterSpacing: 'var(--tracking-display)',
+                color: 'var(--text)',
+                marginBottom: 12,
+              }}>{l.title}</h3>
+              <p style={{ margin: 0, color: 'var(--sub)', fontSize: 14, lineHeight: 1.65, maxWidth: 880 }}>{l.body}</p>
+              {l.stats && (
+                <div style={{
+                  display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))',
+                  gap: 1, marginTop: 22, border: '1px solid var(--line)', background: 'var(--line)',
+                }}>
+                  {l.stats.map(([k, v]) => (
+                    <div key={k} style={{ background: 'var(--bg-2)', padding: '12px 14px' }}>
+                      <div className="label" style={{ fontSize: 9, color: 'var(--dim)' }}>{k}</div>
+                      <div className="tnum" style={{
+                        marginTop: 4, color: 'var(--text)',
+                        fontFamily: 'var(--face-data)', fontSize: 18, fontWeight: 700, lineHeight: 1,
+                      }}>{v}</div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+
+        <div className="row" style={{
+          marginTop: 24, padding: '20px 24px',
+          border: '1px solid var(--accent-a)',
+          background: 'color-mix(in oklab, var(--accent-a) 8%, var(--bg-2))',
+          gap: 24, alignItems: 'center', flexWrap: 'wrap',
+        }}>
+          <span className="label" style={{ color: 'var(--accent-a)' }}>STATE</span>
+          <p style={{ margin: 0, fontSize: 14, color: 'var(--text)', lineHeight: 1.6, flex: 1, minWidth: 280 }}>
+            Delaware C-Corp incorporated. Catalog holding entity (SPV) structured. Securities counsel engaged on the musicUSD classification opinion. Reinsurance design for catalog-debt downside in flight. Data and intelligence are running today.
+          </p>
+        </div>
+      </div>
+    </section>
+  )
+}
+
 export function CatalogIndex() {
   const [waitlistEmail, setWaitlistEmail] = useState('')
   const [waitlistStatus, setWaitlistStatus] = useState('idle')
@@ -802,11 +904,13 @@ export function CatalogIndex() {
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
       setWaitlistStatus('error')
       setWaitlistMessage('ENTER A VALID EMAIL')
+      track('waitlist_error', { reason: 'invalid_email' })
       return
     }
 
     setWaitlistStatus('loading')
     setWaitlistMessage('')
+    track('waitlist_attempt', { domain: email.split('@')[1] || '' })
 
     try {
       const response = await fetch('/api/waitlist', {
@@ -827,17 +931,19 @@ export function CatalogIndex() {
       setWaitlistStatus('success')
       setWaitlistMessage('YOU ARE ON THE LIST')
       setWaitlistEmail('')
+      track('waitlist_success', { domain: email.split('@')[1] || '' })
     } catch (error) {
       setWaitlistStatus('error')
       setWaitlistMessage(error.message || 'TRY AGAIN')
+      track('waitlist_error', { reason: 'submit_failed', message: String(error.message || '').slice(0, 120) })
     }
   }
 
   return (
     <section id="catalog-index" style={{ scrollMarginTop: 80, borderBottom: '1px solid var(--line)', padding: 'clamp(72px, 8vw, 110px) 0', background: 'var(--bg-2)' }}>
       <div className="sec-pad" style={{ maxWidth: 1480, margin: '0 auto', padding: '0 32px' }}>
-        <SectionHead num="04" kicker="THE INDEX"
-          title="Catalogs trade like bonds. Read the curve before it prices in."
+        <SectionHead num="05" kicker="THE INDEX"
+          title="Catalogs trade like bonds. Cashflow on one axis, multiple on the other."
           sub={`A catalog is a portfolio of compositions and / or masters. Multiples = price ÷ NPS (net publisher's share). Implied yield = annual cash flow ÷ price. We monitor ${catalogData.stats.totalListings.toLocaleString()} listings (${catalogData.stats.openListings} open · ${catalogData.stats.closedComps.toLocaleString()} closed comps), of which ${catalogData.stats.socialCoverage} have deep social coverage from our TikTok / Shorts pipeline.`}
         />
         <div className="row" style={{
@@ -849,7 +955,7 @@ export function CatalogIndex() {
             { lab: 'CLOSED COMPS', val: catalogData.stats.closedComps.toLocaleString() },
             { lab: 'MEDIAN MULTIPLE', val: catalogData.stats.medianMultipleAll.toFixed(2) + '×' },
             { lab: 'BLENDED YIELD', val: catalogData.stats.blendedYield.toFixed(1) + '%' },
-            { lab: 'TIKTOK UGC', val: (catalogData.stats.totalTiktokUGC / 1e9).toFixed(2) + 'B' },
+            { lab: 'TIKTOK VIDEOS', val: (catalogData.stats.totalTiktokUGC / 1e9).toFixed(2) + 'B' },
             { lab: 'SOUNDS INDEXED', val: catalogData.stats.totalSounds.toLocaleString() },
           ].map(s => (
             <div key={s.lab} style={{ background: 'var(--bg)', padding: '14px 16px' }}>
@@ -881,6 +987,12 @@ export function CatalogIndex() {
               rel={c.dataRoomUrl ? 'noopener noreferrer' : undefined}
               className="cat-row"
               title={c.dataRoomUrl ? 'Open data room' : undefined}
+              onClick={() => track('catalog_click', {
+                code: c.code,
+                name: c.name,
+                hot: !!c.hot,
+                has_data_room: !!c.dataRoomUrl,
+              })}
               style={{
                 display: 'grid',
                 gridTemplateColumns: '120px 1.6fr 130px 100px 100px 100px 160px',
@@ -925,13 +1037,13 @@ export function CatalogIndex() {
           background: 'var(--bg)', gap: 32, alignItems: 'center', flexWrap: 'wrap',
         }}>
           <div className="col" style={{ gap: 8, flex: '1 1 320px', minWidth: 260 }}>
-            <span className="label" style={{ color: 'var(--accent-a)' }}>WAITLIST</span>
+            <span className="label" style={{ color: 'var(--accent-a)' }}>STAY IN THE LOOP</span>
             <h3 style={{
               margin: 0, fontFamily: 'var(--face-display)', fontWeight: 'var(--weight-display)',
               fontSize: 'clamp(22px, 2vw, 30px)', letterSpacing: 'var(--tracking-display)', color: 'var(--text)',
-            }}>Get early access to the royalty investing terminal.</h3>
+            }}>Get notified as the platform comes online.</h3>
             <p style={{ margin: 0, color: 'var(--sub)', fontSize: 14, lineHeight: 1.55 }}>
-              Track catalog multiples, royalty streams, and pricing signals before the market catches up.
+              Cashflow-tracked catalogs, royalty stream breakdowns, and short-form demand signals — all in one place.
             </p>
           </div>
           <form onSubmit={submitWaitlist} className="row" style={{ gap: 8, flex: '1 1 360px', alignItems: 'stretch' }}>
@@ -989,7 +1101,7 @@ export function Footer() {
           }}>yield.fm</span>
         </div>
         <div className="row footer-meta" style={{ justifyContent: 'space-between', borderTop: '1px solid var(--line)', paddingTop: 20, gap: 24, flexWrap: 'wrap' }}>
-          <span className="label">© 2026 MNFST INC. · YIELD.FM IS A PRODUCT OF MNFST INC.</span>
+          <span className="label">© 2026 MANIFEST MUSIC INTELLIGENCE CORP · YIELD.FM IS A PRODUCT OF MMI</span>
           <span className="label">NOT INVESTMENT ADVICE · NO OFFER OR SOLICITATION</span>
           <span className="label">SOURCES: IFPI · CISAC · MLC · MIDIA</span>
         </div>

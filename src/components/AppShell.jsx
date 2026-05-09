@@ -1,4 +1,5 @@
 import React from 'react'
+import { track } from '../lib/track'
 
 export function Crosshair({ pos = 'tl', color = 'var(--accent-a)' }) {
   const map = {
@@ -35,6 +36,7 @@ function NavLink({ href, children }) {
   return (
     <a
       href={href}
+      onClick={() => track('nav_click', { target: href, label: String(children) })}
       style={{
         minHeight: 44,
         display: 'inline-flex',
@@ -109,16 +111,18 @@ export function TopNav({ mode, onMode, debug = false }) {
             paddingLeft: 12, borderLeft: '1px solid var(--line)',
             fontFamily: 'var(--mono)', fontSize: 10, letterSpacing: '0.2em', color: 'var(--dim)',
             textTransform: 'uppercase',
-          }}>ROYALTY INTELLIGENCE FOR CATALOG BUYERS</span>
+          }}>BY MANIFEST MUSIC INTELLIGENCE CORP</span>
         </div>
 
         <nav className="nav-modes row" style={{ gap: 22, alignItems: 'center' }}>
           <NavLink href="#yield-methodology">Methodology</NavLink>
+          <NavLink href="#platform">Platform</NavLink>
           <NavLink href="#catalog-index">Index</NavLink>
           {debug && <ThemeToggle mode={mode} onMode={onMode} />}
           <a
             href="#waitlist"
             className="nav-cta"
+            onClick={() => track('cta_click', { target: '#waitlist', label: 'Access' })}
             style={{
               minHeight: 44,
               display: 'inline-flex',
