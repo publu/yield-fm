@@ -1092,18 +1092,29 @@ export function Footer() {
   return (
     <footer style={{ padding: '60px 0 80px' }}>
       <div className="sec-pad" style={{ maxWidth: 1480, margin: '0 auto', padding: '0 32px' }}>
-        <div className="row" style={{ alignItems: 'baseline', gap: 16, marginBottom: 22, flexWrap: 'wrap' }}>
+        <div className="row" style={{ alignItems: 'baseline', gap: 16, marginBottom: 22, flexWrap: 'wrap', overflow: 'hidden' }}>
           <span style={{
+            display: 'inline-block',
             fontFamily: 'var(--face-display)', fontSize: 'clamp(60px, 14vw, 220px)',
             fontWeight: 'var(--weight-display)', letterSpacing: 'var(--tracking-display)',
             background: 'linear-gradient(96deg, var(--accent-a), var(--accent-b))',
             WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', lineHeight: 0.85,
+            paddingLeft: '0.08em', paddingRight: '0.04em',
           }}>yield.fm</span>
         </div>
         <div className="row footer-meta" style={{ justifyContent: 'space-between', borderTop: '1px solid var(--line)', paddingTop: 20, gap: 24, flexWrap: 'wrap' }}>
           <span className="label">© 2026 MANIFEST MUSIC INTELLIGENCE CORP · YIELD.FM IS A PRODUCT OF MMI</span>
           <span className="label">NOT INVESTMENT ADVICE · NO OFFER OR SOLICITATION</span>
-          <span className="label">SOURCES: IFPI · CISAC · MLC · MIDIA</span>
+          <span className="label">
+            SOURCES:{' '}
+            <a href="https://www.ifpi.org/" target="_blank" rel="noopener noreferrer" style={{ color: 'inherit', textDecoration: 'underline', textUnderlineOffset: '3px' }}>IFPI</a>
+            {' · '}
+            <a href="https://www.cisac.org/" target="_blank" rel="noopener noreferrer" style={{ color: 'inherit', textDecoration: 'underline', textUnderlineOffset: '3px' }}>CISAC</a>
+            {' · '}
+            <a href="https://www.themlc.com/" target="_blank" rel="noopener noreferrer" style={{ color: 'inherit', textDecoration: 'underline', textUnderlineOffset: '3px' }}>MLC</a>
+            {' · '}
+            <a href="https://www.midiaresearch.com/" target="_blank" rel="noopener noreferrer" style={{ color: 'inherit', textDecoration: 'underline', textUnderlineOffset: '3px' }}>MIDIA</a>
+          </span>
         </div>
       </div>
     </footer>
