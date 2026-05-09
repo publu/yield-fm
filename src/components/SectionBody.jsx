@@ -425,10 +425,10 @@ export function YieldMethodology() {
           background: 'var(--line)', border: '1px solid var(--line)',
         }}>
           {[
-            { lab: 'ALL CLOSED COMPS · FILTERED', val: `${meanY.toFixed(2)}%`,  sub: `n=${cohortN.toLocaleString()} · headline number`, hi: true },
+            { lab: 'CONSERVATIVE BLEND · MNFST',    val: `${conservativeY.toFixed(2)}%`, sub: `the headline number on the hero`, hi: true },
             { lab: 'LIFE OF RIGHTS · FILLED ONLY',  val: `${lorMean.toFixed(2)}%`, sub: `n=948 · permanent ownership only` },
             { lab: 'LIFE OF RIGHTS · MEDIAN',       val: `${lorMedian.toFixed(2)}%`, sub: `the typical permanent comp` },
-            { lab: 'CONSERVATIVE BLEND · MNFST',    val: `${conservativeY.toFixed(2)}%`, sub: `also stored as avgYieldClosedComps` },
+            { lab: 'ALL CLOSED COMPS · FILTERED',   val: `${meanY.toFixed(2)}%`, sub: `n=${cohortN.toLocaleString()} · includes partial-term deals` },
           ].map(c => (
             <div key={c.lab} style={{ background: 'var(--bg-2)', padding: '18px 22px' }}>
               <div className="label" style={{ fontSize: 9, color: c.hi ? 'var(--accent-c)' : 'var(--dim)' }}>{c.lab}</div>
