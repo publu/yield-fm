@@ -799,7 +799,7 @@ export function Platform() {
       label: 'DATA & INTELLIGENCE',
       color: 'var(--accent-a)',
       title: 'Live data, with real analysis on top of it.',
-      body: 'TikTok and YouTube Shorts indexed daily across 68 countries. Sounds are tracked across both platforms as single entities even when titles, artist credits, and metadata don\'t line up. Visual analysis reads what\'s actually happening on screen — dance, fashion, food, brand placement, comedy, performance — not the tags. A perceptual-response model scores whether a clip will hold viewer attention before any streams arrive. Royalty Exchange comps and multi-year earnings histories indexed alongside.',
+      body: 'TikTok and YouTube Shorts indexed daily across 68 countries. Visual analysis reads what\'s actually happening on screen — dance, fashion, food, brand placement, comedy, performance — not just the tags. A perceptual-response model scores whether a clip will hold viewer attention before any streams arrive. Country-level propagation and creator activity tracked alongside, with Royalty Exchange comps and multi-year earnings histories layered in.',
       stats: [
         ['VIDEOS INDEXED', '184M+'],
         ['SOUNDS TRACKED', '1M+'],
