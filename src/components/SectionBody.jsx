@@ -185,7 +185,7 @@ export function FiveStreams() {
                 <span className="label" style={{ color: 'var(--text)' }}>AVG TTM CASH YIELD</span>
               </div>
               <p style={{ margin: '18px 0 0', maxWidth: 760, color: 'var(--sub)', fontSize: 15, lineHeight: 1.65 }}>
-                Computed from filtered Royalty Exchange closed comps using trailing royalties divided by clearing price.
+                Computed from filtered secondary-market closed comps using trailing royalties divided by clearing price.
                 It is a return proxy, not a guarantee, but it makes the category legible: music royalties can behave
                 like a diversified cash-flow market instead of a one-off collectible.
               </p>
@@ -312,7 +312,7 @@ export function YieldMethodology() {
       <div className="sec-pad" style={{ maxWidth: 1480, margin: '0 auto', padding: '0 32px' }}>
         <SectionHead num="03" kicker="METHODOLOGY"
           title="The 19.82% number, taken apart."
-          sub="The hero card averages implied yield across closed comps from royaltyexchange.com. This is real, but it's a trailing snapshot, not a forward promise. Here's the math, the cohort, and where the number comes from."
+          sub="The hero card averages implied yield across closed comps from the catalog secondary market. This is real, but it's a trailing snapshot, not a forward promise. Here's the math, the cohort, and where the number comes from."
         />
 
         <div style={{
@@ -468,7 +468,7 @@ export function YieldMethodology() {
             {
               k: 'WHY WE STILL SHOW 19.82%',
               title: 'The market clears here. So the comps say what they say.',
-              body: 'We don\'t want to massage the headline. The figure reflects what royaltyexchange.com\'s closed comps actually averaged, with only a noise filter (LTM > $1k). The full distribution stays visible — nothing cherry-picked. The methodology section is one click away on purpose.',
+              body: 'We don\'t want to massage the headline. The figure reflects what the secondary-market closed comps actually averaged, with only a noise filter (LTM > $1k). The full distribution stays visible — nothing cherry-picked. The methodology section is one click away on purpose.',
               color: 'var(--accent-d)',
             },
           ].map((c) => (
@@ -799,7 +799,7 @@ export function Platform() {
       label: 'DATA & INTELLIGENCE',
       color: 'var(--accent-a)',
       title: 'Live data, with real analysis on top of it.',
-      body: 'TikTok and YouTube Shorts indexed daily across 68 countries. Visual analysis reads what\'s actually happening on screen — dance, fashion, food, brand placement, comedy, performance — not just the tags. A perceptual-response model scores whether a clip will hold viewer attention before any streams arrive. Country-level propagation and creator activity tracked alongside, with Royalty Exchange comps and multi-year earnings histories layered in.',
+      body: 'TikTok and YouTube Shorts indexed daily across 68 countries. Visual analysis reads what\'s actually happening on screen — dance, fashion, food, brand placement, comedy, performance — not just the tags. A perceptual-response model scores whether a clip will hold viewer attention before any streams arrive. Country-level propagation and creator activity tracked alongside, with secondary-market comps and multi-year earnings histories layered in.',
       stats: [
         ['VIDEOS INDEXED', '184M+'],
         ['SOUNDS TRACKED', '1M+'],
