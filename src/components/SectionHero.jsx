@@ -537,8 +537,8 @@ export function Hero({ mode, intensity }) {
           }}>
             {[
               ['SALE-YEAR YIELD', `${catalogData.stats.avgYieldClosedComps.toFixed(2)}%`, 'avg across life-of-rights comps'],
-              ['DATA', `${catalogData.stats.closedComps.toLocaleString()} closed comps`, `synced ${catalogData.stats.asOf}`],
-              ['SOCIAL SIGNALS', `${(catalogData.stats.totalTiktokUGC / 1e9).toFixed(2)}B TikTok videos`, `${catalogData.stats.totalSounds.toLocaleString()} sounds indexed`],
+              ['CATALOG DATA', `${catalogData.stats.closedComps.toLocaleString()} closed comps`, `synced ${catalogData.stats.asOf}`],
+              ['SHORT-FORM DATA', '184M+ TikTok videos', '1M+ sounds tracked daily across 68 countries'],
             ].map(([k, v, s]) => (
               <div key={k} style={{ background: 'color-mix(in oklab, var(--bg) 86%, transparent)', padding: '14px 16px' }}>
                 <div className="label" style={{ color: 'var(--accent-a)', fontSize: 9 }}>{k}</div>

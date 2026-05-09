@@ -957,8 +957,8 @@ export function CatalogIndex() {
             { lab: 'CLOSED COMPS', val: catalogData.stats.closedComps.toLocaleString() },
             { lab: 'MEDIAN MULTIPLE', val: catalogData.stats.medianMultipleAll.toFixed(2) + '×' },
             { lab: 'BLENDED YIELD', val: catalogData.stats.blendedYield.toFixed(1) + '%' },
-            { lab: 'TIKTOK VIDEOS', val: (catalogData.stats.totalTiktokUGC / 1e9).toFixed(2) + 'B' },
-            { lab: 'SOUNDS INDEXED', val: catalogData.stats.totalSounds.toLocaleString() },
+            { lab: 'PLATFORM VIDEOS', val: '184M+' },
+            { lab: 'PLATFORM SOUNDS', val: '1M+' },
           ].map(s => (
             <div key={s.lab} style={{ background: 'var(--bg)', padding: '14px 16px' }}>
               <div className="label" style={{ fontSize: 9 }}>{s.lab}</div>
