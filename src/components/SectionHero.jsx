@@ -536,7 +536,7 @@ export function Hero({ mode, intensity }) {
             maxWidth: 720,
           }}>
             {[
-              ['AVG ROI PROXY', `${catalogData.stats.avgYieldTTM.toFixed(2)}% TTM`, 'closed-comp cash yield'],
+              ['SALE-YEAR YIELD', `${catalogData.stats.avgYieldClosedComps.toFixed(2)}%`, 'avg across life-of-rights comps'],
               ['DATA', `${catalogData.stats.closedComps.toLocaleString()} closed comps`, `synced ${catalogData.stats.asOf}`],
               ['SOCIAL SIGNALS', `${(catalogData.stats.totalTiktokUGC / 1e9).toFixed(2)}B TikTok videos`, `${catalogData.stats.totalSounds.toLocaleString()} sounds indexed`],
             ].map(([k, v, s]) => (
@@ -571,8 +571,8 @@ export function Hero({ mode, intensity }) {
               sparkSeed={3}
             />
             <Stat
-              label="AVG CATALOG YIELD · CLOSED COMPS TTM"
-              value={`${catalogData.stats.avgYieldTTM.toFixed(2)}%`}
+              label="AVG SALE-YEAR YIELD · LIFE OF RIGHTS"
+              value={`${catalogData.stats.avgYieldClosedComps.toFixed(2)}%`}
               delta={catalogData.stats.avgYieldDelta}
               sparkSeed={5}
               color="var(--accent-c)"
