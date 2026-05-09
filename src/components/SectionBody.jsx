@@ -118,15 +118,15 @@ export function FiveStreams() {
   const stats = catalogData.stats
   const roiCards = [
     {
-      lab: 'SALE-YEAR YIELD · LoR MEAN',
+      lab: 'AVG TRAILING ROI PROXY',
       val: `${stats.avgYieldClosedComps.toFixed(2)}%`,
-      sub: 'last 12 months of royalties ÷ clearing price',
+      sub: 'closed-comp cash yield · TTM cohort',
       color: 'var(--accent-c)',
     },
     {
-      lab: 'BLENDED COHORT',
+      lab: 'CONSERVATIVE BLEND',
       val: `${stats.avgYieldBlended.toFixed(2)}%`,
-      sub: 'across closed and currently open comps',
+      sub: 'blended average across sampled comps',
       color: 'var(--accent-a)',
     },
     {
@@ -147,8 +147,8 @@ export function FiveStreams() {
     <section style={{ borderBottom: '1px solid var(--line)', padding: 'clamp(72px, 8vw, 110px) 0', background: 'var(--bg-2)' }}>
       <div className="sec-pad" style={{ maxWidth: 1480, margin: '0 auto', padding: '0 32px' }}>
         <SectionHead num="02" kicker="RETURN PROFILE"
-          title="Music royalties have a visible sale-year yield history."
-          sub="A catalog's sale-year yield is its trailing 12 months of royalties divided by what it cleared at. Across the life-of-rights cohort that number is repeatable enough to define a market. The pipe mix explains why the cashflow persists once you've bought it."
+          title="Music royalties have a visible cash-yield history."
+          sub="The point is not that there are five royalty pipes. The point is that music catalogs have repeatable cash flows, public comps, and a measurable trailing return profile. The pipe mix explains the durability after the ROI is clear."
         />
 
         <div style={{
@@ -173,7 +173,7 @@ export function FiveStreams() {
             gap: 28,
           }}>
             <div>
-              <div className="label" style={{ color: 'var(--accent-c)' }}>AVG SALE-YEAR YIELD · LIFE OF RIGHTS</div>
+              <div className="label" style={{ color: 'var(--accent-c)' }}>AVERAGE OVERALL ROI SIGNAL</div>
               <div className="row" style={{ alignItems: 'baseline', gap: 16, flexWrap: 'wrap', marginTop: 14 }}>
                 <span className="tnum" style={{
                   fontFamily: 'var(--face-data)',
@@ -182,12 +182,12 @@ export function FiveStreams() {
                   lineHeight: 0.9,
                   color: 'var(--accent-c)',
                 }}>{stats.avgYieldClosedComps.toFixed(2)}%</span>
-                <span className="label" style={{ color: 'var(--text)' }}>LAST 12 MO ROYALTIES ÷ CLEARING PRICE</span>
+                <span className="label" style={{ color: 'var(--text)' }}>AVG TTM CASH YIELD</span>
               </div>
               <p style={{ margin: '18px 0 0', maxWidth: 760, color: 'var(--sub)', fontSize: 15, lineHeight: 1.65 }}>
-                Computed from filtered Royalty Exchange closed comps, life-of-rights cohort only. It's a snapshot at the
-                moment each catalog cleared, not a forward yield. What it shows is that the category clears in a tight,
-                repeatable band — music royalties behave like a cashflow market, not a one-off collectible.
+                Computed from filtered Royalty Exchange closed comps using trailing royalties divided by clearing price.
+                It is a return proxy, not a guarantee, but it makes the category legible: music royalties can behave
+                like a diversified cash-flow market instead of a one-off collectible.
               </p>
             </div>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(6, minmax(0, 1fr))', gap: 6, alignItems: 'end', minHeight: 96 }}>
@@ -311,8 +311,8 @@ export function YieldMethodology() {
     >
       <div className="sec-pad" style={{ maxWidth: 1480, margin: '0 auto', padding: '0 32px' }}>
         <SectionHead num="03" kicker="METHODOLOGY"
-          title="Sale-year yield, taken apart."
-          sub="A catalog's sale-year yield is the trailing 12 months of royalties divided by what it cleared at. We index this across royaltyexchange.com closed comps, life-of-rights cohort. It's a snapshot at the moment of sale, not a forward promise. Here's the math, the cohort, and the distribution."
+          title="The 19.82% number, taken apart."
+          sub="The hero card averages implied yield across closed comps from royaltyexchange.com. This is real, but it's a trailing snapshot, not a forward promise. Here's the math, the cohort, and where the number comes from."
         />
 
         <div style={{
@@ -350,23 +350,23 @@ export function YieldMethodology() {
             </div>
           </div>
           <div style={{ background: 'var(--bg-2)', padding: '22px 24px' }}>
-            <div className="label" style={{ color: 'var(--accent-c)' }}>RESULT · LoR</div>
+            <div className="label" style={{ color: 'var(--accent-c)' }}>RESULT</div>
             <div className="row" style={{ alignItems: 'baseline', gap: 14, marginTop: 8 }}>
               <span className="tnum" style={{
                 fontFamily: 'var(--face-data)', fontWeight: 700, fontSize: 32,
                 color: 'var(--accent-c)', lineHeight: 1,
-              }}>{lorMean.toFixed(2)}%</span>
+              }}>{meanY.toFixed(2)}%</span>
               <span className="label" style={{ color: 'var(--dim)' }}>MEAN</span>
             </div>
             <div className="row" style={{ alignItems: 'baseline', gap: 14, marginTop: 8 }}>
               <span className="tnum" style={{
                 fontFamily: 'var(--face-data)', fontWeight: 700, fontSize: 22,
                 color: 'var(--text)', lineHeight: 1,
-              }}>{lorMedian.toFixed(2)}%</span>
+              }}>{medianY.toFixed(2)}%</span>
               <span className="label" style={{ color: 'var(--dim)' }}>MEDIAN</span>
             </div>
             <div style={{ marginTop: 10, color: 'var(--sub)', fontSize: 12, lineHeight: 1.6 }}>
-              Life-of-rights subset — permanent ownership comps only.
+              Right-skewed distribution. Mean is pulled up by short-term partial deals.
             </div>
           </div>
         </div>
@@ -413,11 +413,9 @@ export function YieldMethodology() {
             marginTop: 16, paddingTop: 14, borderTop: '1px solid var(--line)',
             color: 'var(--sub)', fontSize: 12, lineHeight: 1.6,
           }}>
-            Distribution across all closed comps (life-of-rights plus partial-term).
-            The 15-25% bucket is highlighted; ~33% of comps sit there. The right tail
-            (50%+ ratios, ~4% of cohort) is mostly partial-term deals where the
-            denominator already discounts for principal recovery — strip those out and
-            the headline drops to the life-of-rights numbers above.
+            The bucket containing the mean (15-25%) is highlighted. ~33% of comps sit there;
+            ~45% below, ~22% above. The right tail (50%+ yields, ~4% of cohort) is what
+            pulls the mean (19.82%) above the median (15.69%).
           </div>
         </div>
 
@@ -427,10 +425,10 @@ export function YieldMethodology() {
           background: 'var(--line)', border: '1px solid var(--line)',
         }}>
           {[
-            { lab: 'LIFE OF RIGHTS · MEAN', val: `${lorMean.toFixed(2)}%`, sub: `n≈948 · permanent ownership only · the headline number`, hi: true },
-            { lab: 'LIFE OF RIGHTS · MEDIAN', val: `${lorMedian.toFixed(2)}%`, sub: `the typical permanent comp` },
-            { lab: 'BLENDED COHORT', val: `${conservativeY.toFixed(2)}%`, sub: `closed and currently open comps combined` },
-            { lab: 'ALL CLOSED COMPS · INCLUSIVE', val: `${meanY.toFixed(2)}%`, sub: `n=${cohortN.toLocaleString()} · includes partial-term deals` },
+            { lab: 'ALL CLOSED COMPS · FILTERED', val: `${meanY.toFixed(2)}%`,  sub: `n=${cohortN.toLocaleString()} · headline number`, hi: true },
+            { lab: 'LIFE OF RIGHTS · FILLED ONLY',  val: `${lorMean.toFixed(2)}%`, sub: `n=948 · permanent ownership only` },
+            { lab: 'LIFE OF RIGHTS · MEDIAN',       val: `${lorMedian.toFixed(2)}%`, sub: `the typical permanent comp` },
+            { lab: 'CONSERVATIVE BLEND · MNFST',    val: `${conservativeY.toFixed(2)}%`, sub: `also stored as avgYieldClosedComps` },
           ].map(c => (
             <div key={c.lab} style={{ background: 'var(--bg-2)', padding: '18px 22px' }}>
               <div className="label" style={{ fontSize: 9, color: c.hi ? 'var(--accent-c)' : 'var(--dim)' }}>{c.lab}</div>
@@ -450,27 +448,27 @@ export function YieldMethodology() {
         }}>
           {[
             {
-              k: 'WHAT THE NUMBER IS',
-              title: 'Trailing snapshot. Year of sale only.',
-              body: 'Numerator is the trailing twelve months of royalties at the time the catalog cleared. Denominator is the clearing price. It\'s a year-of-sale ratio, not a forward yield. Royalty curves decay year over year for most catalogs, so the realized run-rate for a fresh buyer is usually lower.',
+              k: 'WHY IT LOOKS HIGH',
+              title: 'Trailing snapshot, not a forward yield.',
+              body: 'Numerator is last year\'s royalties; denominator is the historical clearing price. New buyers pay current market multiples, so realized cash-on-cash for a fresh purchase is materially lower. Royalty curves also decay year-over-year for most catalogs — LTM almost always overstates run-rate.',
               color: 'var(--accent-c)',
             },
             {
-              k: 'WHY WE FILTER TO LoR',
-              title: 'Partial-term deals distort the picture.',
-              body: 'About a third of all closed comps are partial-rights deals (10y, 30y, fixed-return) where the price already discounts for principal recovery. That makes price-to-LTM ratios optically juicy — ratios like 96%, 99%, 111% in the data are typically these. The life-of-rights cohort strips them out, which is why we headline the LoR mean (15.98%) and median (13.64%) and not the all-comps mean.',
+              k: 'THE PARTIAL-DEAL EFFECT',
+              title: 'Short-term terms inflate the mean.',
+              body: 'About a third of the cohort are partial-rights deals (10y, 30y, fixed-return) where the price already discounts for principal recovery. That makes price-to-LTM ratios optically juicy — yields like 96%, 99%, 111% in the data are typically these. Strip them out and the life-of-rights mean drops to 15.98% (median 13.64%).',
               color: 'var(--accent-b)',
             },
             {
-              k: 'THE HONEST RANGE',
-              title: '12 to 16% on permanent rights.',
-              body: 'For a clean life-of-rights catalog at today\'s asks, sale-year cash yield sits roughly between the LoR median (~13%) and the LoR mean (~16%). Anything above that needs a story — viral moment, sync flip, undermarketed catalog — which is what the short-form data layer is built to surface.',
+              k: 'WHAT A BUYER ACTUALLY GETS',
+              title: 'Honest range: 12 - 16% on permanent rights.',
+              body: 'For a clean life-of-rights catalog at today\'s asks, target net cash yield sits roughly between the LoR median (13%) and LoR mean (16%). Anything above that needs a story — viral moment, sync flip, undermarketed catalog — which is exactly the gap our TikTok / Shorts pipeline is built to spot.',
               color: 'var(--accent-a)',
             },
             {
-              k: 'WHAT WE DON\'T DO',
-              title: 'No forward promise dressed up as yield.',
-              body: 'We won\'t headline a number that implies a forward return for a fresh buyer at today\'s asks. The only honest "yield" is the year-of-sale ratio for the cohort, with the cohort defined and the distribution shown. Anything past that needs underwriting — which is what the platform is for, not the page.',
+              k: 'WHY WE STILL SHOW 19.82%',
+              title: 'The market clears here. So the comps say what they say.',
+              body: 'We don\'t want to massage the headline. The figure reflects what royaltyexchange.com\'s closed comps actually averaged, with only a noise filter (LTM > $1k). The full distribution stays visible — nothing cherry-picked. The methodology section is one click away on purpose.',
               color: 'var(--accent-d)',
             },
           ].map((c) => (

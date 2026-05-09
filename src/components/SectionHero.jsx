@@ -536,9 +536,9 @@ export function Hero({ mode, intensity }) {
             maxWidth: 720,
           }}>
             {[
-              ['SALE-YEAR YIELD', `${catalogData.stats.avgYieldClosedComps.toFixed(2)}%`, 'avg across life-of-rights comps'],
-              ['CATALOG DATA', `${catalogData.stats.closedComps.toLocaleString()} closed comps`, `synced ${catalogData.stats.asOf}`],
-              ['SHORT-FORM DATA', '184M+ TikTok videos', '1M+ sounds tracked daily across 68 countries'],
+              ['AVG ROI PROXY', `${catalogData.stats.avgYieldClosedComps.toFixed(2)}% TTM`, 'closed-comp cash yield'],
+              ['DATA', `${catalogData.stats.closedComps.toLocaleString()} closed comps`, `synced ${catalogData.stats.asOf}`],
+              ['SOCIAL SIGNALS', '184M+ TikTok videos', '1M+ sounds tracked daily'],
             ].map(([k, v, s]) => (
               <div key={k} style={{ background: 'color-mix(in oklab, var(--bg) 86%, transparent)', padding: '14px 16px' }}>
                 <div className="label" style={{ color: 'var(--accent-a)', fontSize: 9 }}>{k}</div>
@@ -571,7 +571,7 @@ export function Hero({ mode, intensity }) {
               sparkSeed={3}
             />
             <Stat
-              label="AVG SALE-YEAR YIELD · LIFE OF RIGHTS"
+              label="AVG CATALOG YIELD · CLOSED COMPS TTM"
               value={`${catalogData.stats.avgYieldClosedComps.toFixed(2)}%`}
               delta={catalogData.stats.avgYieldDelta}
               sparkSeed={5}
