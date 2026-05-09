@@ -811,8 +811,8 @@ export function Platform() {
       n: 'II',
       label: 'UNDERWRITING',
       color: 'var(--accent-c)',
-      title: 'Cashflow first, anchored to real comparables.',
-      body: 'A catalog is a portfolio of repeatable royalty cashflows. We underwrite on the trailing earnings curve, anchor pricing to thousands of historical clearing comps, and overlay short-form demand on top. Diversified by genre, decade, and geography.',
+      title: 'Underwrite the cashflow. Price against the comps.',
+      body: 'A catalog is a portfolio of repeatable royalty cashflows. We price against thousands of historical sales, look at what the catalog has actually been earning, and use short-form demand as a forward signal — what royalty statements will show months from now. Diversified by genre, decade, and geography.',
     },
     {
       n: 'III',
