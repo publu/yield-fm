@@ -827,8 +827,8 @@ export function Platform() {
     <section id="platform" style={{ scrollMarginTop: 80, borderBottom: '1px solid var(--line)', padding: 'clamp(72px, 8vw, 110px) 0', background: 'var(--bg)' }}>
       <div className="sec-pad" style={{ maxWidth: 1480, margin: '0 auto', padding: '0 32px' }}>
         <SectionHead num="04" kicker="THE PLATFORM"
-          title="Manifest Music Intelligence Corporation."
-          sub="A data layer, an underwriting framework, and a compliant tokenization platform built around the cashflows themselves."
+          title="Asset first. Then structure. Then settlement."
+          sub="The platform stacks in that order. Catalog data feeds underwriting. Underwriting feeds the on-chain wrapper. Each layer is built on the one below."
         />
 
         <div className="col" style={{ gap: 1, background: 'var(--line)', border: '1px solid var(--line)' }}>
