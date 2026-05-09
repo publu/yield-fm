@@ -509,9 +509,8 @@ export function Hero({ mode, intensity }) {
             color: 'var(--sub)', textWrap: 'pretty',
           }}>
             Manifest Music Intelligence Corporation runs a daily data pipeline across
-            short-form video and the secondary catalog market, and is building a
-            compliant tokenization platform on top — proper legal seniority, real
-            cashflows, novel structuring underneath.
+            short-form video and the secondary catalog market, with a compliant
+            tokenization platform built on top of the cashflows.
           </p>
 
           <div className="row" style={{ gap: 12, flexWrap: 'wrap' }}>

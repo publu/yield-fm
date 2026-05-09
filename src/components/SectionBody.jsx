@@ -796,10 +796,10 @@ export function Platform() {
   const layers = [
     {
       n: 'I',
-      label: 'DATA LAYER',
+      label: 'DATA & INTELLIGENCE',
       color: 'var(--accent-a)',
-      title: 'Daily pipeline across short-form video and the secondary market.',
-      body: 'TikTok and YouTube Shorts indexed across 68 countries, cross-platform audio matched, content-typed past metadata. Closed and open Royalty Exchange comps modeled alongside, with multi-year earnings histories per catalog.',
+      title: 'Live data, with real analysis on top of it.',
+      body: 'TikTok and YouTube Shorts indexed daily across 68 countries. Audio fingerprinting matches the same song across surfaces with conflicting metadata. Content classification reads what\'s actually on screen — dance, fashion, food, brand placement, comedy, performance — not the tags. A perceptual-response model scores whether a clip will hold viewer attention before any streams arrive. Royalty Exchange comps and multi-year earnings histories indexed alongside.',
       stats: [
         ['VIDEOS INDEXED', '184M+'],
         ['SOUNDS TRACKED', '1M+'],
@@ -811,15 +811,15 @@ export function Platform() {
       n: 'II',
       label: 'UNDERWRITING',
       color: 'var(--accent-c)',
-      title: 'Cashflow-first. Social signal layered on top.',
-      body: 'A catalog is a portfolio of repeatable cashflows. We underwrite on the trailing royalty curve and overlay the social-demand signal that statements will reflect months later. Diversified by genre, decade, and geography. No leverage at the asset layer.',
+      title: 'Cashflow first, anchored to real comparables.',
+      body: 'A catalog is a portfolio of repeatable royalty cashflows. We underwrite on the trailing earnings curve, anchor pricing to thousands of historical clearing comps, and overlay short-form demand on top. Diversified by genre, decade, and geography.',
     },
     {
       n: 'III',
       label: 'TOKENIZATION',
       color: 'var(--accent-b)',
-      title: 'Compliant cashflow wrapper. Novel structure underneath.',
-      body: 'Royalty cashflows wrapped in an on-chain instrument with proper legal seniority over the underlying. UCC Article 9 framework over royalty collateral, dedicated catalog SPV, securities counsel engaged on classification. Settlement is on-chain because it earns its place there, not because the token is the product.',
+      title: 'Cashflow wrapped on-chain. Asset comes first.',
+      body: 'Royalty cashflows wrapped in an on-chain instrument with senior claim on the underlying asset. Settlement is on-chain because that\'s where capital is moving — the asset and the underwriting come first, the token is the wrapper.',
     },
   ]
 
@@ -884,7 +884,7 @@ export function Platform() {
         }}>
           <span className="label" style={{ color: 'var(--accent-a)' }}>STATE</span>
           <p style={{ margin: 0, fontSize: 14, color: 'var(--text)', lineHeight: 1.6, flex: 1, minWidth: 280 }}>
-            Delaware C-Corp incorporated. Catalog holding entity (SPV) structured. Securities counsel engaged on the musicUSD classification opinion. Reinsurance design for catalog-debt downside in flight. Data and intelligence are running today.
+            Data and intelligence layers running today. Underwriting and tokenization frameworks in flight.
           </p>
         </div>
       </div>
