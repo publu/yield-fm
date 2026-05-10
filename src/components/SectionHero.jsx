@@ -535,16 +535,32 @@ export function Hero({ mode, intensity }) {
             maxWidth: 720,
           }}>
             {[
-              ['AVG ROI PROXY', `${catalogData.stats.avgYieldClosedComps.toFixed(2)}% TTM`, 'closed-comp cash yield'],
-              ['DATA', `${catalogData.stats.closedComps.toLocaleString()} closed comps`, `synced ${catalogData.stats.asOf}`],
-              ['SOCIAL SIGNALS', '184M+ TikTok videos', '1M+ sounds tracked daily'],
-            ].map(([k, v, s]) => (
-              <div key={k} style={{ background: 'color-mix(in oklab, var(--bg) 86%, transparent)', padding: '14px 16px' }}>
-                <div className="label" style={{ color: 'var(--accent-a)', fontSize: 9 }}>{k}</div>
-                <div className="tnum" style={{ marginTop: 7, color: 'var(--text)', fontFamily: 'var(--face-data)', fontSize: 18, fontWeight: 700, lineHeight: 1.1 }}>{v}</div>
-                <div style={{ marginTop: 6, color: 'var(--dim)', fontFamily: 'var(--mono)', fontSize: 10, letterSpacing: '0.08em', textTransform: 'uppercase' }}>{s}</div>
-              </div>
-            ))}
+              { k: 'AVG ROI PROXY', v: `${catalogData.stats.avgYieldClosedComps.toFixed(2)}% TTM`, s: 'closed-comp cash yield' },
+              { k: 'DATA', v: `${catalogData.stats.closedComps.toLocaleString()} closed comps`, s: 'secondary-market index', href: 'https://mnfst-data-room.vercel.app/' },
+              { k: 'SOCIAL SIGNALS', v: '184M+ TikTok videos', s: '1M+ sounds tracked daily', href: 'https://tiktok.highscore.page' },
+            ].map(({ k, v, s, href }) => {
+              const inner = (
+                <>
+                  <div className="label" style={{ color: 'var(--accent-a)', fontSize: 9, display: 'flex', alignItems: 'center', gap: 6 }}>
+                    <span>{k}</span>
+                    {href && (
+                      <span aria-hidden="true" style={{
+                        fontFamily: 'var(--mono)', fontSize: 9,
+                        color: 'var(--accent-a)',
+                        border: '1px solid var(--accent-a)',
+                        padding: '0 4px', lineHeight: '12px', letterSpacing: '0.1em',
+                      }}>?</span>
+                    )}
+                  </div>
+                  <div className="tnum" style={{ marginTop: 7, color: 'var(--text)', fontFamily: 'var(--face-data)', fontSize: 18, fontWeight: 700, lineHeight: 1.1 }}>{v}</div>
+                  <div style={{ marginTop: 6, color: 'var(--dim)', fontFamily: 'var(--mono)', fontSize: 10, letterSpacing: '0.08em', textTransform: 'uppercase' }}>{s}</div>
+                </>
+              )
+              const baseStyle = { background: 'color-mix(in oklab, var(--bg) 86%, transparent)', padding: '14px 16px', display: 'block', textDecoration: 'none', color: 'inherit' }
+              return href
+                ? <a key={k} href={href} target="_blank" rel="noopener noreferrer" style={baseStyle}>{inner}</a>
+                : <div key={k} style={baseStyle}>{inner}</div>
+            })}
           </div>
 
           <div className="hr" style={{ marginTop: 12 }} />
@@ -564,10 +580,12 @@ export function Hero({ mode, intensity }) {
               rate={42_700_000_000 / (365.25 * 86400)} prefix="$"
             />
             <Stat
-              label="MEDIAN CATALOG MULTIPLE · TTM"
+              label="MEDIAN CATALOG MULTIPLE"
               value={`${catalogData.stats.medianMultipleTTM.toFixed(2)}×`}
               delta={catalogData.stats.medianMultipleDelta}
               sparkSeed={3}
+              hint="Browse the underlying comps"
+              onClick={() => window.open('https://mnfst-data-room.vercel.app/', '_blank', 'noopener,noreferrer')}
             />
             <Stat
               label="AVG CATALOG YIELD · CLOSED COMPS TTM"
