@@ -281,13 +281,11 @@ export function FiveStreams() {
 export function YieldMethodology() {
   const stats = catalogData.stats
   const cohortN = 1479
-  const meanY = stats.avgYieldTTM
-  const medianY = 15.69
   const lorMean = 15.98
   const lorMedian = 13.64
   const conservativeY = stats.avgYieldClosedComps
 
-  // Computed from royalty-exchange/catalog.json closed comps with LTM > $1,000.
+  // Computed from closed comps with LTM > $1,000.
   const buckets = [
     { range: '0-5%',    pct: 1,  n: 22  },
     { range: '5-10%',   pct: 15, n: 227 },
@@ -311,8 +309,8 @@ export function YieldMethodology() {
     >
       <div className="sec-pad" style={{ maxWidth: 1480, margin: '0 auto', padding: '0 32px' }}>
         <SectionHead num="03" kicker="METHODOLOGY"
-          title="The 19.82% number, taken apart."
-          sub="The hero card averages implied yield across closed comps from the catalog secondary market. This is real, but it's a trailing snapshot, not a forward promise. Here's the math, the cohort, and where the number comes from."
+          title="The conservative comp yield, taken apart."
+          sub="The hero uses a conservative blend anchored to permanent-rights comps and the full closed-comp distribution. The raw all-comps mean is not the headline because partial-term deals can make trailing yield look too high."
         />
 
         <div style={{
@@ -355,18 +353,18 @@ export function YieldMethodology() {
               <span className="tnum" style={{
                 fontFamily: 'var(--face-data)', fontWeight: 700, fontSize: 32,
                 color: 'var(--accent-c)', lineHeight: 1,
-              }}>{meanY.toFixed(2)}%</span>
-              <span className="label" style={{ color: 'var(--dim)' }}>MEAN</span>
+              }}>{conservativeY.toFixed(2)}%</span>
+              <span className="label" style={{ color: 'var(--dim)' }}>CONSERVATIVE BLEND</span>
             </div>
             <div className="row" style={{ alignItems: 'baseline', gap: 14, marginTop: 8 }}>
               <span className="tnum" style={{
                 fontFamily: 'var(--face-data)', fontWeight: 700, fontSize: 22,
                 color: 'var(--text)', lineHeight: 1,
-              }}>{medianY.toFixed(2)}%</span>
-              <span className="label" style={{ color: 'var(--dim)' }}>MEDIAN</span>
+              }}>{lorMedian.toFixed(2)}%</span>
+              <span className="label" style={{ color: 'var(--dim)' }}>LIFE-OF-RIGHTS MEDIAN</span>
             </div>
             <div style={{ marginTop: 10, color: 'var(--sub)', fontSize: 12, lineHeight: 1.6 }}>
-              Right-skewed distribution. Mean is pulled up by short-term partial deals.
+              Anchored to durable rights, with partial-term outliers treated as context.
             </div>
           </div>
         </div>
@@ -413,9 +411,9 @@ export function YieldMethodology() {
             marginTop: 16, paddingTop: 14, borderTop: '1px solid var(--line)',
             color: 'var(--sub)', fontSize: 12, lineHeight: 1.6,
           }}>
-            The bucket containing the mean (15-25%) is highlighted. ~33% of comps sit there;
-            ~45% below, ~22% above. The right tail (50%+ yields, ~4% of cohort) is what
-            pulls the mean (19.82%) above the median (15.69%).
+            The 15-25% bucket is highlighted because it contains the broad center of the distribution.
+            Roughly 33% of comps sit there; ~45% below, ~22% above. The right tail (50%+ yields,
+            ~4% of cohort) is why the raw all-comps mean is too aggressive for the hero.
           </div>
         </div>
 
@@ -428,7 +426,7 @@ export function YieldMethodology() {
             { lab: 'CONSERVATIVE BLEND · MNFST',    val: `${conservativeY.toFixed(2)}%`, sub: `the headline number on the hero`, hi: true },
             { lab: 'LIFE OF RIGHTS · FILLED ONLY',  val: `${lorMean.toFixed(2)}%`, sub: `n=948 · permanent ownership only` },
             { lab: 'LIFE OF RIGHTS · MEDIAN',       val: `${lorMedian.toFixed(2)}%`, sub: `the typical permanent comp` },
-            { lab: 'ALL CLOSED COMPS · FILTERED',   val: `${meanY.toFixed(2)}%`, sub: `n=${cohortN.toLocaleString()} · includes partial-term deals` },
+            { lab: 'COHORT REVIEWED',               val: `${cohortN.toLocaleString()}`, sub: `filtered closed comps; includes partial-term deals` },
           ].map(c => (
             <div key={c.lab} style={{ background: 'var(--bg-2)', padding: '18px 22px' }}>
               <div className="label" style={{ fontSize: 9, color: c.hi ? 'var(--accent-c)' : 'var(--dim)' }}>{c.lab}</div>
@@ -466,9 +464,9 @@ export function YieldMethodology() {
               color: 'var(--accent-a)',
             },
             {
-              k: 'WHY WE STILL SHOW 19.82%',
-              title: 'The market clears here. So the comps say what they say.',
-              body: 'We don\'t want to massage the headline. The figure reflects what the secondary-market closed comps actually averaged, with only a noise filter (LTM > $1k). The full distribution stays visible — nothing cherry-picked. The methodology section is one click away on purpose.',
+              k: 'WHY 14.16% IS THE HEADLINE',
+              title: 'Old sale prices do not equal today\'s buy-in.',
+              body: 'The conservative blend keeps the public comp set visible while avoiding the mistake of treating old clearing prices and trailing royalties as a fresh-purchase return. That is why the hero uses 14.16%, not the higher all-comps mean.',
               color: 'var(--accent-d)',
             },
           ].map((c) => (
@@ -493,14 +491,16 @@ export function YieldMethodology() {
           gap: 18, alignItems: 'center', flexWrap: 'wrap',
         }}>
           <span className="label" style={{ color: 'var(--dim)' }}>SOURCE</span>
-          <span style={{ fontFamily: 'var(--mono)', fontSize: 12, color: 'var(--text)' }}>
-            mnfst-data-room.vercel.app · synced {stats.asOf}
-          </span>
+          <a
+            href="https://mnfst-data-room.vercel.app/"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{ fontFamily: 'var(--mono)', fontSize: 12, color: 'var(--text)', textDecoration: 'none' }}
+          >
+            mnfst-data-room.vercel.app [?]
+          </a>
           <span style={{ flex: 1 }} />
-          <span className="label" style={{ color: 'var(--dim)' }}>LAST RECOMPUTED</span>
-          <span className="tnum" style={{ fontFamily: 'var(--mono)', fontSize: 12, color: 'var(--text)' }}>
-            {stats.asOf}
-          </span>
+          <span className="label" style={{ color: 'var(--dim)' }}>CLOSED-COMP METHODOLOGY</span>
         </div>
       </div>
     </section>
@@ -819,7 +819,7 @@ export function Platform() {
       label: 'TOKENIZATION',
       color: 'var(--accent-b)',
       title: 'Cashflow wrapped on-chain. Asset comes first.',
-      body: 'Royalty cashflows wrapped in an on-chain instrument with senior claim on the underlying asset. Settlement is on-chain because that\'s where capital is moving — the asset and the underwriting come first, the token is the wrapper.',
+      body: 'Royalty cashflows packaged for on-chain access after the catalog and underwriting are in place. Settlement is on-chain because that\'s where capital is moving. The asset and the data come first; the token is the wrapper.',
     },
   ]
 

@@ -19,16 +19,13 @@
     "asOf": "2026-04-16",
     "medianMultipleTTM": 7.06,
     "medianMultipleDelta": 10.31,
-    "avgYieldTTM": 19.82,
     "avgYieldDelta": 14.61,
     "universeGrowthTTM": 12.83
   },
-  "syncedAt": "2026-04-18T07:08:22.434896Z",
   "catalogs": [
     {
       "id": 6375,
       "title": "\"Brand New\" by Ben Rector + More - Publishing Royalties",
-      "url": "https://auctions.royaltyexchange.com/orderbook/asset-detail/6375/",
       "tags": [
         "Downtown Music Publishing",
         "Synchronization Heavy",
@@ -54,7 +51,6 @@
     {
       "id": 5948,
       "title": "Travis Scott, 50 Cent, ILOVEMAKONNEN ft. Drake - Songwriter Royalties",
-      "url": "https://auctions.royaltyexchange.com/orderbook/asset-detail/5948/",
       "tags": [
         "BMI",
         "Travis Scott",
@@ -80,7 +76,6 @@
     {
       "id": 4520,
       "title": "\"She Got The Best Of Me\" by Luke Combs - Songwriter Royalties",
-      "url": "https://auctions.royaltyexchange.com/orderbook/asset-detail/4520/",
       "tags": [
         "ASCAP",
         "Country",
@@ -106,7 +101,6 @@
     {
       "id": 4324,
       "title": "SZA + Rihanna: Songwriter Royalties",
-      "url": "https://auctions.royaltyexchange.com/orderbook/asset-detail/4324/",
       "tags": [
         "ASCAP",
         "Pop",
@@ -132,7 +126,6 @@
     {
       "id": 6583,
       "title": "Hits From Khalid: 7X Platinum \"Location\" & More",
-      "url": "https://auctions.royaltyexchange.com/orderbook/asset-detail/6583/",
       "tags": [
         "BMI",
         "Khalid",
@@ -158,7 +151,6 @@
     {
       "id": 6178,
       "title": "Drake, Megan Thee Stallion, Beyonce + More - Publishing Rights",
-      "url": "https://auctions.royaltyexchange.com/orderbook/asset-detail/6178/",
       "tags": [
         "Kobalt"
       ],
@@ -182,7 +174,6 @@
     {
       "id": 6333,
       "title": "Todd Dulaney - Publishing Royalties",
-      "url": "https://auctions.royaltyexchange.com/orderbook/asset-detail/6333/",
       "tags": [
         "Contemporary Christian",
         "MNRK Music Group",
@@ -208,7 +199,6 @@
     {
       "id": 3998,
       "title": "Grammy-Winning Band: Cage The Elephant",
-      "url": "https://auctions.royaltyexchange.com/orderbook/asset-detail/3998/",
       "tags": [
         "BMI",
         "Cage The Elephant",
@@ -234,7 +224,6 @@
     {
       "id": 2834,
       "title": "Jay-Z\u2019s Multi-Platinum \u201cEmpire State of Mind\u201d",
-      "url": "https://auctions.royaltyexchange.com/orderbook/asset-detail/2834/",
       "tags": [
         "ASCAP",
         "Established Earner",
@@ -260,7 +249,6 @@
     {
       "id": 6619,
       "title": "Rihanna\u2019s \u201cDon\u2019t Stop The Music\u201d \u2014 Publishing Royalties",
-      "url": "https://auctions.royaltyexchange.com/orderbook/asset-detail/6619/",
       "tags": [
         "Sony Music Publishing"
       ],
@@ -284,7 +272,6 @@
     {
       "id": 2821,
       "title": "Consistent R&B Royalties - Lyfe Jennings",
-      "url": "https://auctions.royaltyexchange.com/orderbook/asset-detail/2821/",
       "tags": [
         "ASCAP",
         "ASCAP",
@@ -310,7 +297,6 @@
     {
       "id": 3982,
       "title": "Dirty Dancing\u2019s \"(I've Had) The Time of My Life\"",
-      "url": "https://auctions.royaltyexchange.com/orderbook/asset-detail/3982/",
       "tags": [
         "ASCAP",
         "\"Dirty Dancing\"",
@@ -336,7 +322,6 @@
     {
       "id": 3756,
       "title": "Dance/Club Tracks from Terrence Parker - Songwriter Royalties",
-      "url": "https://auctions.royaltyexchange.com/orderbook/asset-detail/3756/",
       "tags": [
         "BMI",
         "Large Track List",
@@ -362,7 +347,6 @@
     {
       "id": 2819,
       "title": "Diverse Catalog Featuring Multi-Platinum Artists",
-      "url": "https://auctions.royaltyexchange.com/orderbook/asset-detail/2819/",
       "tags": [
         "ASCAP",
         "ASCAP",
@@ -388,7 +372,6 @@
     {
       "id": 2837,
       "title": "Streaming-Driven, 10-Year Old Hip-Hop",
-      "url": "https://auctions.royaltyexchange.com/orderbook/asset-detail/2837/",
       "tags": [
         "ASCAP",
         "Large Track List",
@@ -414,7 +397,6 @@
     {
       "id": 6431,
       "title": "Cherish, ACRAZE, DaniLeigh, and more - Publishing Royalties",
-      "url": "https://auctions.royaltyexchange.com/orderbook/asset-detail/6431/",
       "tags": [
         "CHERISH",
         "Kaytranada",
@@ -440,7 +422,6 @@
     {
       "id": 3306,
       "title": "Lil Uzi Vert + Playboi Carti Royalties",
-      "url": "https://auctions.royaltyexchange.com/orderbook/asset-detail/3306/",
       "tags": [
         "ASCAP",
         "Hip-Hop",
@@ -466,7 +447,6 @@
     {
       "id": 6312,
       "title": "Tech N9ne, Jelly Roll, The Rock, + more - Songwriting Royalties",
-      "url": "https://auctions.royaltyexchange.com/orderbook/asset-detail/6312/",
       "tags": [
         "Streaming Heavy",
         "Hip-Hop",
