@@ -480,7 +480,7 @@ export function Hero({ mode, intensity }) {
         <div className="col hero-copy" style={{ gap: 'clamp(14px, 2.4vh, 28px)' }}>
           <div className="row" style={{ alignItems: 'center', gap: 14, flexWrap: 'wrap' }}>
             <PulseDot color="var(--accent-c)" />
-            <span className="label" style={{ color: 'var(--accent-c)' }}>MANIFEST MUSIC INTELLIGENCE · DATA LAYER LIVE · CASHFLOW PLATFORM IN FLIGHT</span>
+            <span className="label" style={{ color: 'var(--accent-c)' }}>MANIFEST MUSIC INTELLIGENCE · CATALOG DATA · SOCIAL SIGNALS · CASHFLOW PLATFORM</span>
             <span style={{ height: 1, flex: 1, maxWidth: 120, background: 'var(--line)' }} />
             <span className="label tnum">{time}</span>
           </div>
@@ -494,12 +494,12 @@ export function Hero({ mode, intensity }) {
             letterSpacing: 'var(--tracking-display)',
             color: 'var(--text)', textWrap: 'balance',
           }}>
-            Music royalty cashflows,
+            Music catalogs are cashflow assets.
             <br />
             <span style={{
               background: 'linear-gradient(94deg, var(--accent-a) 0%, var(--accent-b) 70%)',
               WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent',
-            }}>tokenized with structure.</span>
+            }}>We price the income.</span>
           </h1>
 
           <p style={{
@@ -508,9 +508,9 @@ export function Hero({ mode, intensity }) {
             fontSize: 'clamp(14px, 1.2vw, 17px)', lineHeight: 1.6,
             color: 'var(--sub)', textWrap: 'pretty',
           }}>
-            Manifest Music Intelligence Corporation runs a daily data pipeline across
-            short-form video and the secondary catalog market, with a compliant
-            tokenization platform built on top of the cashflows.
+            Songs earn royalties when they stream, play in public, or get licensed.
+            yield.fm tracks the catalog sales, royalty histories, and short-form demand
+            signals that help explain what those rights are worth.
           </p>
 
           <div className="row" style={{ gap: 12, flexWrap: 'wrap' }}>
@@ -518,12 +518,12 @@ export function Hero({ mode, intensity }) {
               background: 'var(--accent-a)', color: 'var(--bg)', border: 'none',
               padding: '16px 26px', fontFamily: 'var(--mono)', fontSize: 12,
               letterSpacing: '0.22em', fontWeight: 700,
-            }}>BROWSE THE INDEX →</button>
+            }}>VIEW CATALOG DATA →</button>
             <button onClick={() => scrollToId('platform')} style={{
               background: 'transparent', color: 'var(--text)',
               border: '1px solid var(--text)', padding: '16px 26px',
               fontFamily: 'var(--mono)', fontSize: 12, letterSpacing: '0.22em', fontWeight: 700,
-            }}>READ THE PLATFORM NOTE</button>
+            }}>HOW IT WORKS</button>
           </div>
 
           <div className="hero-proof-grid" style={{
@@ -535,7 +535,7 @@ export function Hero({ mode, intensity }) {
             maxWidth: 720,
           }}>
             {[
-              { k: 'AVG ROI PROXY', v: `${catalogData.stats.avgYieldClosedComps.toFixed(2)}% TTM`, s: 'closed-comp cash yield' },
+              { k: 'CATALOG YIELD', v: `${catalogData.stats.avgYieldClosedComps.toFixed(2)}%`, s: 'closed-comp cash yield' },
               { k: 'DATA', v: `${catalogData.stats.closedComps.toLocaleString()} closed comps`, s: 'secondary-market index', href: 'https://mnfst-data-room.vercel.app/' },
               { k: 'SOCIAL SIGNALS', v: '184M+ TikTok videos', s: '1M+ sounds tracked daily', href: 'https://tiktok.highscore.page' },
             ].map(({ k, v, s, href }) => {
@@ -588,7 +588,7 @@ export function Hero({ mode, intensity }) {
               onClick={() => window.open('https://mnfst-data-room.vercel.app/', '_blank', 'noopener,noreferrer')}
             />
             <Stat
-              label="AVG CATALOG YIELD · CLOSED COMPS TTM"
+              label="AVG CATALOG YIELD · CLOSED COMPS"
               value={`${catalogData.stats.avgYieldClosedComps.toFixed(2)}%`}
               delta={catalogData.stats.avgYieldDelta}
               sparkSeed={5}

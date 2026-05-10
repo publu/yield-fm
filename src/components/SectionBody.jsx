@@ -30,7 +30,7 @@ export function Primer() {
       <div className="sec-pad" style={{ maxWidth: 1480, margin: '0 auto', padding: '0 32px' }}>
         <SectionHead num="01" kicker="THE FOUNDATION"
           title="A song is two copyrights, separately owned."
-          sub="Before any money moves you have to know which copyright is being used. Most people lump them together; sophisticated buyers treat them as two distinct asset classes — different cash-flow profiles, different collectors, different durations."
+          sub="Before a catalog can be priced, you need to know which rights are included. The composition is the song as written. The master is one recording of that song. Each side has different royalty streams, collectors, and durability."
         />
         <div className="primer-grid" style={{
           display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: 1,
@@ -96,8 +96,8 @@ export function Primer() {
         }}>
           <span className="label" style={{ color: 'var(--accent-a)' }}>KEY INSIGHT</span>
           <p style={{ margin: 0, fontSize: 14, color: 'var(--text)', lineHeight: 1.6, flex: 1, minWidth: 280 }}>
-            One Spotify stream pays <em>both</em> sides — composition (~$0.0008 to writers/publishers via the MLC) and master (~$0.0040 to label/artist via the distributor).{' '}
-            <span style={{ color: 'var(--sub)' }}>Same play, two checks, different mailboxes. Master share is ~5× larger; composition share is more durable (covers, syncs, samples all still pay).</span>
+            One Spotify stream pays <em>both</em> sides: composition royalties to writers and publishers, and master royalties to the owner of the recording.{' '}
+            <span style={{ color: 'var(--sub)' }}>The same play creates two checks. Master income is usually larger per stream; composition income can last across covers, samples, and syncs.</span>
           </p>
         </div>
       </div>
@@ -118,9 +118,9 @@ export function FiveStreams() {
   const stats = catalogData.stats
   const roiCards = [
     {
-      lab: 'AVG TRAILING ROI PROXY',
+      lab: 'AVG CATALOG YIELD',
       val: `${stats.avgYieldClosedComps.toFixed(2)}%`,
-      sub: 'closed-comp cash yield · TTM cohort',
+      sub: 'closed-comp cash yield',
       color: 'var(--accent-c)',
     },
     {
@@ -147,8 +147,8 @@ export function FiveStreams() {
     <section style={{ borderBottom: '1px solid var(--line)', padding: 'clamp(72px, 8vw, 110px) 0', background: 'var(--bg-2)' }}>
       <div className="sec-pad" style={{ maxWidth: 1480, margin: '0 auto', padding: '0 32px' }}>
         <SectionHead num="02" kicker="RETURN PROFILE"
-          title="Music royalties have a visible cash-yield history."
-          sub="The point is not that there are five royalty pipes. The point is that music catalogs have repeatable cash flows, public comps, and a measurable trailing return profile. The pipe mix explains the durability after the ROI is clear."
+          title="Where catalog cashflows come from."
+          sub="A catalog is not one income line. It can earn from streaming, radio, public performance, mechanical royalties, sync licensing, and neighboring rights. The mix matters because each royalty stream pays on a different schedule and reacts to different demand."
         />
 
         <div style={{
@@ -173,7 +173,7 @@ export function FiveStreams() {
             gap: 28,
           }}>
             <div>
-              <div className="label" style={{ color: 'var(--accent-c)' }}>AVERAGE OVERALL ROI SIGNAL</div>
+              <div className="label" style={{ color: 'var(--accent-c)' }}>CATALOG CASH YIELD</div>
               <div className="row" style={{ alignItems: 'baseline', gap: 16, flexWrap: 'wrap', marginTop: 14 }}>
                 <span className="tnum" style={{
                   fontFamily: 'var(--face-data)',
@@ -182,12 +182,11 @@ export function FiveStreams() {
                   lineHeight: 0.9,
                   color: 'var(--accent-c)',
                 }}>{stats.avgYieldClosedComps.toFixed(2)}%</span>
-                <span className="label" style={{ color: 'var(--text)' }}>AVG TTM CASH YIELD</span>
+                <span className="label" style={{ color: 'var(--text)' }}>AVG CLOSED-COMP YIELD</span>
               </div>
               <p style={{ margin: '18px 0 0', maxWidth: 760, color: 'var(--sub)', fontSize: 15, lineHeight: 1.65 }}>
-                Computed from filtered secondary-market closed comps using trailing royalties divided by clearing price.
-                It is a return proxy, not a guarantee, but it makes the category legible: music royalties can behave
-                like a diversified cash-flow market instead of a one-off collectible.
+                Yield is annual royalty cashflow divided by catalog price. It is not a promise of future returns.
+                It is a way to compare catalogs with different prices, earnings histories, and rights packages.
               </p>
             </div>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(6, minmax(0, 1fr))', gap: 6, alignItems: 'end', minHeight: 96 }}>
@@ -221,7 +220,7 @@ export function FiveStreams() {
 
         <div className="col" style={{ gap: 10, marginBottom: 22 }}>
           <div className="row" style={{ justifyContent: 'space-between', alignItems: 'baseline' }}>
-            <span className="label">WHY THE CASH FLOW PERSISTS · 2024 GLOBAL ROYALTY MIX</span>
+            <span className="label">HOW THE ROYALTY BASE BREAKS DOWN · 2024 GLOBAL MIX</span>
             <span className="label tnum">100.0%</span>
           </div>
           <div className="row" style={{ height: 64, border: '1px solid var(--line)' }}>
@@ -309,8 +308,8 @@ export function YieldMethodology() {
     >
       <div className="sec-pad" style={{ maxWidth: 1480, margin: '0 auto', padding: '0 32px' }}>
         <SectionHead num="03" kicker="METHODOLOGY"
-          title="The conservative comp yield, taken apart."
-          sub="The hero uses a conservative blend anchored to permanent-rights comps and the full closed-comp distribution. The raw all-comps mean is not the headline because partial-term deals can make trailing yield look too high."
+          title="How are catalogs priced?"
+          sub="Catalog buyers usually start with annual royalty income, then compare the asking price to similar catalogs that have already sold. The two basic numbers are multiple and yield: multiple tells you how many years of income the price represents; yield tells you the cashflow as a percentage of price."
         />
 
         <div style={{
@@ -319,7 +318,7 @@ export function YieldMethodology() {
           background: 'var(--line)', border: '1px solid var(--line)',
         }}>
           <div style={{ background: 'var(--bg-2)', padding: '22px 24px' }}>
-            <div className="label" style={{ color: 'var(--accent-c)' }}>FORMULA</div>
+            <div className="label" style={{ color: 'var(--accent-c)' }}>BASIC MATH</div>
             <div style={{
               marginTop: 12, fontFamily: 'var(--mono)', fontSize: 14,
               lineHeight: 1.7, color: 'var(--text)',
@@ -332,39 +331,39 @@ export function YieldMethodology() {
               <span style={{ color: 'var(--dim)' }}> × 100</span>
             </div>
             <div style={{ marginTop: 12, color: 'var(--sub)', fontSize: 12, lineHeight: 1.6 }}>
-              LTM = trailing 12 months of royalties for the asset, as reported at sale.
-              Deal price = USD-converted clearing price.
+              LTM means the last 12 months of royalties reported for the asset.
+              Deal price is the sale price. Multiple is deal price divided by annual royalties.
             </div>
           </div>
           <div style={{ background: 'var(--bg-2)', padding: '22px 24px' }}>
-            <div className="label" style={{ color: 'var(--accent-c)' }}>COHORT</div>
+            <div className="label" style={{ color: 'var(--accent-c)' }}>COMPS USED</div>
             <div className="tnum" style={{
               marginTop: 8, fontFamily: 'var(--face-data)', fontWeight: 700,
               fontSize: 32, color: 'var(--text)', lineHeight: 1,
             }}>{cohortN.toLocaleString()}</div>
             <div style={{ marginTop: 6, color: 'var(--sub)', fontSize: 12, lineHeight: 1.6 }}>
-              closed comps with state=<span style={{ fontFamily: 'var(--mono)', color: 'var(--text)' }}>filled</span>{' '}
-              and LTM royalties &gt; <span className="tnum">$1,000</span> (drops empty / placeholder rows).
+              closed catalog sales with reported royalties above <span className="tnum">$1,000</span>.
+              Empty rows and placeholder listings are excluded.
             </div>
           </div>
           <div style={{ background: 'var(--bg-2)', padding: '22px 24px' }}>
-            <div className="label" style={{ color: 'var(--accent-c)' }}>RESULT</div>
+            <div className="label" style={{ color: 'var(--accent-c)' }}>DISPLAYED YIELD</div>
             <div className="row" style={{ alignItems: 'baseline', gap: 14, marginTop: 8 }}>
               <span className="tnum" style={{
                 fontFamily: 'var(--face-data)', fontWeight: 700, fontSize: 32,
                 color: 'var(--accent-c)', lineHeight: 1,
               }}>{conservativeY.toFixed(2)}%</span>
-              <span className="label" style={{ color: 'var(--dim)' }}>CONSERVATIVE BLEND</span>
+              <span className="label" style={{ color: 'var(--dim)' }}>AVG CATALOG YIELD</span>
             </div>
             <div className="row" style={{ alignItems: 'baseline', gap: 14, marginTop: 8 }}>
               <span className="tnum" style={{
                 fontFamily: 'var(--face-data)', fontWeight: 700, fontSize: 22,
                 color: 'var(--text)', lineHeight: 1,
               }}>{lorMedian.toFixed(2)}%</span>
-              <span className="label" style={{ color: 'var(--dim)' }}>LIFE-OF-RIGHTS MEDIAN</span>
+              <span className="label" style={{ color: 'var(--dim)' }}>PERMANENT-RIGHTS MEDIAN</span>
             </div>
             <div style={{ marginTop: 10, color: 'var(--sub)', fontSize: 12, lineHeight: 1.6 }}>
-              Anchored to durable rights, with partial-term outliers treated as context.
+              The displayed yield favors permanent-rights comps over short-term deal structures.
             </div>
           </div>
         </div>
@@ -374,7 +373,7 @@ export function YieldMethodology() {
           padding: '24px 28px', marginBottom: 24,
         }}>
           <div className="row" style={{ justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 16 }}>
-            <span className="label">DISTRIBUTION · IMPLIED YIELD ACROSS COHORT</span>
+            <span className="label">YIELD DISTRIBUTION · CLOSED-COMP COHORT</span>
             <span className="label tnum" style={{ color: 'var(--dim)' }}>n = {cohortN.toLocaleString()}</span>
           </div>
           <div className="col" style={{ gap: 8 }}>
@@ -411,9 +410,8 @@ export function YieldMethodology() {
             marginTop: 16, paddingTop: 14, borderTop: '1px solid var(--line)',
             color: 'var(--sub)', fontSize: 12, lineHeight: 1.6,
           }}>
-            The 15-25% bucket is highlighted because it contains the broad center of the distribution.
-            Roughly 33% of comps sit there; ~45% below, ~22% above. The right tail (50%+ yields,
-            ~4% of cohort) is why the raw all-comps mean is too aggressive for the hero.
+            Most comps sit between 10% and 25% implied yield. Very high yields usually need context:
+            short terms, unusual rights, temporary royalty spikes, or a price that already reflects risk.
           </div>
         </div>
 
@@ -423,10 +421,10 @@ export function YieldMethodology() {
           background: 'var(--line)', border: '1px solid var(--line)',
         }}>
           {[
-            { lab: 'CONSERVATIVE BLEND · MNFST',    val: `${conservativeY.toFixed(2)}%`, sub: `the headline number on the hero`, hi: true },
-            { lab: 'LIFE OF RIGHTS · FILLED ONLY',  val: `${lorMean.toFixed(2)}%`, sub: `n=948 · permanent ownership only` },
-            { lab: 'LIFE OF RIGHTS · MEDIAN',       val: `${lorMedian.toFixed(2)}%`, sub: `the typical permanent comp` },
-            { lab: 'COHORT REVIEWED',               val: `${cohortN.toLocaleString()}`, sub: `filtered closed comps; includes partial-term deals` },
+            { lab: 'AVG CATALOG YIELD',             val: `${conservativeY.toFixed(2)}%`, sub: `displayed closed-comp yield`, hi: true },
+            { lab: 'PERMANENT RIGHTS · MEAN',       val: `${lorMean.toFixed(2)}%`, sub: `n=948 · permanent ownership only` },
+            { lab: 'PERMANENT RIGHTS · MEDIAN',     val: `${lorMedian.toFixed(2)}%`, sub: `middle permanent-rights comp` },
+            { lab: 'COMPS REVIEWED',                val: `${cohortN.toLocaleString()}`, sub: `filtered closed comps` },
           ].map(c => (
             <div key={c.lab} style={{ background: 'var(--bg-2)', padding: '18px 22px' }}>
               <div className="label" style={{ fontSize: 9, color: c.hi ? 'var(--accent-c)' : 'var(--dim)' }}>{c.lab}</div>
@@ -446,27 +444,27 @@ export function YieldMethodology() {
         }}>
           {[
             {
-              k: 'WHY IT LOOKS HIGH',
-              title: 'Trailing snapshot, not a forward yield.',
-              body: 'Numerator is last year\'s royalties; denominator is the historical clearing price. New buyers pay current market multiples, so realized cash-on-cash for a fresh purchase is materially lower. Royalty curves also decay year-over-year for most catalogs — LTM almost always overstates run-rate.',
+              k: 'MULTIPLE',
+              title: 'Price divided by annual royalties.',
+              body: 'If a catalog earns $100,000 per year and sells for $700,000, it sold for a 7.0x multiple. Lower multiples usually mean higher cash yield, but they can also mean higher risk or shorter rights.',
               color: 'var(--accent-c)',
             },
             {
-              k: 'THE PARTIAL-DEAL EFFECT',
-              title: 'Short-term terms inflate the mean.',
-              body: 'About a third of the cohort are partial-rights deals (10y, 30y, fixed-return) where the price already discounts for principal recovery. That makes price-to-LTM ratios optically juicy — yields like 96%, 99%, 111% in the data are typically these. Strip them out and the life-of-rights mean drops to 15.98% (median 13.64%).',
+              k: 'YIELD',
+              title: 'Annual royalties divided by price.',
+              body: 'The same $100,000 catalog bought for $700,000 has a 14.3% trailing yield. That is a comparison tool, not a guarantee, because future royalties can rise, decay, or shift across platforms.',
               color: 'var(--accent-b)',
             },
             {
-              k: 'WHAT A BUYER ACTUALLY GETS',
-              title: 'Honest range: 12 - 16% on permanent rights.',
-              body: 'For a clean life-of-rights catalog at today\'s asks, target net cash yield sits roughly between the LoR median (13%) and LoR mean (16%). Anything above that needs a story — viral moment, sync flip, undermarketed catalog — which is exactly the gap our TikTok / Shorts pipeline is built to spot.',
+              k: 'RIGHTS',
+              title: 'Term changes the number.',
+              body: 'A permanent-rights catalog and a 10-year royalty stream should not be treated the same. Shorter terms can show higher yields because the buyer has fewer years to recover the purchase price.',
               color: 'var(--accent-a)',
             },
             {
-              k: 'WHY 14.16% IS THE HEADLINE',
-              title: 'Old sale prices do not equal today\'s buy-in.',
-              body: 'The conservative blend keeps the public comp set visible while avoiding the mistake of treating old clearing prices and trailing royalties as a fresh-purchase return. That is why the hero uses 14.16%, not the higher all-comps mean.',
+              k: 'DEMAND',
+              title: 'Social activity can move future royalties.',
+              body: 'Short-form video does not replace royalty statements. It gives an earlier signal that a song is being used, discovered, or revived before that demand fully shows up in reported income.',
               color: 'var(--accent-d)',
             },
           ].map((c) => (
@@ -500,7 +498,7 @@ export function YieldMethodology() {
             mnfst-data-room.vercel.app [?]
           </a>
           <span style={{ flex: 1 }} />
-          <span className="label" style={{ color: 'var(--dim)' }}>CLOSED-COMP METHODOLOGY</span>
+          <span className="label" style={{ color: 'var(--dim)' }}>UNDERLYING CLOSED-COMP DATA</span>
         </div>
       </div>
     </section>
@@ -612,7 +610,7 @@ function RoyaltyMap() {
               letterSpacing: 'var(--tracking-display)',
               lineHeight: 1.05,
               color: 'var(--text)',
-            }}>Where catalogs sit on the cashflow versus price plane.</h3>
+            }}>Each dot is a catalog: price multiple on one axis, trailing yield on the other.</h3>
           </div>
           <div className="row royalty-map-filters" style={{ gap: 0, border: '1px solid var(--line)', flexShrink: 0 }}>
             {[
@@ -747,13 +745,13 @@ function RoyaltyMap() {
             </div>
 
             <div className="col" style={{ gap: 9 }}>
-              <span className="label">WHY IT MATTERS</span>
+              <span className="label">HOW TO READ THIS</span>
               <p style={{ margin: 0, color: 'var(--sub)', fontSize: 13, lineHeight: 1.65 }}>
                 This point sits at <span className="tnum" style={{ color: 'var(--text)' }}>{active.mult.toFixed(2)}x</span> price-to-cash-flow
                 and <span className="tnum" style={{ color: 'var(--text)' }}>{active.yld.toFixed(1)}%</span> trailing yield.
                 {active.topUgc > 0
-                  ? ` The social layer adds ${fmtUgc(active.topUgc)} TikTok creations tied to the catalog signal.`
-                  : ' No major TikTok heat is attached yet, so the thesis is mostly cash-flow driven.'}
+                  ? ` The social layer adds ${fmtUgc(active.topUgc)} TikTok creations as a demand signal.`
+                  : ' No major TikTok heat is attached yet, so the read is mostly based on cashflow and price.'}
               </p>
             </div>
 
@@ -798,8 +796,8 @@ export function Platform() {
       n: 'I',
       label: 'DATA & INTELLIGENCE',
       color: 'var(--accent-a)',
-      title: 'Live data, with real analysis on top of it.',
-      body: 'TikTok and YouTube Shorts indexed daily across 68 countries. Visual analysis reads what\'s actually happening on screen — dance, fashion, food, brand placement, comedy, performance — not just the tags. A perceptual-response model scores whether a clip will hold viewer attention before any streams arrive. Country-level propagation and creator activity tracked alongside, with secondary-market comps and multi-year earnings histories layered in.',
+      title: 'Track what songs earn and where demand is forming.',
+      body: 'The data layer watches catalog sales, royalty histories, TikTok activity, and YouTube Shorts activity. The goal is simple: see the cashflow history and the demand signals in the same place.',
       stats: [
         ['VIDEOS INDEXED', '184M+'],
         ['SOUNDS TRACKED', '1M+'],
@@ -811,15 +809,15 @@ export function Platform() {
       n: 'II',
       label: 'UNDERWRITING',
       color: 'var(--accent-c)',
-      title: 'Underwrite the cashflow. Price against the comps.',
-      body: 'A catalog is a portfolio of repeatable royalty cashflows. We price against thousands of historical sales, look at what the catalog has actually been earning, and use short-form demand as a forward signal — what royalty statements will show months from now. Diversified by genre, decade, and geography.',
+      title: 'Compare the catalog to what has already sold.',
+      body: 'A catalog is priced by its earnings, its rights package, and its comps. We look at what it has earned, what similar catalogs cleared for, and whether current social demand suggests the next statements may look different.',
     },
     {
       n: 'III',
       label: 'TOKENIZATION',
       color: 'var(--accent-b)',
-      title: 'Cashflow wrapped on-chain. Asset comes first.',
-      body: 'Royalty cashflows packaged for on-chain access after the catalog and underwriting are in place. Settlement is on-chain because that\'s where capital is moving. The asset and the data come first; the token is the wrapper.',
+      title: 'Turn the cashflow into an investable wrapper.',
+      body: 'The tokenization layer comes after the catalog is understood. The asset is the royalty cashflow. The data explains the asset. The wrapper is how investors can access it.',
     },
   ]
 
@@ -827,8 +825,8 @@ export function Platform() {
     <section id="platform" style={{ scrollMarginTop: 80, borderBottom: '1px solid var(--line)', padding: 'clamp(72px, 8vw, 110px) 0', background: 'var(--bg)' }}>
       <div className="sec-pad" style={{ maxWidth: 1480, margin: '0 auto', padding: '0 32px' }}>
         <SectionHead num="04" kicker="THE PLATFORM"
-          title="Asset first. Then structure. Then settlement."
-          sub="The platform stacks in that order. Catalog data feeds underwriting. Underwriting feeds the on-chain wrapper. Each layer is built on the one below."
+          title="What yield.fm does."
+          sub="First, collect catalog and social data. Second, use it to understand royalty cashflows. Third, build a cleaner way to access those cashflows."
         />
 
         <div className="col" style={{ gap: 1, background: 'var(--line)', border: '1px solid var(--line)' }}>
@@ -884,7 +882,7 @@ export function Platform() {
         }}>
           <span className="label" style={{ color: 'var(--accent-a)' }}>STATE</span>
           <p style={{ margin: 0, fontSize: 14, color: 'var(--text)', lineHeight: 1.6, flex: 1, minWidth: 280 }}>
-            Data and intelligence layers running today. Underwriting and tokenization frameworks in flight.
+            The data and intelligence layer is live. Underwriting and tokenization are being built around the catalog cashflows.
           </p>
         </div>
       </div>
@@ -943,8 +941,8 @@ export function CatalogIndex() {
     <section id="catalog-index" style={{ scrollMarginTop: 80, borderBottom: '1px solid var(--line)', padding: 'clamp(72px, 8vw, 110px) 0', background: 'var(--bg-2)' }}>
       <div className="sec-pad" style={{ maxWidth: 1480, margin: '0 auto', padding: '0 32px' }}>
         <SectionHead num="05" kicker="THE INDEX"
-          title="Catalogs trade like bonds. Cashflow on one axis, multiple on the other."
-          sub={`A catalog is a portfolio of compositions and / or masters. Multiples = price ÷ NPS (net publisher's share). Implied yield = annual cash flow ÷ price. We monitor ${catalogData.stats.totalListings.toLocaleString()} listings (${catalogData.stats.openListings} open · ${catalogData.stats.closedComps.toLocaleString()} closed comps), of which ${catalogData.stats.socialCoverage} have deep social coverage from our TikTok / Shorts pipeline.`}
+          title="The index makes catalog listings comparable."
+          sub={`Each catalog has a price, a royalty history, a rights term, and a demand profile. We monitor ${catalogData.stats.totalListings.toLocaleString()} listings (${catalogData.stats.openListings} open · ${catalogData.stats.closedComps.toLocaleString()} closed comps), including ${catalogData.stats.socialCoverage} with deeper TikTok / Shorts coverage.`}
         />
         <div className="row" style={{
           display: 'grid', gap: 1, marginBottom: 18, border: '1px solid var(--line)', background: 'var(--line)',
@@ -1043,7 +1041,7 @@ export function CatalogIndex() {
               fontSize: 'clamp(22px, 2vw, 30px)', letterSpacing: 'var(--tracking-display)', color: 'var(--text)',
             }}>Get notified as the platform comes online.</h3>
             <p style={{ margin: 0, color: 'var(--sub)', fontSize: 14, lineHeight: 1.55 }}>
-              Cashflow-tracked catalogs, royalty stream breakdowns, and short-form demand signals — all in one place.
+              Catalog comps, royalty breakdowns, and short-form demand signals in one place.
             </p>
           </div>
           <form onSubmit={submitWaitlist} className="row" style={{ gap: 8, flex: '1 1 360px', alignItems: 'stretch' }}>
