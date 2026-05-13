@@ -582,7 +582,6 @@ export function Hero({ mode, intensity }) {
             <Stat
               label="MEDIAN CATALOG MULTIPLE"
               value={`${catalogData.stats.medianMultipleTTM.toFixed(2)}×`}
-              delta={catalogData.stats.medianMultipleDelta}
               sparkSeed={3}
               hint="Browse the underlying comps"
               onClick={() => window.open('https://mnfst-data-room.vercel.app/', '_blank', 'noopener,noreferrer')}
@@ -590,7 +589,6 @@ export function Hero({ mode, intensity }) {
             <Stat
               label="AVG CATALOG YIELD · CLOSED COMPS"
               value={`${catalogData.stats.avgYieldClosedComps.toFixed(2)}%`}
-              delta={catalogData.stats.avgYieldDelta}
               sparkSeed={5}
               color="var(--accent-c)"
               hint="How is this calculated?"
@@ -606,7 +604,6 @@ export function Hero({ mode, intensity }) {
             <Stat
               label="CATALOGS TRACKED"
               value={catalogData.stats.totalListings.toLocaleString()}
-              delta={catalogData.stats.universeGrowthTTM}
               sparkSeed={7}
               color="var(--accent-b)"
             />
