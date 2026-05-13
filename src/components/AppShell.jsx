@@ -122,7 +122,7 @@ export function TopNav({ mode, onMode, debug = false }) {
           <a
             href="#waitlist"
             className="nav-cta"
-            onClick={() => track('cta_click', { target: '#waitlist', label: 'Access' })}
+            onClick={() => track('cta_click', { target: '#waitlist', label: 'Updates' })}
             style={{
               minHeight: 44,
               display: 'inline-flex',
@@ -137,7 +137,7 @@ export function TopNav({ mode, onMode, debug = false }) {
               textTransform: 'uppercase',
             }}
           >
-            Access
+            Updates
           </a>
         </nav>
       </div>

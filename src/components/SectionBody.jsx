@@ -816,8 +816,8 @@ export function Platform() {
       n: 'III',
       label: 'TOKENIZATION',
       color: 'var(--accent-b)',
-      title: 'Turn the cashflow into an investable wrapper.',
-      body: 'The tokenization layer comes after the catalog is understood. The asset is the royalty cashflow. The data explains the asset. The wrapper is how investors can access it.',
+      title: 'Wrap the cashflow so it settles on-chain.',
+      body: 'Tokenization sits at the end of the stack, not the start. The royalty stream is the asset. The data and underwriting are how it is priced. The wrapper makes it programmable, transferable, and held without a custodian.',
     },
   ]
 
@@ -826,7 +826,7 @@ export function Platform() {
       <div className="sec-pad" style={{ maxWidth: 1480, margin: '0 auto', padding: '0 32px' }}>
         <SectionHead num="04" kicker="THE PLATFORM"
           title="What yield.fm does."
-          sub="First, collect catalog and social data. Second, use it to understand royalty cashflows. Third, build a cleaner way to access those cashflows."
+          sub="First, collect catalog and social data. Second, use it to underwrite royalty cashflows. Third, wrap them so they settle on-chain."
         />
 
         <div className="col" style={{ gap: 1, background: 'var(--line)', border: '1px solid var(--line)' }}>
@@ -874,16 +874,51 @@ export function Platform() {
           ))}
         </div>
 
-        <div className="row" style={{
-          marginTop: 24, padding: '20px 24px',
+        <div style={{
+          marginTop: 24,
           border: '1px solid var(--accent-a)',
           background: 'color-mix(in oklab, var(--accent-a) 8%, var(--bg-2))',
-          gap: 24, alignItems: 'center', flexWrap: 'wrap',
         }}>
-          <span className="label" style={{ color: 'var(--accent-a)' }}>STATE</span>
-          <p style={{ margin: 0, fontSize: 14, color: 'var(--text)', lineHeight: 1.6, flex: 1, minWidth: 280 }}>
-            The data and intelligence layer is live. Underwriting and tokenization are being built around the catalog cashflows.
-          </p>
+          <div className="row" style={{
+            padding: '16px 24px',
+            borderBottom: '1px solid color-mix(in oklab, var(--accent-a) 28%, var(--line))',
+            gap: 18, alignItems: 'center', flexWrap: 'wrap',
+          }}>
+            <span className="label" style={{ color: 'var(--accent-a)' }}>IN MOTION</span>
+            <p style={{ margin: 0, fontSize: 14, color: 'var(--text)', lineHeight: 1.6, flex: 1, minWidth: 280 }}>
+              Three layers, three states. Data is running across the open market. Underwriting is active on the picks indexed below. The first catalog close starts the on-chain settlement layer.
+            </p>
+          </div>
+          <div className="platform-motion-grid" style={{
+            display: 'grid', gridTemplateColumns: 'repeat(3, minmax(0, 1fr))', gap: 1,
+            background: 'color-mix(in oklab, var(--accent-a) 18%, var(--line))',
+          }}>
+            {[
+              { phase: 'RUNNING', color: 'var(--positive)', dot: 'pulse', layer: 'I · DATA', body: 'Catalog comps, royalty histories, and short-form signals indexed daily across 68 countries.' },
+              { phase: 'ACTIVE', color: 'var(--accent-c)', dot: 'pulse', layer: 'II · UNDERWRITING', body: 'Picks scored against closed comps, term, and live demand. Tier-1 picks marked in the index below.' },
+              { phase: 'NEXT', color: 'var(--accent-b)', dot: 'solid', layer: 'III · SETTLEMENT', body: 'On-chain wrapper goes live with the first close. Programmable, transferable, custody-free.' },
+            ].map((m) => (
+              <div key={m.layer} style={{
+                background: 'color-mix(in oklab, var(--bg-2) 92%, transparent)',
+                padding: '16px 18px',
+                display: 'flex', flexDirection: 'column', gap: 8,
+              }}>
+                <div className="row" style={{ alignItems: 'center', gap: 8 }}>
+                  <span
+                    className={m.dot === 'pulse' ? 'pulse' : ''}
+                    style={{
+                      width: 7, height: 7, borderRadius: 999,
+                      background: m.color, display: 'inline-block',
+                      boxShadow: m.dot === 'pulse' ? `0 0 10px ${m.color}` : 'none',
+                    }}
+                  />
+                  <span className="label" style={{ color: m.color, fontSize: 9 }}>{m.phase}</span>
+                  <span className="label" style={{ color: 'var(--dim)', fontSize: 9 }}>{m.layer}</span>
+                </div>
+                <p style={{ margin: 0, fontSize: 12, color: 'var(--sub)', lineHeight: 1.55 }}>{m.body}</p>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </section>
@@ -1035,13 +1070,13 @@ export function CatalogIndex() {
           background: 'var(--bg)', gap: 32, alignItems: 'center', flexWrap: 'wrap',
         }}>
           <div className="col" style={{ gap: 8, flex: '1 1 320px', minWidth: 260 }}>
-            <span className="label" style={{ color: 'var(--accent-a)' }}>STAY IN THE LOOP</span>
+            <span className="label" style={{ color: 'var(--accent-a)' }}>SIGNAL UPDATES</span>
             <h3 style={{
               margin: 0, fontFamily: 'var(--face-display)', fontWeight: 'var(--weight-display)',
               fontSize: 'clamp(22px, 2vw, 30px)', letterSpacing: 'var(--tracking-display)', color: 'var(--text)',
-            }}>Get notified as the platform comes online.</h3>
+            }}>Catalog moves and signal shifts in your inbox.</h3>
             <p style={{ margin: 0, color: 'var(--sub)', fontSize: 14, lineHeight: 1.55 }}>
-              Catalog comps, royalty breakdowns, and short-form demand signals in one place.
+              Comp closes, demand spikes, and new picks as they happen. Drop your email if you want them direct.
             </p>
           </div>
           <form onSubmit={submitWaitlist} className="row" style={{ gap: 8, flex: '1 1 360px', alignItems: 'stretch' }}>
